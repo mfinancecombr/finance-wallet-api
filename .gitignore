@@ -1,3 +1,6 @@
 *.swp
 .idea
 coverage.out
+finance-wallet-api
+purchases.sh
+sales.sh
