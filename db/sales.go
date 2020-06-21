@@ -28,14 +28,19 @@ func (m *mongoSession) DeleteSaleByID(id string) (*mongo.DeleteResult, error) {
 	return m.collection.DeleteOne(salesCollection, q)
 }
 
+func (m *mongoSession) GetSalesItemType() ([]interface{}, error) {
+	log.Debug("[DB] GetSalesItemType")
+	return m.collection.Distinct(salesCollection, "itemType", bson.M{})
+}
+
 func (m *mongoSession) getSalesSymbols(filter bson.M) ([]interface{}, error) {
 	log.Debug("[DB] getSalesSymbols")
 	return m.collection.Distinct(salesCollection, "symbol", filter)
 }
 
-func (m *mongoSession) getAllSalesBySymbol(symbol, itemType string, year int) (wallet.SalesList, error) {
+func (m *mongoSession) getAllSalesBySymbol(symbol, itemType string, year, month int) (wallet.SalesList, error) {
 	log.Debug("[DB] getAllSalesBySymbol")
-	date := time.Date(year, 12, 31, 23, 59, 59, 0, time.UTC)
+	date := time.Date(year, time.Month(month), 31, 23, 59, 59, 0, time.UTC)
 	query := bson.M{"symbol": symbol, "date": bson.M{"$lte": date}}
 	results, err := m.collection.FindAll(salesCollection, query)
 	if err != nil {

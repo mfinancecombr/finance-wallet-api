@@ -31,6 +31,17 @@ type PortfolioItem struct {
 	SubSector     string        `json:"subSector" bson:"subSector"`
 }
 
+// FIXME
+type PortolioYiedValue struct {
+	Year           int     `json:"year" bson:"year"`
+	Month          int     `json:"month" bson:"month"`
+	Percentage     float64 `json:"percentage" bson:"percentage"`
+	Value          float64 `json:"value" bson:"value"`
+	IsConsolidated bool    `json:"isConsolidated" bson:"isConsolidated"`
+}
+
+type PortfolioYield []PortolioYiedValue
+
 type Portfolio struct {
 	CostBasics    float64                  `json:"costBasics" bson:"costBasics"`
 	Gain          float64                  `json:"gain" bson:"gain"`

@@ -4,7 +4,6 @@
 package db
 
 import (
-	"github.com/mfinancecombr/finance-wallet-api/financeapi"
 	"github.com/mfinancecombr/finance-wallet-api/wallet"
 	log "github.com/sirupsen/logrus"
 	"go.mongodb.org/mongo-driver/bson"
@@ -79,7 +78,7 @@ func mergeSlices(a, b []interface{}) []interface{} {
 	return a
 }
 
-func (m *mongoSession) getPortfolioItem(itemType string, year int) (map[string]wallet.PortfolioItem, error) {
+func (m *mongoSession) getPortfolioItem(itemType string, year, month int) (map[string]wallet.PortfolioItem, error) {
 	log.Debugf("[DB] Getting portfolio item %s", itemType)
 	purchasesSymbols, err := m.getPurchasesSymbols(bson.M{"itemType": itemType})
 	if err != nil {
@@ -98,18 +97,13 @@ func (m *mongoSession) getPortfolioItem(itemType string, year int) (map[string]w
 	items := map[string]wallet.PortfolioItem{}
 	for _, s := range uniqueSymbols {
 		symbol := s.(string)
-		portfolioItem := &wallet.PortfolioItem{}
-		// FIXME: one request
-		if err := financeapi.GetJSON("/"+itemType+"/"+symbol, portfolioItem); err != nil {
-			log.Errorf("Error on get stock item: %s", err)
-		}
 
-		purchases, err := m.getAllPurchasesBySymbol(symbol, itemType, year)
+		purchases, err := m.getAllPurchasesBySymbol(symbol, itemType, year, month)
 		if err != nil {
 			return nil, err
 		}
 
-		sales, err := m.getAllSalesBySymbol(symbol, itemType, year)
+		sales, err := m.getAllSalesBySymbol(symbol, itemType, year, month)
 		if err != nil {
 			return nil, err
 		}
@@ -139,11 +133,11 @@ func (m *mongoSession) getPortfolioItem(itemType string, year int) (map[string]w
 			}
 		}
 
+		portfolioItem := &wallet.PortfolioItem{}
 		portfolioItem.BrokerID = broker
 		portfolioItem.ItemType = itemType
 		portfolioItem.Purchases = purchases
 		portfolioItem.Sales = sales
-		portfolioItem.Recalculate()
 		items[symbol] = *portfolioItem
 	}
 
@@ -151,21 +145,24 @@ func (m *mongoSession) getPortfolioItem(itemType string, year int) (map[string]w
 }
 
 // FIXME
-func (m *mongoSession) GetPortfolioItems(portfolio *wallet.Portfolio, year int) error {
+func (m *mongoSession) GetPortfolioItems(portfolio *wallet.Portfolio, year, month int) error {
 	log.Debug("[DB] GetPortfolioItems")
 
-	slugs := []string{
-		"certificates-of-deposit",
-		"ficfi",
-		"fiis",
-		"stocks",
-		"stocks-funds",
-		"treasuries-direct",
+	purchasesItemType, err := m.GetPurchasesItemType()
+	if err != nil {
+		return err
 	}
+
+	salesItemType, err := m.GetSalesItemType()
+	if err != nil {
+		return err
+	}
+
+	slugs := mergeSlices(purchasesItemType, salesItemType)
 
 	portfolio.Items = map[string]wallet.PortfolioItem{}
 	for _, slug := range slugs {
-		stocks, err := m.getPortfolioItem(slug, year)
+		stocks, err := m.getPortfolioItem(slug.(string), year, month)
 		if err != nil {
 			log.Errorf("[DB] Error on get portfolio items: %v", err)
 			continue

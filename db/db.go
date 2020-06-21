@@ -89,15 +89,17 @@ type DB interface {
 	DeletePortfolioByID(id string) (*mongo.DeleteResult, error)
 	GetAllPortfolios() ([]wallet.Portfolio, error)
 	GetPortfolioByID(id string) (*wallet.Portfolio, error)
-	GetPortfolioItems(p *wallet.Portfolio, year int) error
+	GetPortfolioItems(p *wallet.Portfolio, year, month int) error
 	InsertPortfolio(d interface{}) (*mongo.InsertOneResult, error)
 	UpdatePortfolio(id string, d interface{}) (*mongo.UpdateResult, error)
 
-	GetAllPurchases() (interface{}, error)
 	DeletePurchaseByID(id string) (*mongo.DeleteResult, error)
+	GetAllPurchases() (interface{}, error)
+	GetPurchasesItemType() ([]interface{}, error)
 
-	GetAllSales() (interface{}, error)
 	DeleteSaleByID(id string) (*mongo.DeleteResult, error)
+	GetAllSales() (interface{}, error)
+	GetSalesItemType() ([]interface{}, error)
 
 	Ping() error
 }
