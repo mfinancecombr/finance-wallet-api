@@ -21,6 +21,14 @@ func (s *server) getAllTreasuriesDirectSales(c echo.Context) error {
 	return c.JSON(http.StatusOK, result)
 }
 
+// getTreasuryDirectSaleByID godoc
+// @Summary Get treasury direct sale by ID
+// @Description get treasury direct  sale data
+// @Accept json
+// @Produce json
+// @Success 200 {object} wallet.TreasuryDirect
+// @Router /treasuries-direct/sales/{id} [get]
+// @Param id path string true "Sale id"
 func (s *server) getTreasuryDirectSaleByID(c echo.Context) error {
 	id := c.Param("id")
 	log.Debugf("[API] Retrieving treasury direct sale with id: %s", id)
@@ -35,6 +43,12 @@ func (s *server) getTreasuryDirectSaleByID(c echo.Context) error {
 	return c.JSON(http.StatusOK, result)
 }
 
+// insertTreasuryDirectSale godoc
+// @Summary Insert some treasury direct sale
+// @Description insert new treasury direct sale
+// @Accept json
+// @Produce json
+// @Router /treasuries-direct/sales [post]
 func (s *server) insertTreasuryDirectSale(c echo.Context) error {
 	log.Debugf("[API] Inserting treasury direct sale")
 
@@ -59,6 +73,13 @@ func (s *server) insertTreasuryDirectSale(c echo.Context) error {
 	return c.JSON(http.StatusOK, result)
 }
 
+// updateTreasuryDirectSaleByID godoc
+// @Summary Update some treasury direct sale
+// @Description update new treasury direct sale
+// @Accept json
+// @Produce json
+// @Router /treasuries-direct/sales/{id} [put]
+// @Param id path string true "Sale id"
 func (s *server) updateTreasuryDirectSaleByID(c echo.Context) error {
 	id := c.Param("id")
 	log.Debugf("[API] Updating treasury direct sale with id %s", id)

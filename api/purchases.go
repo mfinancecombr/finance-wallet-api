@@ -10,6 +10,12 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
+// getAllPurchases godoc
+// @Summary List all purchases
+// @Description get all purchases data
+// @Accept json
+// @Produce json
+// @Router /purchases [get]
 func (s *server) getAllPurchases(c echo.Context) error {
 	log.Debug("[API] Retrieving all purchases")
 	result, err := s.db.GetAllPurchases()
@@ -19,6 +25,13 @@ func (s *server) getAllPurchases(c echo.Context) error {
 	return c.JSON(http.StatusOK, result)
 }
 
+// deletePurchaseByID godoc
+// @Summary Delete purchase by ID
+// @Description delete some purchase by id
+// @Accept json
+// @Produce json
+// @Router /purchases/{id} [delete]
+// @Param id path string true "Sale id"
 func (s *server) deletePurchaseByID(c echo.Context) error {
 	id := c.Param("id")
 	log.Debugf("Deleting %s data", id)

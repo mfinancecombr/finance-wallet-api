@@ -17,6 +17,10 @@ make setup
 make run
 ```
 
+## Docs
+
+http://localhost:8889/swagger/index.html
+
 ## Examples:
 
 * Adding portfolio:

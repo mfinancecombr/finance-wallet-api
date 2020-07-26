@@ -10,3 +10,6 @@ run:
 
 clean:
 	@find . -name "*.swp" -delete
+
+docs-update:
+	@swag init

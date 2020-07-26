@@ -21,6 +21,14 @@ func (s *server) getAllFICFIPurchases(c echo.Context) error {
 	return c.JSON(http.StatusOK, result)
 }
 
+// getFICFIPurchaseByID godoc
+// @Summary Get FICFI purchase by ID
+// @Description get FIFCI purchase data
+// @Accept json
+// @Produce json
+// @Success 200 {object} wallet.FICFI
+// @Router /ficfi/purchases/{id} [get]
+// @Param id path string true "Purchase id"
 func (s *server) getFICFIPurchaseByID(c echo.Context) error {
 	id := c.Param("id")
 	log.Debugf("[API] Retrieving FICFI purchase with id: %s", id)
@@ -35,6 +43,12 @@ func (s *server) getFICFIPurchaseByID(c echo.Context) error {
 	return c.JSON(http.StatusOK, result)
 }
 
+// insertFICFIPurchase godoc
+// @Summary Insert some FICFI purchase
+// @Description insert new FICFI purchase
+// @Accept json
+// @Produce json
+// @Router /ficfi/purchases [post]
 func (s *server) insertFICFIPurchase(c echo.Context) error {
 	log.Debugf("[API] Inserting FICFI purchase")
 
@@ -59,6 +73,13 @@ func (s *server) insertFICFIPurchase(c echo.Context) error {
 	return c.JSON(http.StatusOK, result)
 }
 
+// updateFICFIPurchaseByID godoc
+// @Summary Update some FICFI purchase
+// @Description update new FICFI purchase
+// @Accept json
+// @Produce json
+// @Router /ficfi/purchases/{id} [put]
+// @Param id path string true "Purchase id"
 func (s *server) updateFICFIPurchaseByID(c echo.Context) error {
 	id := c.Param("id")
 	log.Debugf("[API] Updating FICFI purchase with id %s", id)

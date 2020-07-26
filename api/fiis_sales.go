@@ -21,6 +21,14 @@ func (s *server) getAllFIISales(c echo.Context) error {
 	return c.JSON(http.StatusOK, result)
 }
 
+// getFIISaleByID godoc
+// @Summary Get FII sale by ID
+// @Description get FII sale data
+// @Accept json
+// @Produce json
+// @Success 200 {object} wallet.FII
+// @Router /fiis/sales/{id} [get]
+// @Param id path string true "Sale id"
 func (s *server) getFIISaleByID(c echo.Context) error {
 	id := c.Param("id")
 	log.Debugf("[API] Retrieving stock sale with id: %s", id)
@@ -35,6 +43,12 @@ func (s *server) getFIISaleByID(c echo.Context) error {
 	return c.JSON(http.StatusOK, result)
 }
 
+// insertFIISale godoc
+// @Summary Insert some FII sale
+// @Description insert new FII sale
+// @Accept json
+// @Produce json
+// @Router /fiis/sales [post]
 func (s *server) insertFIISale(c echo.Context) error {
 	log.Debugf("[API] Inserting stock sale")
 
@@ -59,6 +73,13 @@ func (s *server) insertFIISale(c echo.Context) error {
 	return c.JSON(http.StatusOK, result)
 }
 
+// updateFIISaleByID godoc
+// @Summary Update some FII sale
+// @Description update new FII sale
+// @Accept json
+// @Produce json
+// @Router /fiis/sales/{id} [put]
+// @Param id path string true "Sale id"
 func (s *server) updateFIISaleByID(c echo.Context) error {
 	id := c.Param("id")
 	log.Debugf("[API] Updating stock sale with id %s", id)

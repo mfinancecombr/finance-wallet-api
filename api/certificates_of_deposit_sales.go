@@ -21,6 +21,14 @@ func (s *server) getAllCertificatesOfDepositSales(c echo.Context) error {
 	return c.JSON(http.StatusOK, result)
 }
 
+// getCertificateOfDepositSaleByID godoc
+// @Summary Get get certificate of deposit sale by ID
+// @Description get certificate of deposit sale data
+// @Accept json
+// @Produce json
+// @Success 200 {object} wallet.CertificateOfDeposit
+// @Router /certificates-of-deposit/sales/{id} [get]
+// @Param id path string true "Sale id"
 func (s *server) getCertificateOfDepositSaleByID(c echo.Context) error {
 	id := c.Param("id")
 	log.Debugf("[API] Retrieving certificate of deposit sale with id: %s", id)
@@ -35,6 +43,12 @@ func (s *server) getCertificateOfDepositSaleByID(c echo.Context) error {
 	return c.JSON(http.StatusOK, result)
 }
 
+// insertCertificateOfDepositSale godoc
+// @Summary Insert some certificate of deposit sale
+// @Description insert new certificate of deposit sale
+// @Accept json
+// @Produce json
+// @Router /certificates-of-deposit/sales [post]
 func (s *server) insertCertificateOfDepositSale(c echo.Context) error {
 	log.Debugf("[API] Inserting certificate of deposit sale")
 
@@ -59,6 +73,13 @@ func (s *server) insertCertificateOfDepositSale(c echo.Context) error {
 	return c.JSON(http.StatusOK, result)
 }
 
+// updateCertificateOfDepositSaleByID godoc
+// @Summary Update some certificate of deposit sale
+// @Description update new certificate of deposit sale
+// @Accept json
+// @Produce json
+// @Router /certificates-of-deposit/sales/{id} [put]
+// @Param id path string true "Sale id"
 func (s *server) updateCertificateOfDepositSaleByID(c echo.Context) error {
 	id := c.Param("id")
 	log.Debugf("[API] Updating certificate of deposit sale with id %s", id)

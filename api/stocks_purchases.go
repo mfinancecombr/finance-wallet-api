@@ -21,6 +21,14 @@ func (s *server) getAllStockPurchases(c echo.Context) error {
 	return c.JSON(http.StatusOK, result)
 }
 
+// getStockPurchaseByID godoc
+// @Summary Get stocks purchase by ID
+// @Description get stocks purchase data
+// @Accept json
+// @Produce json
+// @Success 200 {object} wallet.Stock
+// @Router /stocks/purchases/{id} [get]
+// @Param id path string true "Purchase id"
 func (s *server) getStockPurchaseByID(c echo.Context) error {
 	id := c.Param("id")
 	log.Debugf("[API] Retrieving stock purchase with id: %s", id)
@@ -35,6 +43,12 @@ func (s *server) getStockPurchaseByID(c echo.Context) error {
 	return c.JSON(http.StatusOK, result)
 }
 
+// insertStockPurchase godoc
+// @Summary Insert some stocks purchase
+// @Description insert new stocksFII purchase
+// @Accept json
+// @Produce json
+// @Router /stocks/purchases [post]
 func (s *server) insertStockPurchase(c echo.Context) error {
 	log.Debugf("[API] Inserting stock purchase")
 
@@ -59,6 +73,13 @@ func (s *server) insertStockPurchase(c echo.Context) error {
 	return c.JSON(http.StatusOK, result)
 }
 
+// updateStockPurchaseByID godoc
+// @Summary Update some stocks purchase
+// @Description update new stocksFII purchase
+// @Accept json
+// @Produce json
+// @Router /stocks/purchases/{id} [put]
+// @Param id path string true "Purchase id"
 func (s *server) updateStockPurchaseByID(c echo.Context) error {
 	id := c.Param("id")
 	log.Debugf("[API] Updating stock purchase with id %s", id)

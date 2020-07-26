@@ -1,0 +1,948 @@
+basePath: /api/v1
+definitions:
+  wallet.Broker:
+    properties:
+      CNPJ:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+    required:
+    - id
+    - name
+    type: object
+  wallet.CertificateOfDeposit:
+    properties:
+      brokerId:
+        type: string
+      commission:
+        type: number
+      date:
+        type: string
+      dueDate:
+        type: string
+      fixedInterestRate:
+        type: number
+      id:
+        type: string
+      itemType:
+        type: string
+      portfolioId:
+        type: string
+      price:
+        type: number
+      shares:
+        type: number
+      symbol:
+        type: string
+    required:
+    - brokerId
+    - date
+    - dueDate
+    - fixedInterestRate
+    - itemType
+    - portfolioId
+    - price
+    - shares
+    - symbol
+    type: object
+  wallet.FICFI:
+    properties:
+      brokerId:
+        type: string
+      commission:
+        type: number
+      date:
+        type: string
+      id:
+        type: string
+      itemType:
+        type: string
+      portfolioId:
+        type: string
+      price:
+        type: number
+      shares:
+        type: number
+      symbol:
+        type: string
+    required:
+    - brokerId
+    - date
+    - itemType
+    - portfolioId
+    - price
+    - shares
+    - symbol
+    type: object
+  wallet.FII:
+    properties:
+      brokerId:
+        type: string
+      commission:
+        type: number
+      date:
+        type: string
+      id:
+        type: string
+      itemType:
+        type: string
+      portfolioId:
+        type: string
+      price:
+        type: number
+      shares:
+        type: number
+      symbol:
+        type: string
+    required:
+    - brokerId
+    - date
+    - itemType
+    - portfolioId
+    - price
+    - shares
+    - symbol
+    type: object
+  wallet.Portfolio:
+    properties:
+      costBasics:
+        type: number
+      gain:
+        type: number
+      id:
+        type: string
+      items:
+        additionalProperties:
+          $ref: '#/definitions/wallet.PortfolioItem'
+        type: object
+      name:
+        type: string
+      overallReturn:
+        type: number
+    required:
+    - id
+    - name
+    type: object
+  wallet.PortfolioItem:
+    properties:
+      averagePrice:
+        type: number
+      brokerId:
+        type: string
+      change:
+        type: number
+      closingPrice:
+        type: number
+      commission:
+        type: number
+      costBasics:
+        type: number
+      gain:
+        type: number
+      itemType:
+        type: string
+      lastPrice:
+        type: number
+      lastYearHigh:
+        type: number
+      lastYearLow:
+        type: number
+      name:
+        type: string
+      purchases:
+        $ref: '#/definitions/wallet.PurchasesList'
+        type: object
+      sales:
+        $ref: '#/definitions/wallet.SalesList'
+        type: object
+      sector:
+        type: string
+      segment:
+        type: string
+      shares:
+        type: number
+      subSector:
+        type: string
+    type: object
+  wallet.PurchasesList:
+    items:
+      type: object
+    type: array
+  wallet.SalesList:
+    items:
+      type: object
+    type: array
+  wallet.Stock:
+    properties:
+      brokerId:
+        type: string
+      commission:
+        type: number
+      date:
+        type: string
+      id:
+        type: string
+      itemType:
+        type: string
+      portfolioId:
+        type: string
+      price:
+        type: number
+      shares:
+        type: number
+      symbol:
+        type: string
+    required:
+    - brokerId
+    - date
+    - itemType
+    - portfolioId
+    - price
+    - shares
+    - symbol
+    type: object
+  wallet.StockFund:
+    properties:
+      brokerId:
+        type: string
+      commission:
+        type: number
+      date:
+        type: string
+      id:
+        type: string
+      itemType:
+        type: string
+      portfolioId:
+        type: string
+      price:
+        type: number
+      shares:
+        type: number
+      symbol:
+        type: string
+    required:
+    - brokerId
+    - date
+    - itemType
+    - portfolioId
+    - price
+    - shares
+    - symbol
+    type: object
+  wallet.TreasuryDirect:
+    properties:
+      brokerId:
+        type: string
+      commission:
+        type: number
+      date:
+        type: string
+      fixedInterestRate:
+        description: DueDate           *time.Time `json:"dueDate" bson:"dueDate" validate:"required"`
+        type: number
+      id:
+        type: string
+      itemType:
+        type: string
+      portfolioId:
+        type: string
+      price:
+        type: number
+      shares:
+        type: number
+      symbol:
+        type: string
+    required:
+    - brokerId
+    - date
+    - fixedInterestRate
+    - itemType
+    - portfolioId
+    - price
+    - shares
+    - symbol
+    type: object
+host: localhost:8889
+info:
+  contact:
+    name: API Support
+    url: https://github.com/mfinancecombr/finance-wallet-api
+  description: mfinance Wallet API data.
+  license:
+    name: BSD 3-Clause
+    url: https://opensource.org/licenses/BSD-3-Clause
+  title: MFinance Wallet API
+  version: 0.1.0
+paths:
+  /brokers:
+    get:
+      consumes:
+      - application/json
+      description: get all brokers data
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/wallet.Broker'
+            type: array
+      summary: List all brokers
+    post:
+      consumes:
+      - application/json
+      description: insert new broker
+      produces:
+      - application/json
+      summary: Insert some broker
+  /brokers/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: delete some broker by id
+      parameters:
+      - description: Broker id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      summary: Delete broker by ID
+    get:
+      consumes:
+      - application/json
+      description: get all broker data
+      parameters:
+      - description: Broker id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/wallet.Broker'
+      summary: Get a broker
+    put:
+      consumes:
+      - application/json
+      description: Update some broker by id
+      parameters:
+      - description: Broker id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      summary: Update broker data by ID
+  /certificate-of-deposit/purchases:
+    post:
+      consumes:
+      - application/json
+      description: insert new certificate of deposit purchase
+      produces:
+      - application/json
+      summary: Insert some certificate of deposit purchase
+  /certificate-of-deposit/purchases/{id}:
+    get:
+      consumes:
+      - application/json
+      description: get certificate of deposi purchase data
+      parameters:
+      - description: Purchase id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/wallet.CertificateOfDeposit'
+      summary: Get get certificate of deposit purchase by ID
+    put:
+      consumes:
+      - application/json
+      description: update new certificate of deposit purchase
+      parameters:
+      - description: Purchase id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      summary: Update some certificate of deposit purchase
+  /certificates-of-deposit/sales:
+    post:
+      consumes:
+      - application/json
+      description: insert new certificate of deposit sale
+      produces:
+      - application/json
+      summary: Insert some certificate of deposit sale
+  /certificates-of-deposit/sales/{id}:
+    get:
+      consumes:
+      - application/json
+      description: get certificate of deposit sale data
+      parameters:
+      - description: Sale id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/wallet.CertificateOfDeposit'
+      summary: Get get certificate of deposit sale by ID
+    put:
+      consumes:
+      - application/json
+      description: update new certificate of deposit sale
+      parameters:
+      - description: Sale id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      summary: Update some certificate of deposit sale
+  /ficfi/purchases:
+    post:
+      consumes:
+      - application/json
+      description: insert new FICFI purchase
+      produces:
+      - application/json
+      summary: Insert some FICFI purchase
+  /ficfi/purchases/{id}:
+    get:
+      consumes:
+      - application/json
+      description: get FIFCI purchase data
+      parameters:
+      - description: Purchase id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/wallet.FICFI'
+      summary: Get FICFI purchase by ID
+    put:
+      consumes:
+      - application/json
+      description: update new FICFI purchase
+      parameters:
+      - description: Purchase id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      summary: Update some FICFI purchase
+  /ficfi/sales:
+    post:
+      consumes:
+      - application/json
+      description: insert new FICFI sale
+      produces:
+      - application/json
+      summary: Insert some FICFI sale
+  /ficfi/sales/{id}:
+    get:
+      consumes:
+      - application/json
+      description: get FICFI sale data
+      parameters:
+      - description: Sale id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/wallet.FICFI'
+      summary: Get FICFI sale by ID
+    put:
+      consumes:
+      - application/json
+      description: update new FICFI sale
+      parameters:
+      - description: Sale id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      summary: Update some FICFI sale
+  /fiis/purchases:
+    post:
+      consumes:
+      - application/json
+      description: insert new FII purchase
+      produces:
+      - application/json
+      summary: Insert some FII purchase
+  /fiis/purchases/{id}:
+    get:
+      consumes:
+      - application/json
+      description: get FII purchase data
+      parameters:
+      - description: Purchase id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/wallet.FII'
+      summary: Get FII purchase by ID
+    put:
+      consumes:
+      - application/json
+      description: update new FII purchase
+      parameters:
+      - description: Purchase id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      summary: Update some FII purchase
+  /fiis/sales:
+    post:
+      consumes:
+      - application/json
+      description: insert new FII sale
+      produces:
+      - application/json
+      summary: Insert some FII sale
+  /fiis/sales/{id}:
+    get:
+      consumes:
+      - application/json
+      description: get FII sale data
+      parameters:
+      - description: Sale id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/wallet.FII'
+      summary: Get FII sale by ID
+    put:
+      consumes:
+      - application/json
+      description: update new FII sale
+      parameters:
+      - description: Sale id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      summary: Update some FII sale
+  /portfolios:
+    get:
+      consumes:
+      - application/json
+      description: get all portfolio data
+      parameters:
+      - description: filter by year
+        in: query
+        name: year
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/wallet.Portfolio'
+            type: array
+      summary: List all portfolios
+  /portfolios/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: delete some portfolio by id
+      parameters:
+      - description: Portfolio id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      summary: Delete portfolio by ID
+    get:
+      consumes:
+      - application/json
+      description: get all portfolio data
+      parameters:
+      - description: Broker id
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: filter by year
+        in: query
+        name: year
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/wallet.Portfolio'
+      summary: Get a portfolio
+    put:
+      consumes:
+      - application/json
+      description: Update some portfolio by id
+      parameters:
+      - description: Portfolio id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      summary: Update portfolio data by ID
+  /portfolioss:
+    post:
+      consumes:
+      - application/json
+      description: insert new portfolio
+      produces:
+      - application/json
+      summary: Insert some portfolio
+  /purchases:
+    get:
+      consumes:
+      - application/json
+      description: get all purchases data
+      produces:
+      - application/json
+      summary: List all purchases
+  /purchases/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: delete some purchase by id
+      parameters:
+      - description: Sale id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      summary: Delete purchase by ID
+  /sales:
+    get:
+      consumes:
+      - application/json
+      description: get all sales data
+      produces:
+      - application/json
+      summary: List all sales
+  /sales/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: delete some sale by id
+      parameters:
+      - description: Sale id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      summary: Delete sale by ID
+  /stocks-funds/purchases:
+    post:
+      consumes:
+      - application/json
+      description: insert new stocks fund purchase
+      produces:
+      - application/json
+      summary: Insert some stocks fund purchase
+  /stocks-funds/purchases/{id}:
+    get:
+      consumes:
+      - application/json
+      description: get stocks fund purchase data
+      parameters:
+      - description: Purchase id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/wallet.StockFund'
+      summary: Get stocks fund purchase by ID
+    put:
+      consumes:
+      - application/json
+      description: update new stocks fund purchase
+      parameters:
+      - description: Purchase id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      summary: Update some stocks fund purchase
+  /stocks-funds/sales:
+    post:
+      consumes:
+      - application/json
+      description: insert new stocks fund sale
+      produces:
+      - application/json
+      summary: Insert some stocks fund sale
+  /stocks-funds/sales/{id}:
+    get:
+      consumes:
+      - application/json
+      description: get stocks fund sale data
+      parameters:
+      - description: Sale id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/wallet.StockFund'
+      summary: Get stocks fund sale by ID
+    put:
+      consumes:
+      - application/json
+      description: update new stocks fund sale
+      parameters:
+      - description: Sale id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      summary: Update some stocks fund sale
+  /stocks/purchases:
+    post:
+      consumes:
+      - application/json
+      description: insert new stocksFII purchase
+      produces:
+      - application/json
+      summary: Insert some stocks purchase
+  /stocks/purchases/{id}:
+    get:
+      consumes:
+      - application/json
+      description: get stocks purchase data
+      parameters:
+      - description: Purchase id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/wallet.Stock'
+      summary: Get stocks purchase by ID
+    put:
+      consumes:
+      - application/json
+      description: update new stocksFII purchase
+      parameters:
+      - description: Purchase id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      summary: Update some stocks purchase
+  /stocks/sales:
+    post:
+      consumes:
+      - application/json
+      description: insert new stocks sale
+      produces:
+      - application/json
+      summary: Insert some stocks sale
+  /stocks/sales/{id}:
+    get:
+      consumes:
+      - application/json
+      description: get stocks sale data
+      parameters:
+      - description: Sale id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/wallet.Stock'
+      summary: Get stocks sale by ID
+    put:
+      consumes:
+      - application/json
+      description: update new stocks sale
+      parameters:
+      - description: Sale id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      summary: Update some stocks sale
+  /treasuries-direct/purchases:
+    post:
+      consumes:
+      - application/json
+      description: insert new treasury direct purchase
+      produces:
+      - application/json
+      summary: Insert some treasury direct purchase
+  /treasuries-direct/purchases/{id}:
+    get:
+      consumes:
+      - application/json
+      description: get treasury direct purchase data
+      parameters:
+      - description: Purchase id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/wallet.TreasuryDirect'
+      summary: Get treasury direct purchase by ID
+    put:
+      consumes:
+      - application/json
+      description: update new treasury direct purchase
+      parameters:
+      - description: Purchase id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      summary: Update some treasury direct purchase
+  /treasuries-direct/sales:
+    post:
+      consumes:
+      - application/json
+      description: insert new treasury direct sale
+      produces:
+      - application/json
+      summary: Insert some treasury direct sale
+  /treasuries-direct/sales/{id}:
+    get:
+      consumes:
+      - application/json
+      description: get treasury direct  sale data
+      parameters:
+      - description: Sale id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/wallet.TreasuryDirect'
+      summary: Get treasury direct sale by ID
+    put:
+      consumes:
+      - application/json
+      description: update new treasury direct sale
+      parameters:
+      - description: Sale id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      summary: Update some treasury direct sale
+swagger: "2.0"

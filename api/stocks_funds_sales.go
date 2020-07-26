@@ -21,6 +21,14 @@ func (s *server) getAllStockFundsSales(c echo.Context) error {
 	return c.JSON(http.StatusOK, result)
 }
 
+// getStockFundSaleByID godoc
+// @Summary Get stocks fund sale by ID
+// @Description get stocks fund sale data
+// @Accept json
+// @Produce json
+// @Success 200 {object} wallet.StockFund
+// @Router /stocks-funds/sales/{id} [get]
+// @Param id path string true "Sale id"
 func (s *server) getStockFundSaleByID(c echo.Context) error {
 	id := c.Param("id")
 	log.Debugf("[API] Retrieving stock fund sale with id: %s", id)
@@ -35,6 +43,12 @@ func (s *server) getStockFundSaleByID(c echo.Context) error {
 	return c.JSON(http.StatusOK, result)
 }
 
+// insertStockFundSale godoc
+// @Summary Insert some stocks fund sale
+// @Description insert new stocks fund sale
+// @Accept json
+// @Produce json
+// @Router /stocks-funds/sales [post]
 func (s *server) insertStockFundSale(c echo.Context) error {
 	log.Debugf("[API] Inserting stock fund sale")
 
@@ -59,6 +73,13 @@ func (s *server) insertStockFundSale(c echo.Context) error {
 	return c.JSON(http.StatusOK, result)
 }
 
+// updateStockFundSaleByID godoc
+// @Summary Update some stocks fund sale
+// @Description update new stocks fund sale
+// @Accept json
+// @Produce json
+// @Router /stocks-funds/sales/{id} [put]
+// @Param id path string true "Sale id"
 func (s *server) updateStockFundSaleByID(c echo.Context) error {
 	id := c.Param("id")
 	log.Debugf("[API] Updating stock fund sale with id %s", id)

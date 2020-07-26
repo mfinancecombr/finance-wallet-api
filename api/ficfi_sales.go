@@ -21,6 +21,14 @@ func (s *server) getAllFICFISales(c echo.Context) error {
 	return c.JSON(http.StatusOK, result)
 }
 
+// getFICFISaleByID godoc
+// @Summary Get FICFI sale by ID
+// @Description get FICFI sale data
+// @Accept json
+// @Produce json
+// @Success 200 {object} wallet.FICFI
+// @Router /ficfi/sales/{id} [get]
+// @Param id path string true "Sale id"
 func (s *server) getFICFISaleByID(c echo.Context) error {
 	id := c.Param("id")
 	log.Debugf("[API] Retrieving FICFI sale with id: %s", id)
@@ -35,6 +43,12 @@ func (s *server) getFICFISaleByID(c echo.Context) error {
 	return c.JSON(http.StatusOK, result)
 }
 
+// insertFICFISale godoc
+// @Summary Insert some FICFI sale
+// @Description insert new FICFI sale
+// @Accept json
+// @Produce json
+// @Router /ficfi/sales [post]
 func (s *server) insertFICFISale(c echo.Context) error {
 	log.Debugf("[API] Inserting FICFI sale")
 
@@ -59,6 +73,13 @@ func (s *server) insertFICFISale(c echo.Context) error {
 	return c.JSON(http.StatusOK, result)
 }
 
+// updateFICFISaleByID godoc
+// @Summary Update some FICFI sale
+// @Description update new FICFI sale
+// @Accept json
+// @Produce json
+// @Router /ficfi/sales/{id} [put]
+// @Param id path string true "Sale id"
 func (s *server) updateFICFISaleByID(c echo.Context) error {
 	id := c.Param("id")
 	log.Debugf("[API] Updating FICFI sale with id %s", id)

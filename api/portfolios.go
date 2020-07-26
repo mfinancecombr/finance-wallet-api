@@ -13,6 +13,15 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
+// portfolio godoc
+// @Summary Get a portfolio
+// @Description get all portfolio data
+// @Accept json
+// @Produce json
+// @Success 200 {object} wallet.Portfolio
+// @Router /portfolios/{id} [get]
+// @Param id path string true "Broker id"
+// @Param year query string false "filter by year"
 func (s *server) portfolio(c echo.Context) error {
 	id := c.Param("id")
 	log.Debugf("Retrieving %s data...", id)
@@ -46,6 +55,14 @@ func (s *server) portfolio(c echo.Context) error {
 	return c.JSON(http.StatusOK, result)
 }
 
+// portfolios godoc
+// @Summary List all portfolios
+// @Description get all portfolio data
+// @Accept json
+// @Produce json
+// @Success 200 {array} wallet.Portfolio
+// @Router /portfolios [get]
+// @Param year query string false "filter by year"
 func (s *server) portfolios(c echo.Context) error {
 	log.Debug("Retrieving all portfolios")
 
@@ -76,6 +93,12 @@ func (s *server) portfolios(c echo.Context) error {
 	return c.JSON(http.StatusOK, portfolios)
 }
 
+// portfoliosAdd godoc
+// @Summary Insert some portfolio
+// @Description insert new portfolio
+// @Accept json
+// @Produce json
+// @Router /portfolios [post]
 func (s *server) portfoliosAdd(c echo.Context) error {
 	log.Debug("Insert portfolio data")
 
@@ -98,6 +121,13 @@ func (s *server) portfoliosAdd(c echo.Context) error {
 	return c.JSON(http.StatusOK, result)
 }
 
+// portfoliosDelete godoc
+// @Summary Delete portfolio by ID
+// @Description delete some portfolio by id
+// @Accept json
+// @Produce json
+// @Router /portfolios/{id} [delete]
+// @Param id path string true "Portfolio id"
 func (s *server) portfoliosDelete(c echo.Context) error {
 	id := c.Param("id")
 	log.Debugf("Deleting %s data", id)
@@ -108,6 +138,13 @@ func (s *server) portfoliosDelete(c echo.Context) error {
 	return c.JSON(http.StatusOK, result)
 }
 
+// portfoliosUpdate godoc
+// @Summary Update portfolio data by ID
+// @Description Update some portfolio by id
+// @Accept json
+// @Produce json
+// @Router /portfolios/{id} [put]
+// @Param id path string true "Portfolio id"
 func (s *server) portfoliosUpdate(c echo.Context) error {
 	id := c.Param("id")
 	log.Debugf("Updating %s data", id)
