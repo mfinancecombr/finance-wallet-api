@@ -10,24 +10,25 @@ import (
 )
 
 type PortfolioItem struct {
-	AveragePrice float64       `json:"averagePrice" bson:"averagePrice"`
-	BrokerID     string        `json:"brokerId" bson:"brokerId"`
-	Change       float64       `json:"change" bson:"change"`
-	ClosingPrice float64       `json:"closingPrice" bson:"closingPrice"`
-	Commission   float64       `json:"commission" bson:"commission"`
-	CostBasics   float64       `json:"costBasics" bson:"costBasics"`
-	Gain         float64       `json:"gain" bson:"gain"`
-	ItemType     string        `json:"itemType" bson:"itemType"`
-	LastPrice    float64       `json:"lastPrice" bson:"lastPrice"`
-	LastYearHigh float64       `json:"lastYearHigh" bson:"lastYearHigh"`
-	LastYearLow  float64       `json:"lastYearLow" bson:"lastYearLow"`
-	Name         string        `json:"name" bson:"name"`
-	Purchases    PurchasesList `json:"purchases" bson:"purchases"`
-	Sales        SalesList     `json:"sales" bson:"sales"`
-	Sector       string        `json:"sector" bson:"sector"`
-	Segment      string        `json:"segment" bson:"segment"`
-	Shares       float64       `json:"shares" bson:"shares"`
-	SubSector    string        `json:"subSector" bson:"subSector"`
+	AveragePrice  float64       `json:"averagePrice" bson:"averagePrice"`
+	BrokerID      string        `json:"brokerId" bson:"brokerId"`
+	Change        float64       `json:"change" bson:"change"`
+	ClosingPrice  float64       `json:"closingPrice" bson:"closingPrice"`
+	Commission    float64       `json:"commission" bson:"commission"`
+	CostBasics    float64       `json:"costBasics" bson:"costBasics"`
+	Gain          float64       `json:"gain" bson:"gain"`
+	OverallReturn float64       `json:"overallReturn" bson:"overallReturn"`
+	ItemType      string        `json:"itemType" bson:"itemType"`
+	LastPrice     float64       `json:"lastPrice" bson:"lastPrice"`
+	LastYearHigh  float64       `json:"lastYearHigh" bson:"lastYearHigh"`
+	LastYearLow   float64       `json:"lastYearLow" bson:"lastYearLow"`
+	Name          string        `json:"name" bson:"name"`
+	Purchases     PurchasesList `json:"purchases" bson:"purchases"`
+	Sales         SalesList     `json:"sales" bson:"sales"`
+	Sector        string        `json:"sector" bson:"sector"`
+	Segment       string        `json:"segment" bson:"segment"`
+	Shares        float64       `json:"shares" bson:"shares"`
+	SubSector     string        `json:"subSector" bson:"subSector"`
 }
 
 type Portfolio struct {
@@ -154,9 +155,12 @@ func (pi *PortfolioItem) Recalculate() {
 
 		// FIXME
 		if pi.ItemType == "stocks" || pi.ItemType == "fiis" {
-			pi.Gain = roundFloatTwoDecimalPlaces((pi.Shares * pi.LastPrice) - pi.CostBasics)
+			gain := (pi.Shares * pi.LastPrice) - pi.CostBasics
+			pi.Gain = roundFloatTwoDecimalPlaces(gain)
+			pi.OverallReturn = roundFloatTwoDecimalPlaces((gain * 100) / pi.CostBasics)
 		} else {
 			pi.Gain = 0
+			pi.OverallReturn = 0
 		}
 	}
 }
