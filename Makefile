@@ -13,3 +13,9 @@ clean:
 
 docs-update:
 	@swag init
+
+docker-build:
+	@docker build . -t mfinance/finance-wallet-api
+
+docker-run:
+	@docker run -p 8889:8889 mfinance/finance-wallet-api
