@@ -27,3 +27,23 @@ type TreasuryDirectList []TreasuryDirect
 func NewTreasuryDirect() *TreasuryDirect {
 	return &TreasuryDirect{ItemType: "treasury-direct"}
 }
+
+func (s TreasuryDirect) GetPrice() float64 {
+	return s.Price
+}
+
+func (s TreasuryDirect) GetShares() float64 {
+	return s.Shares
+}
+
+func (s TreasuryDirect) GetComission() float64 {
+	return s.Commission
+}
+
+func (s TreasuryDirect) GetType() string {
+	return s.Type
+}
+
+func (s TreasuryDirect) GetBrokerID() string {
+	return s.BrokerID
+}

@@ -25,3 +25,23 @@ type StockFundList []StockFund
 func NewStockFund() *StockFund {
 	return &StockFund{ItemType: "stocks-funds"}
 }
+
+func (s StockFund) GetPrice() float64 {
+	return s.Price
+}
+
+func (s StockFund) GetShares() float64 {
+	return s.Shares
+}
+
+func (s StockFund) GetComission() float64 {
+	return s.Commission
+}
+
+func (s StockFund) GetType() string {
+	return s.Type
+}
+
+func (s StockFund) GetBrokerID() string {
+	return s.BrokerID
+}

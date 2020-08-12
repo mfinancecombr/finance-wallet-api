@@ -25,3 +25,23 @@ type FICFIList []FICFI
 func NewFICFI() *FICFI {
 	return &FICFI{ItemType: "ficfi"}
 }
+
+func (s FICFI) GetPrice() float64 {
+	return s.Price
+}
+
+func (s FICFI) GetShares() float64 {
+	return s.Shares
+}
+
+func (s FICFI) GetComission() float64 {
+	return s.Commission
+}
+
+func (s FICFI) GetType() string {
+	return s.Type
+}
+
+func (s FICFI) GetBrokerID() string {
+	return s.BrokerID
+}
