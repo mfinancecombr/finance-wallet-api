@@ -11,13 +11,14 @@ import (
 	"github.com/spf13/viper"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
 	"go.mongodb.org/mongo-driver/mongo/readpref"
 )
 
 type Collection interface {
 	DeleteOne(c string, d interface{}) (*mongo.DeleteResult, error)
 	Distinct(c string, q string, f interface{}) ([]interface{}, error)
-	FindAll(c string, q bson.M) ([]bson.M, error)
+	FindAll(c string, q bson.M, o ...*options.FindOptions) ([]bson.M, error)
 	FindOne(c string, q bson.M, r interface{}) error
 	InsertOne(c string, d interface{}) (*mongo.InsertOneResult, error)
 	Ping() error
@@ -48,11 +49,11 @@ func (m *mongoCollection) InsertOne(c string, d interface{}) (*mongo.InsertOneRe
 	return collection.InsertOne(ctx, d)
 }
 
-func (m *mongoCollection) FindAll(c string, q bson.M) ([]bson.M, error) {
+func (m *mongoCollection) FindAll(c string, q bson.M, o ...*options.FindOptions) ([]bson.M, error) {
 	log.Debug("[Collection] FindAll")
 	collection := m.session.Database(m.dbName).Collection(c)
 	ctx, _ := newCollectionContext()
-	cur, err := collection.Find(ctx, q)
+	cur, err := collection.Find(ctx, q, o...)
 	if err != nil {
 		log.Errorf("[Collection] Find: %s", err)
 		return nil, err

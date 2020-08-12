@@ -116,32 +116,32 @@
                 ]
             }
         },
-        "/certificate-of-deposit/purchases": {
+        "/certificates-of-deposit/operations": {
             "post": {
-                "description": "insert new certificate of deposit purchase",
+                "description": "insert new certificate of deposit operation",
                 "consumes": [
                     "application/json"
                 ],
                 "produces": [
                     "application/json"
                 ],
-                "summary": "Insert some certificate of deposit purchase"
+                "summary": "Insert some certificate of deposit operation"
             }
         },
-        "/certificate-of-deposit/purchases/{id}": {
+        "/certificates-of-deposit/operations/{id}": {
             "get": {
-                "description": "get certificate of deposi purchase data",
+                "description": "get certificate of deposit operation data",
                 "consumes": [
                     "application/json"
                 ],
                 "produces": [
                     "application/json"
                 ],
-                "summary": "Get get certificate of deposit purchase by ID",
+                "summary": "Get get certificate of deposit operation by ID",
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "Purchase id",
+                        "description": "Operation id",
                         "name": "id",
                         "in": "path",
                         "required": true
@@ -157,18 +157,18 @@
                 }
             },
             "put": {
-                "description": "update new certificate of deposit purchase",
+                "description": "update new certificate of deposit operation",
                 "consumes": [
                     "application/json"
                 ],
                 "produces": [
                     "application/json"
                 ],
-                "summary": "Update some certificate of deposit purchase",
+                "summary": "Update some certificate of deposit operation",
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "Purchase id",
+                        "description": "Operation id",
                         "name": "id",
                         "in": "path",
                         "required": true
@@ -176,92 +176,32 @@
                 ]
             }
         },
-        "/certificates-of-deposit/sales": {
+        "/ficfi/operations": {
             "post": {
-                "description": "insert new certificate of deposit sale",
+                "description": "insert new FICFI operation",
                 "consumes": [
                     "application/json"
                 ],
                 "produces": [
                     "application/json"
                 ],
-                "summary": "Insert some certificate of deposit sale"
+                "summary": "Insert some FICFI operation"
             }
         },
-        "/certificates-of-deposit/sales/{id}": {
+        "/ficfi/operations/{id}": {
             "get": {
-                "description": "get certificate of deposit sale data",
+                "description": "get FICFI operation data",
                 "consumes": [
                     "application/json"
                 ],
                 "produces": [
                     "application/json"
                 ],
-                "summary": "Get get certificate of deposit sale by ID",
+                "summary": "Get FICFI operation by ID",
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "Sale id",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/wallet.CertificateOfDeposit"
-                        }
-                    }
-                }
-            },
-            "put": {
-                "description": "update new certificate of deposit sale",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "summary": "Update some certificate of deposit sale",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Sale id",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ]
-            }
-        },
-        "/ficfi/purchases": {
-            "post": {
-                "description": "insert new FICFI purchase",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "summary": "Insert some FICFI purchase"
-            }
-        },
-        "/ficfi/purchases/{id}": {
-            "get": {
-                "description": "get FIFCI purchase data",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "summary": "Get FICFI purchase by ID",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Purchase id",
+                        "description": "Operation id",
                         "name": "id",
                         "in": "path",
                         "required": true
@@ -277,18 +217,18 @@
                 }
             },
             "put": {
-                "description": "update new FICFI purchase",
+                "description": "update new FICFI operation",
                 "consumes": [
                     "application/json"
                 ],
                 "produces": [
                     "application/json"
                 ],
-                "summary": "Update some FICFI purchase",
+                "summary": "Update some FICFI operation",
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "Purchase id",
+                        "description": "Operation id",
                         "name": "id",
                         "in": "path",
                         "required": true
@@ -296,92 +236,32 @@
                 ]
             }
         },
-        "/ficfi/sales": {
+        "/fiis/operations": {
             "post": {
-                "description": "insert new FICFI sale",
+                "description": "insert new FII operation",
                 "consumes": [
                     "application/json"
                 ],
                 "produces": [
                     "application/json"
                 ],
-                "summary": "Insert some FICFI sale"
+                "summary": "Insert some FII operation"
             }
         },
-        "/ficfi/sales/{id}": {
+        "/fiis/operations/{id}": {
             "get": {
-                "description": "get FICFI sale data",
+                "description": "get FII operation data",
                 "consumes": [
                     "application/json"
                 ],
                 "produces": [
                     "application/json"
                 ],
-                "summary": "Get FICFI sale by ID",
+                "summary": "Get FII operation by ID",
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "Sale id",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/wallet.FICFI"
-                        }
-                    }
-                }
-            },
-            "put": {
-                "description": "update new FICFI sale",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "summary": "Update some FICFI sale",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Sale id",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ]
-            }
-        },
-        "/fiis/purchases": {
-            "post": {
-                "description": "insert new FII purchase",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "summary": "Insert some FII purchase"
-            }
-        },
-        "/fiis/purchases/{id}": {
-            "get": {
-                "description": "get FII purchase data",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "summary": "Get FII purchase by ID",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Purchase id",
+                        "description": "Operation id",
                         "name": "id",
                         "in": "path",
                         "required": true
@@ -397,18 +277,18 @@
                 }
             },
             "put": {
-                "description": "update new FII purchase",
+                "description": "update new FII operation",
                 "consumes": [
                     "application/json"
                 ],
                 "produces": [
                     "application/json"
                 ],
-                "summary": "Update some FII purchase",
+                "summary": "Update some FII operation",
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "Purchase id",
+                        "description": "Operation id",
                         "name": "id",
                         "in": "path",
                         "required": true
@@ -416,59 +296,32 @@
                 ]
             }
         },
-        "/fiis/sales": {
-            "post": {
-                "description": "insert new FII sale",
+        "/operations": {
+            "get": {
+                "description": "get all operations data",
                 "consumes": [
                     "application/json"
                 ],
                 "produces": [
                     "application/json"
                 ],
-                "summary": "Insert some FII sale"
+                "summary": "List all operations"
             }
         },
-        "/fiis/sales/{id}": {
-            "get": {
-                "description": "get FII sale data",
+        "/operations/{id}": {
+            "delete": {
+                "description": "delete some operation by id",
                 "consumes": [
                     "application/json"
                 ],
                 "produces": [
                     "application/json"
                 ],
-                "summary": "Get FII sale by ID",
+                "summary": "Delete operation by ID",
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "Sale id",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/wallet.FII"
-                        }
-                    }
-                }
-            },
-            "put": {
-                "description": "update new FII sale",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "summary": "Update some FII sale",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Sale id",
+                        "description": "Operation id",
                         "name": "id",
                         "in": "path",
                         "required": true
@@ -505,6 +358,16 @@
                         }
                     }
                 }
+            },
+            "post": {
+                "description": "insert new portfolio",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Insert some portfolio"
             }
         },
         "/portfolios/{id}": {
@@ -580,110 +443,32 @@
                 ]
             }
         },
-        "/portfolioss": {
+        "/stocks-funds/operations": {
             "post": {
-                "description": "insert new portfolio",
+                "description": "insert new stocks fund operation",
                 "consumes": [
                     "application/json"
                 ],
                 "produces": [
                     "application/json"
                 ],
-                "summary": "Insert some portfolio"
+                "summary": "Insert some stocks fund operation"
             }
         },
-        "/purchases": {
+        "/stocks-funds/operations/{id}": {
             "get": {
-                "description": "get all purchases data",
+                "description": "get stocks fund operation data",
                 "consumes": [
                     "application/json"
                 ],
                 "produces": [
                     "application/json"
                 ],
-                "summary": "List all purchases"
-            }
-        },
-        "/purchases/{id}": {
-            "delete": {
-                "description": "delete some purchase by id",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "summary": "Delete purchase by ID",
+                "summary": "Get stocks fund operation by ID",
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "Sale id",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ]
-            }
-        },
-        "/sales": {
-            "get": {
-                "description": "get all sales data",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "summary": "List all sales"
-            }
-        },
-        "/sales/{id}": {
-            "delete": {
-                "description": "delete some sale by id",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "summary": "Delete sale by ID",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Sale id",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ]
-            }
-        },
-        "/stocks-funds/purchases": {
-            "post": {
-                "description": "insert new stocks fund purchase",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "summary": "Insert some stocks fund purchase"
-            }
-        },
-        "/stocks-funds/purchases/{id}": {
-            "get": {
-                "description": "get stocks fund purchase data",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "summary": "Get stocks fund purchase by ID",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Purchase id",
+                        "description": "Operation id",
                         "name": "id",
                         "in": "path",
                         "required": true
@@ -699,18 +484,18 @@
                 }
             },
             "put": {
-                "description": "update new stocks fund purchase",
+                "description": "update new stocks fund operation",
                 "consumes": [
                     "application/json"
                 ],
                 "produces": [
                     "application/json"
                 ],
-                "summary": "Update some stocks fund purchase",
+                "summary": "Update some stocks fund operation",
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "Purchase id",
+                        "description": "Operation id",
                         "name": "id",
                         "in": "path",
                         "required": true
@@ -718,92 +503,32 @@
                 ]
             }
         },
-        "/stocks-funds/sales": {
+        "/stocks/operations": {
             "post": {
-                "description": "insert new stocks fund sale",
+                "description": "insert new stocks operation",
                 "consumes": [
                     "application/json"
                 ],
                 "produces": [
                     "application/json"
                 ],
-                "summary": "Insert some stocks fund sale"
+                "summary": "Insert some stocks operation"
             }
         },
-        "/stocks-funds/sales/{id}": {
+        "/stocks/operations/{id}": {
             "get": {
-                "description": "get stocks fund sale data",
+                "description": "get stocks operation data",
                 "consumes": [
                     "application/json"
                 ],
                 "produces": [
                     "application/json"
                 ],
-                "summary": "Get stocks fund sale by ID",
+                "summary": "Get stocks operation by ID",
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "Sale id",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/wallet.StockFund"
-                        }
-                    }
-                }
-            },
-            "put": {
-                "description": "update new stocks fund sale",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "summary": "Update some stocks fund sale",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Sale id",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ]
-            }
-        },
-        "/stocks/purchases": {
-            "post": {
-                "description": "insert new stocksFII purchase",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "summary": "Insert some stocks purchase"
-            }
-        },
-        "/stocks/purchases/{id}": {
-            "get": {
-                "description": "get stocks purchase data",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "summary": "Get stocks purchase by ID",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Purchase id",
+                        "description": "Operation id",
                         "name": "id",
                         "in": "path",
                         "required": true
@@ -819,18 +544,18 @@
                 }
             },
             "put": {
-                "description": "update new stocksFII purchase",
+                "description": "update new stocks operation",
                 "consumes": [
                     "application/json"
                 ],
                 "produces": [
                     "application/json"
                 ],
-                "summary": "Update some stocks purchase",
+                "summary": "Update some stocks operation",
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "Purchase id",
+                        "description": "Operation id",
                         "name": "id",
                         "in": "path",
                         "required": true
@@ -838,92 +563,32 @@
                 ]
             }
         },
-        "/stocks/sales": {
+        "/treasuries-direct/operations": {
             "post": {
-                "description": "insert new stocks sale",
+                "description": "insert new treasury direct operation",
                 "consumes": [
                     "application/json"
                 ],
                 "produces": [
                     "application/json"
                 ],
-                "summary": "Insert some stocks sale"
+                "summary": "Insert some treasury direct operation"
             }
         },
-        "/stocks/sales/{id}": {
+        "/treasuries-direct/operations/{id}": {
             "get": {
-                "description": "get stocks sale data",
+                "description": "get treasury direct  operation data",
                 "consumes": [
                     "application/json"
                 ],
                 "produces": [
                     "application/json"
                 ],
-                "summary": "Get stocks sale by ID",
+                "summary": "Get treasury direct operation by ID",
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "Sale id",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/wallet.Stock"
-                        }
-                    }
-                }
-            },
-            "put": {
-                "description": "update new stocks sale",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "summary": "Update some stocks sale",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Sale id",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ]
-            }
-        },
-        "/treasuries-direct/purchases": {
-            "post": {
-                "description": "insert new treasury direct purchase",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "summary": "Insert some treasury direct purchase"
-            }
-        },
-        "/treasuries-direct/purchases/{id}": {
-            "get": {
-                "description": "get treasury direct purchase data",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "summary": "Get treasury direct purchase by ID",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Purchase id",
+                        "description": "Operation id",
                         "name": "id",
                         "in": "path",
                         "required": true
@@ -939,78 +604,18 @@
                 }
             },
             "put": {
-                "description": "update new treasury direct purchase",
+                "description": "update new treasury direct operation",
                 "consumes": [
                     "application/json"
                 ],
                 "produces": [
                     "application/json"
                 ],
-                "summary": "Update some treasury direct purchase",
+                "summary": "Update some treasury direct operation",
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "Purchase id",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ]
-            }
-        },
-        "/treasuries-direct/sales": {
-            "post": {
-                "description": "insert new treasury direct sale",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "summary": "Insert some treasury direct sale"
-            }
-        },
-        "/treasuries-direct/sales/{id}": {
-            "get": {
-                "description": "get treasury direct  sale data",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "summary": "Get treasury direct sale by ID",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Sale id",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/wallet.TreasuryDirect"
-                        }
-                    }
-                }
-            },
-            "put": {
-                "description": "update new treasury direct sale",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "summary": "Update some treasury direct sale",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Sale id",
+                        "description": "Operation id",
                         "name": "id",
                         "in": "path",
                         "required": true
@@ -1049,7 +654,8 @@
                 "portfolioId",
                 "price",
                 "shares",
-                "symbol"
+                "symbol",
+                "type"
             ],
             "properties": {
                 "brokerId": {
@@ -1084,6 +690,9 @@
                 },
                 "symbol": {
                     "type": "string"
+                },
+                "type": {
+                    "type": "string"
                 }
             }
         },
@@ -1096,7 +705,8 @@
                 "portfolioId",
                 "price",
                 "shares",
-                "symbol"
+                "symbol",
+                "type"
             ],
             "properties": {
                 "brokerId": {
@@ -1124,6 +734,9 @@
                     "type": "number"
                 },
                 "symbol": {
+                    "type": "string"
+                },
+                "type": {
                     "type": "string"
                 }
             }
@@ -1137,7 +750,8 @@
                 "portfolioId",
                 "price",
                 "shares",
-                "symbol"
+                "symbol",
+                "type"
             ],
             "properties": {
                 "brokerId": {
@@ -1166,7 +780,16 @@
                 },
                 "symbol": {
                     "type": "string"
+                },
+                "type": {
+                    "type": "string"
                 }
+            }
+        },
+        "wallet.OperationsList": {
+            "type": "array",
+            "items": {
+                "type": "object"
             }
         },
         "wallet.Portfolio": {
@@ -1238,13 +861,12 @@
                 "name": {
                     "type": "string"
                 },
-                "purchases": {
+                "operations": {
                     "type": "object",
-                    "$ref": "#/definitions/wallet.PurchasesList"
+                    "$ref": "#/definitions/wallet.OperationsList"
                 },
-                "sales": {
-                    "type": "object",
-                    "$ref": "#/definitions/wallet.SalesList"
+                "overallReturn": {
+                    "type": "number"
                 },
                 "sector": {
                     "type": "string"
@@ -1260,18 +882,6 @@
                 }
             }
         },
-        "wallet.PurchasesList": {
-            "type": "array",
-            "items": {
-                "type": "object"
-            }
-        },
-        "wallet.SalesList": {
-            "type": "array",
-            "items": {
-                "type": "object"
-            }
-        },
         "wallet.Stock": {
             "type": "object",
             "required": [
@@ -1281,7 +891,8 @@
                 "portfolioId",
                 "price",
                 "shares",
-                "symbol"
+                "symbol",
+                "type"
             ],
             "properties": {
                 "brokerId": {
@@ -1309,6 +920,9 @@
                     "type": "number"
                 },
                 "symbol": {
+                    "type": "string"
+                },
+                "type": {
                     "type": "string"
                 }
             }
@@ -1322,7 +936,8 @@
                 "portfolioId",
                 "price",
                 "shares",
-                "symbol"
+                "symbol",
+                "type"
             ],
             "properties": {
                 "brokerId": {
@@ -1350,6 +965,9 @@
                     "type": "number"
                 },
                 "symbol": {
+                    "type": "string"
+                },
+                "type": {
                     "type": "string"
                 }
             }
@@ -1364,7 +982,8 @@
                 "portfolioId",
                 "price",
                 "shares",
-                "symbol"
+                "symbol",
+                "type"
             ],
             "properties": {
                 "brokerId": {
@@ -1396,6 +1015,9 @@
                     "type": "number"
                 },
                 "symbol": {
+                    "type": "string"
+                },
+                "type": {
                     "type": "string"
                 }
             }

@@ -11,9 +11,9 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
-func (s *server) getAllStockFundsPurchases(c echo.Context) error {
-	log.Debug("[API] Retrieving all stocks funds purchases")
-	result, err := s.db.GetAllStocksFundsPurchases()
+func (s *server) getAllStockOperations(c echo.Context) error {
+	log.Debug("[API] Retrieving all stocks operations")
+	result, err := s.db.GetAllStocksOperations()
 	if err != nil {
 		log.Errorf("[API] Error on retrieve data: %v", err)
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
@@ -21,38 +21,38 @@ func (s *server) getAllStockFundsPurchases(c echo.Context) error {
 	return c.JSON(http.StatusOK, result)
 }
 
-// getStockFundPurchaseByID godoc
-// @Summary Get stocks fund purchase by ID
-// @Description get stocks fund purchase data
+// getStockOperationByID godoc
+// @Summary Get stocks operation by ID
+// @Description get stocks operation data
 // @Accept json
 // @Produce json
-// @Success 200 {object} wallet.StockFund
-// @Router /stocks-funds/purchases/{id} [get]
-// @Param id path string true "Purchase id"
-func (s *server) getStockFundPurchaseByID(c echo.Context) error {
+// @Router /stocks/operations/{id} [get]
+// @Success 200 {object} wallet.Stock
+// @Param id path string true "Operation id"
+func (s *server) getStockOperationByID(c echo.Context) error {
 	id := c.Param("id")
-	log.Debugf("[API] Retrieving stock fund purchase with id: %s", id)
-	result, err := s.db.GetStockFundPurchaseByID(id)
+	log.Debugf("[API] Retrieving stock operation with id: %s", id)
+	result, err := s.db.GetStockOperationByID(id)
 	if err != nil {
 		log.Errorf("[API] Error on retrieve data: %v", err)
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}
 	if result == nil {
-		return c.JSON(http.StatusNotFound, "Stock fund purchase data not found")
+		return c.JSON(http.StatusNotFound, "Stock operation data not found")
 	}
 	return c.JSON(http.StatusOK, result)
 }
 
-// insertStockFundPurchase godoc
-// @Summary Insert some stocks fund purchase
-// @Description insert new stocks fund purchase
+// insertStockOperation godoc
+// @Summary Insert some stocks operation
+// @Description insert new stocks operation
 // @Accept json
 // @Produce json
-// @Router /stocks-funds/purchases [post]
-func (s *server) insertStockFundPurchase(c echo.Context) error {
-	log.Debugf("[API] Inserting stock fund purchase")
+// @Router /stocks/operations [post]
+func (s *server) insertStockOperation(c echo.Context) error {
+	log.Debugf("[API] Inserting stock operation")
 
-	data := wallet.NewStockFund()
+	data := wallet.NewStock()
 
 	if err := c.Bind(data); err != nil {
 		log.Errorf("[API] Error on bind: %v", err)
@@ -64,7 +64,7 @@ func (s *server) insertStockFundPurchase(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusUnprocessableEntity, err.Error())
 	}
 
-	result, err := s.db.InsertStockFundPurchase(data)
+	result, err := s.db.InsertStockOperation(data)
 	if err != nil {
 		log.Errorf("[API] Error on insert: %v", err)
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
@@ -73,18 +73,18 @@ func (s *server) insertStockFundPurchase(c echo.Context) error {
 	return c.JSON(http.StatusOK, result)
 }
 
-// updateStockFundPurchaseByID godoc
-// @Summary Update some stocks fund purchase
-// @Description update new stocks fund purchase
+// updateStockOperationByID godoc
+// @Summary Update some stocks operation
+// @Description update new stocks operation
 // @Accept json
 // @Produce json
-// @Router /stocks-funds/purchases/{id} [put]
-// @Param id path string true "Purchase id"
-func (s *server) updateStockFundPurchaseByID(c echo.Context) error {
+// @Router /stocks/operations/{id} [put]
+// @Param id path string true "Operation id"
+func (s *server) updateStockOperationByID(c echo.Context) error {
 	id := c.Param("id")
-	log.Debugf("[API] Updating stock fund purchase with id %s", id)
+	log.Debugf("[API] Updating stock operation with id %s", id)
 
-	data := wallet.NewStockFund()
+	data := wallet.NewStock()
 
 	if err := c.Bind(data); err != nil {
 		log.Errorf("[API] Error on bind: %v", err)
@@ -96,7 +96,7 @@ func (s *server) updateStockFundPurchaseByID(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusUnprocessableEntity, err.Error())
 	}
 
-	result, err := s.db.UpdateStockFundPurchaseByID(id, data)
+	result, err := s.db.UpdateStockOperationByID(id, data)
 	if err != nil {
 		log.Errorf("[API] Error on update: %v", err)
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
@@ -106,5 +106,5 @@ func (s *server) updateStockFundPurchaseByID(c echo.Context) error {
 		return c.JSON(http.StatusOK, result)
 	}
 
-	return c.JSON(http.StatusNotFound, "Stock fund purchase not found")
+	return c.JSON(http.StatusNotFound, "Stock operation not found")
 }

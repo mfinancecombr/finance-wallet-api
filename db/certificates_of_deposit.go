@@ -29,14 +29,14 @@ func (m *mongoSession) getAllCertificatesOfDeposits(c string) (wallet.Certificat
 	if err != nil {
 		return nil, err
 	}
-	purchasesList := wallet.CertificateOfDepositList{}
+	operationsList := wallet.CertificateOfDepositList{}
 	for _, result := range results {
 		bsonBytes, _ := bson.Marshal(result)
 		buy := wallet.CertificateOfDeposit{}
 		bson.Unmarshal(bsonBytes, &buy)
-		purchasesList = append(purchasesList, buy)
+		operationsList = append(operationsList, buy)
 	}
-	return purchasesList, nil
+	return operationsList, nil
 }
 
 func (m *mongoSession) getCertificateOfDepositByPortfolioID(c, id string) (wallet.CertificateOfDepositList, error) {
@@ -46,14 +46,14 @@ func (m *mongoSession) getCertificateOfDepositByPortfolioID(c, id string) (walle
 	if err != nil {
 		return nil, err
 	}
-	purchasesList := wallet.CertificateOfDepositList{}
+	operationsList := wallet.CertificateOfDepositList{}
 	for _, result := range results {
 		bsonBytes, _ := bson.Marshal(result)
-		purchase := wallet.CertificateOfDeposit{}
-		bson.Unmarshal(bsonBytes, &purchase)
-		purchasesList = append(purchasesList, purchase)
+		operation := wallet.CertificateOfDeposit{}
+		bson.Unmarshal(bsonBytes, &operation)
+		operationsList = append(operationsList, operation)
 	}
-	return purchasesList, nil
+	return operationsList, nil
 }
 
 func (m *mongoSession) getCertificateOfDepositByID(c, id string) (*wallet.CertificateOfDeposit, error) {

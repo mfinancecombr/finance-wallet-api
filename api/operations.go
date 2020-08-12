@@ -10,32 +10,32 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
-// getAllPurchases godoc
-// @Summary List all purchases
-// @Description get all purchases data
+// getAllOperations godoc
+// @Summary List all operations
+// @Description get all operations data
 // @Accept json
 // @Produce json
-// @Router /purchases [get]
-func (s *server) getAllPurchases(c echo.Context) error {
-	log.Debug("[API] Retrieving all purchases")
-	result, err := s.db.GetAllPurchases()
+// @Router /operations [get]
+func (s *server) getAllOperations(c echo.Context) error {
+	log.Debug("[API] Retrieving all operations")
+	result, err := s.db.GetAllOperations()
 	if err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}
 	return c.JSON(http.StatusOK, result)
 }
 
-// deletePurchaseByID godoc
-// @Summary Delete purchase by ID
-// @Description delete some purchase by id
+// deleteOperationByID godoc
+// @Summary Delete operation by ID
+// @Description delete some operation by id
 // @Accept json
 // @Produce json
-// @Router /purchases/{id} [delete]
-// @Param id path string true "Sale id"
-func (s *server) deletePurchaseByID(c echo.Context) error {
+// @Router /operations/{id} [delete]
+// @Param id path string true "Operation id"
+func (s *server) deleteOperationByID(c echo.Context) error {
 	id := c.Param("id")
 	log.Debugf("Deleting %s data", id)
-	result, err := s.db.DeletePurchaseByID(id)
+	result, err := s.db.DeleteOperationByID(id)
 	if err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}

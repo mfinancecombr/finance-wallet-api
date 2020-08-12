@@ -11,9 +11,9 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
-func (s *server) getAllCertificatesOfDepositPurchases(c echo.Context) error {
-	log.Debug("[API] Retrieving all certificates of deposit purchases")
-	result, err := s.db.GetAllCertificatesOfDepositsPurchases()
+func (s *server) getAllCertificatesOfDepositOperations(c echo.Context) error {
+	log.Debug("[API] Retrieving all certificates of deposit operations")
+	result, err := s.db.GetAllCertificatesOfDepositsOperations()
 	if err != nil {
 		log.Errorf("[API] Error on retrieve data: %v", err)
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
@@ -21,36 +21,36 @@ func (s *server) getAllCertificatesOfDepositPurchases(c echo.Context) error {
 	return c.JSON(http.StatusOK, result)
 }
 
-// getCertificateOfDepositPurchaseByID godoc
-// @Summary Get get certificate of deposit purchase by ID
-// @Description get certificate of deposi purchase data
+// getCertificateOfDepositOperationByID godoc
+// @Summary Get get certificate of deposit operation by ID
+// @Description get certificate of deposit operation data
 // @Accept json
 // @Produce json
 // @Success 200 {object} wallet.CertificateOfDeposit
-// @Router /certificate-of-deposit/purchases/{id} [get]
-// @Param id path string true "Purchase id"
-func (s *server) getCertificateOfDepositPurchaseByID(c echo.Context) error {
+// @Router /certificates-of-deposit/operations/{id} [get]
+// @Param id path string true "Operation id"
+func (s *server) getCertificateOfDepositOperationByID(c echo.Context) error {
 	id := c.Param("id")
-	log.Debugf("[API] Retrieving certificate of deposit purchase with id: %s", id)
-	result, err := s.db.GetCertificateOfDepositPurchaseByID(id)
+	log.Debugf("[API] Retrieving certificate of deposit operation with id: %s", id)
+	result, err := s.db.GetCertificateOfDepositOperationByID(id)
 	if err != nil {
 		log.Errorf("[API] Error on retrieve data: %v", err)
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}
 	if result == nil {
-		return c.JSON(http.StatusNotFound, "Certificate of deposit purchase data not found")
+		return c.JSON(http.StatusNotFound, "Certificate of deposit operation data not found")
 	}
 	return c.JSON(http.StatusOK, result)
 }
 
-// insertCertificateOfDepositPurchase godoc
-// @Summary Insert some certificate of deposit purchase
-// @Description insert new certificate of deposit purchase
+// insertCertificateOfDepositOperation godoc
+// @Summary Insert some certificate of deposit operation
+// @Description insert new certificate of deposit operation
 // @Accept json
 // @Produce json
-// @Router /certificate-of-deposit/purchases [post]
-func (s *server) insertCertificateOfDepositPurchase(c echo.Context) error {
-	log.Debugf("[API] Inserting certificate of deposit purchase")
+// @Router /certificates-of-deposit/operations [post]
+func (s *server) insertCertificateOfDepositOperation(c echo.Context) error {
+	log.Debugf("[API] Inserting certificate of deposit operation")
 
 	data := wallet.NewCertificateOfDeposit()
 
@@ -64,7 +64,7 @@ func (s *server) insertCertificateOfDepositPurchase(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusUnprocessableEntity, err.Error())
 	}
 
-	result, err := s.db.InsertCertificateOfDepositPurchase(data)
+	result, err := s.db.InsertCertificateOfDepositOperation(data)
 	if err != nil {
 		log.Errorf("[API] Error on insert: %v", err)
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
@@ -73,16 +73,16 @@ func (s *server) insertCertificateOfDepositPurchase(c echo.Context) error {
 	return c.JSON(http.StatusOK, result)
 }
 
-// updateCertificateOfDepositPurchaseByID godoc
-// @Summary Update some certificate of deposit purchase
-// @Description update new certificate of deposit purchase
+// updateCertificateOfDepositOperationByID godoc
+// @Summary Update some certificate of deposit operation
+// @Description update new certificate of deposit operation
 // @Accept json
 // @Produce json
-// @Router /certificate-of-deposit/purchases/{id} [put]
-// @Param id path string true "Purchase id"
-func (s *server) updateCertificateOfDepositPurchaseByID(c echo.Context) error {
+// @Router /certificates-of-deposit/operations/{id} [put]
+// @Param id path string true "Operation id"
+func (s *server) updateCertificateOfDepositOperationByID(c echo.Context) error {
 	id := c.Param("id")
-	log.Debugf("[API] Updating certificate of deposit purchase with id %s", id)
+	log.Debugf("[API] Updating certificate of deposit operation with id %s", id)
 
 	data := wallet.NewCertificateOfDeposit()
 
@@ -96,7 +96,7 @@ func (s *server) updateCertificateOfDepositPurchaseByID(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusUnprocessableEntity, err.Error())
 	}
 
-	result, err := s.db.UpdateCertificateOfDepositPurchaseByID(id, data)
+	result, err := s.db.UpdateCertificateOfDepositOperationByID(id, data)
 	if err != nil {
 		log.Errorf("[API] Error on update: %v", err)
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
@@ -106,5 +106,5 @@ func (s *server) updateCertificateOfDepositPurchaseByID(c echo.Context) error {
 		return c.JSON(http.StatusOK, result)
 	}
 
-	return c.JSON(http.StatusNotFound, "Certificate of deposit purchase not found")
+	return c.JSON(http.StatusNotFound, "Certificate of deposit operation not found")
 }

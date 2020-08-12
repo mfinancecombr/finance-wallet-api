@@ -3,4 +3,4 @@
 
 package wallet
 
-type PurchasesList []interface{}
+type OperationsList []interface{}

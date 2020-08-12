@@ -11,9 +11,9 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
-func (s *server) getAllStockFundsSales(c echo.Context) error {
-	log.Debug("[API] Retrieving all stocks funds sales")
-	result, err := s.db.GetAllStocksFundsSales()
+func (s *server) getAllTreasuriesDirectOperations(c echo.Context) error {
+	log.Debug("[API] Retrieving all treasuries direct operations")
+	result, err := s.db.GetAllTreasuriesDirectsOperations()
 	if err != nil {
 		log.Errorf("[API] Error on retrieve data: %v", err)
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
@@ -21,38 +21,38 @@ func (s *server) getAllStockFundsSales(c echo.Context) error {
 	return c.JSON(http.StatusOK, result)
 }
 
-// getStockFundSaleByID godoc
-// @Summary Get stocks fund sale by ID
-// @Description get stocks fund sale data
+// getTreasuryDirectOperationByID godoc
+// @Summary Get treasury direct operation by ID
+// @Description get treasury direct  operation data
 // @Accept json
 // @Produce json
-// @Success 200 {object} wallet.StockFund
-// @Router /stocks-funds/sales/{id} [get]
-// @Param id path string true "Sale id"
-func (s *server) getStockFundSaleByID(c echo.Context) error {
+// @Success 200 {object} wallet.TreasuryDirect
+// @Router /treasuries-direct/operations/{id} [get]
+// @Param id path string true "Operation id"
+func (s *server) getTreasuryDirectOperationByID(c echo.Context) error {
 	id := c.Param("id")
-	log.Debugf("[API] Retrieving stock fund sale with id: %s", id)
-	result, err := s.db.GetStockFundSaleByID(id)
+	log.Debugf("[API] Retrieving treasury direct operation with id: %s", id)
+	result, err := s.db.GetTreasuryDirectOperationByID(id)
 	if err != nil {
 		log.Errorf("[API] Error on retrieve data: %v", err)
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}
 	if result == nil {
-		return c.JSON(http.StatusNotFound, "Stock fund sale data not found")
+		return c.JSON(http.StatusNotFound, "Treasury direct operation data not found")
 	}
 	return c.JSON(http.StatusOK, result)
 }
 
-// insertStockFundSale godoc
-// @Summary Insert some stocks fund sale
-// @Description insert new stocks fund sale
+// insertTreasuryDirectOperation godoc
+// @Summary Insert some treasury direct operation
+// @Description insert new treasury direct operation
 // @Accept json
 // @Produce json
-// @Router /stocks-funds/sales [post]
-func (s *server) insertStockFundSale(c echo.Context) error {
-	log.Debugf("[API] Inserting stock fund sale")
+// @Router /treasuries-direct/operations [post]
+func (s *server) insertTreasuryDirectOperation(c echo.Context) error {
+	log.Debugf("[API] Inserting treasury direct operation")
 
-	data := wallet.NewStockFund()
+	data := wallet.NewTreasuryDirect()
 
 	if err := c.Bind(data); err != nil {
 		log.Errorf("[API] Error on bind: %v", err)
@@ -64,7 +64,7 @@ func (s *server) insertStockFundSale(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusUnprocessableEntity, err.Error())
 	}
 
-	result, err := s.db.InsertStockFundSale(data)
+	result, err := s.db.InsertTreasuryDirectOperation(data)
 	if err != nil {
 		log.Errorf("[API] Error on insert: %v", err)
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
@@ -73,18 +73,18 @@ func (s *server) insertStockFundSale(c echo.Context) error {
 	return c.JSON(http.StatusOK, result)
 }
 
-// updateStockFundSaleByID godoc
-// @Summary Update some stocks fund sale
-// @Description update new stocks fund sale
+// updateTreasuryDirectOperationByID godoc
+// @Summary Update some treasury direct operation
+// @Description update new treasury direct operation
 // @Accept json
 // @Produce json
-// @Router /stocks-funds/sales/{id} [put]
-// @Param id path string true "Sale id"
-func (s *server) updateStockFundSaleByID(c echo.Context) error {
+// @Router /treasuries-direct/operations/{id} [put]
+// @Param id path string true "Operation id"
+func (s *server) updateTreasuryDirectOperationByID(c echo.Context) error {
 	id := c.Param("id")
-	log.Debugf("[API] Updating stock fund sale with id %s", id)
+	log.Debugf("[API] Updating treasury direct operation with id %s", id)
 
-	data := wallet.NewStockFund()
+	data := wallet.NewTreasuryDirect()
 
 	if err := c.Bind(data); err != nil {
 		log.Errorf("[API] Error on bind: %v", err)
@@ -96,7 +96,7 @@ func (s *server) updateStockFundSaleByID(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusUnprocessableEntity, err.Error())
 	}
 
-	result, err := s.db.UpdateStockFundSaleByID(id, data)
+	result, err := s.db.UpdateTreasuryDirectOperationByID(id, data)
 	if err != nil {
 		log.Errorf("[API] Error on update: %v", err)
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
@@ -106,5 +106,5 @@ func (s *server) updateStockFundSaleByID(c echo.Context) error {
 		return c.JSON(http.StatusOK, result)
 	}
 
-	return c.JSON(http.StatusNotFound, "Stock fund sale not found")
+	return c.JSON(http.StatusNotFound, "Treasury direct operation not found")
 }

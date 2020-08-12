@@ -29,14 +29,14 @@ func (m *mongoSession) getAllFICFI(c string) (wallet.FICFIList, error) {
 	if err != nil {
 		return nil, err
 	}
-	salesList := wallet.FICFIList{}
+	operationsList := wallet.FICFIList{}
 	for _, result := range results {
 		bsonBytes, _ := bson.Marshal(result)
 		buy := wallet.FICFI{}
 		bson.Unmarshal(bsonBytes, &buy)
-		salesList = append(salesList, buy)
+		operationsList = append(operationsList, buy)
 	}
-	return salesList, nil
+	return operationsList, nil
 }
 
 func (m *mongoSession) getFICFIByPortfolioID(c, id string) (wallet.FICFIList, error) {
@@ -46,14 +46,14 @@ func (m *mongoSession) getFICFIByPortfolioID(c, id string) (wallet.FICFIList, er
 	if err != nil {
 		return nil, err
 	}
-	salesList := wallet.FICFIList{}
+	operationsList := wallet.FICFIList{}
 	for _, result := range results {
 		bsonBytes, _ := bson.Marshal(result)
-		sale := wallet.FICFI{}
-		bson.Unmarshal(bsonBytes, &sale)
-		salesList = append(salesList, sale)
+		operation := wallet.FICFI{}
+		bson.Unmarshal(bsonBytes, &operation)
+		operationsList = append(operationsList, operation)
 	}
-	return salesList, nil
+	return operationsList, nil
 }
 
 func (m *mongoSession) getFICFIByID(c, id string) (*wallet.FICFI, error) {

@@ -19,6 +19,7 @@ type TreasuryDirect struct {
 	Price             float64 `json:"price" bson:"price" validate:"required"`
 	Shares            float64 `json:"shares" bson:"shares" validate:"required"`
 	Symbol            string  `json:"symbol" bson:"symbol" validate:"required"`
+	Type              string  `json:"type" bson:"type" validate:"required"`
 }
 
 type TreasuryDirectList []TreasuryDirect

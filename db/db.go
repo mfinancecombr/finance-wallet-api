@@ -17,8 +17,7 @@ import (
 const (
 	brokersCollection    = "brokers"
 	portfoliosCollection = "portfolios"
-	purchasesCollection  = "purchases"
-	salesCollection      = "sales"
+	operationsCollection  = "operations"
 )
 
 type mongoSession struct {
@@ -26,59 +25,35 @@ type mongoSession struct {
 }
 
 type DB interface {
-	GetAllStocksPurchases() (wallet.StockList, error)
-	GetAllStocksSales() (wallet.StockList, error)
-	GetStockPurchaseByID(id string) (*wallet.Stock, error)
-	GetStockSaleByID(id string) (*wallet.Stock, error)
-	InsertStockPurchase(d *wallet.Stock) (*mongo.InsertOneResult, error)
-	InsertStockSale(d *wallet.Stock) (*mongo.InsertOneResult, error)
-	UpdateStockPurchaseByID(id string, d *wallet.Stock) (*mongo.UpdateResult, error)
-	UpdateStockSaleByID(id string, d *wallet.Stock) (*mongo.UpdateResult, error)
+	GetAllStocksOperations() (wallet.StockList, error)
+	GetStockOperationByID(id string) (*wallet.Stock, error)
+	InsertStockOperation(d *wallet.Stock) (*mongo.InsertOneResult, error)
+	UpdateStockOperationByID(id string, d *wallet.Stock) (*mongo.UpdateResult, error)
 
-	GetAllFIIsPurchases() (wallet.FIIList, error)
-	GetAllFIIsSales() (wallet.FIIList, error)
-	GetFIIPurchaseByID(id string) (*wallet.FII, error)
-	GetFIISaleByID(id string) (*wallet.FII, error)
-	InsertFIIPurchase(d *wallet.FII) (*mongo.InsertOneResult, error)
-	InsertFIISale(d *wallet.FII) (*mongo.InsertOneResult, error)
-	UpdateFIIPurchaseByID(id string, d *wallet.FII) (*mongo.UpdateResult, error)
-	UpdateFIISaleByID(id string, d *wallet.FII) (*mongo.UpdateResult, error)
+	GetAllFIIsOperations() (wallet.FIIList, error)
+	GetFIIOperationByID(id string) (*wallet.FII, error)
+	InsertFIIOperation(d *wallet.FII) (*mongo.InsertOneResult, error)
+	UpdateFIIOperationByID(id string, d *wallet.FII) (*mongo.UpdateResult, error)
 
-	GetAllTreasuriesDirectsPurchases() (wallet.TreasuryDirectList, error)
-	GetAllTreasuriesDirectsSales() (wallet.TreasuryDirectList, error)
-	GetTreasuryDirectPurchaseByID(id string) (*wallet.TreasuryDirect, error)
-	GetTreasuryDirectSaleByID(id string) (*wallet.TreasuryDirect, error)
-	InsertTreasuryDirectPurchase(d *wallet.TreasuryDirect) (*mongo.InsertOneResult, error)
-	InsertTreasuryDirectSale(d *wallet.TreasuryDirect) (*mongo.InsertOneResult, error)
-	UpdateTreasuryDirectPurchaseByID(id string, d *wallet.TreasuryDirect) (*mongo.UpdateResult, error)
-	UpdateTreasuryDirectSaleByID(id string, d *wallet.TreasuryDirect) (*mongo.UpdateResult, error)
+	GetAllTreasuriesDirectsOperations() (wallet.TreasuryDirectList, error)
+	GetTreasuryDirectOperationByID(id string) (*wallet.TreasuryDirect, error)
+	InsertTreasuryDirectOperation(d *wallet.TreasuryDirect) (*mongo.InsertOneResult, error)
+	UpdateTreasuryDirectOperationByID(id string, d *wallet.TreasuryDirect) (*mongo.UpdateResult, error)
 
-	GetAllCertificatesOfDepositsPurchases() (wallet.CertificateOfDepositList, error)
-	GetAllCertificatesOfDepositsSales() (wallet.CertificateOfDepositList, error)
-	GetCertificateOfDepositPurchaseByID(id string) (*wallet.CertificateOfDeposit, error)
-	GetCertificateOfDepositSaleByID(id string) (*wallet.CertificateOfDeposit, error)
-	InsertCertificateOfDepositPurchase(d *wallet.CertificateOfDeposit) (*mongo.InsertOneResult, error)
-	InsertCertificateOfDepositSale(d *wallet.CertificateOfDeposit) (*mongo.InsertOneResult, error)
-	UpdateCertificateOfDepositPurchaseByID(id string, d *wallet.CertificateOfDeposit) (*mongo.UpdateResult, error)
-	UpdateCertificateOfDepositSaleByID(id string, d *wallet.CertificateOfDeposit) (*mongo.UpdateResult, error)
+	GetAllCertificatesOfDepositsOperations() (wallet.CertificateOfDepositList, error)
+	GetCertificateOfDepositOperationByID(id string) (*wallet.CertificateOfDeposit, error)
+	InsertCertificateOfDepositOperation(d *wallet.CertificateOfDeposit) (*mongo.InsertOneResult, error)
+	UpdateCertificateOfDepositOperationByID(id string, d *wallet.CertificateOfDeposit) (*mongo.UpdateResult, error)
 
-	GetAllStocksFundsPurchases() (wallet.StockFundList, error)
-	GetAllStocksFundsSales() (wallet.StockFundList, error)
-	GetStockFundPurchaseByID(id string) (*wallet.StockFund, error)
-	GetStockFundSaleByID(id string) (*wallet.StockFund, error)
-	InsertStockFundPurchase(d *wallet.StockFund) (*mongo.InsertOneResult, error)
-	InsertStockFundSale(d *wallet.StockFund) (*mongo.InsertOneResult, error)
-	UpdateStockFundPurchaseByID(id string, d *wallet.StockFund) (*mongo.UpdateResult, error)
-	UpdateStockFundSaleByID(id string, d *wallet.StockFund) (*mongo.UpdateResult, error)
+	GetAllStocksFundsOperations() (wallet.StockFundList, error)
+	GetStockFundOperationByID(id string) (*wallet.StockFund, error)
+	InsertStockFundOperation(d *wallet.StockFund) (*mongo.InsertOneResult, error)
+	UpdateStockFundOperationByID(id string, d *wallet.StockFund) (*mongo.UpdateResult, error)
 
-	GetAllFICFIPurchases() (wallet.FICFIList, error)
-	GetAllFICFISales() (wallet.FICFIList, error)
-	GetFICFIPurchaseByID(id string) (*wallet.FICFI, error)
-	GetFICFISaleByID(id string) (*wallet.FICFI, error)
-	InsertFICFIPurchase(d *wallet.FICFI) (*mongo.InsertOneResult, error)
-	InsertFICFISale(d *wallet.FICFI) (*mongo.InsertOneResult, error)
-	UpdateFICFIPurchaseByID(id string, d *wallet.FICFI) (*mongo.UpdateResult, error)
-	UpdateFICFISaleByID(id string, d *wallet.FICFI) (*mongo.UpdateResult, error)
+	GetAllFICFIOperations() (wallet.FICFIList, error)
+	GetFICFIOperationByID(id string) (*wallet.FICFI, error)
+	InsertFICFIOperation(d *wallet.FICFI) (*mongo.InsertOneResult, error)
+	UpdateFICFIOperationByID(id string, d *wallet.FICFI) (*mongo.UpdateResult, error)
 
 	DeleteBrokerByID(id string) (*mongo.DeleteResult, error)
 	GetAllBrokers() (*wallet.BrokersList, error)
@@ -93,11 +68,8 @@ type DB interface {
 	InsertPortfolio(d interface{}) (*mongo.InsertOneResult, error)
 	UpdatePortfolio(id string, d interface{}) (*mongo.UpdateResult, error)
 
-	GetAllPurchases() (interface{}, error)
-	DeletePurchaseByID(id string) (*mongo.DeleteResult, error)
-
-	GetAllSales() (interface{}, error)
-	DeleteSaleByID(id string) (*mongo.DeleteResult, error)
+	GetAllOperations() (interface{}, error)
+	DeleteOperationByID(id string) (*mongo.DeleteResult, error)
 
 	Ping() error
 }

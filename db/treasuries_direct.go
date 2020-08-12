@@ -25,7 +25,7 @@ func (m *mongoSession) updateTreasuryDirectByID(c, id string, d *wallet.Treasury
 
 func (m *mongoSession) getAllTreasuriesDirects(c string) (wallet.TreasuryDirectList, error) {
 	log.Debug("[DB] getAllTreasuriesDirects")
-	results, err := m.collection.FindAll(purchasesCollection, bson.M{})
+	results, err := m.collection.FindAll(operationsCollection, bson.M{})
 	if err != nil {
 		return nil, err
 	}
@@ -46,14 +46,14 @@ func (m *mongoSession) getTreasuryDirectByPortfolioID(c, id string) (wallet.Trea
 	if err != nil {
 		return nil, err
 	}
-	purchasesList := wallet.TreasuryDirectList{}
+	operationsList := wallet.TreasuryDirectList{}
 	for _, result := range results {
 		bsonBytes, _ := bson.Marshal(result)
-		purchase := wallet.TreasuryDirect{}
-		bson.Unmarshal(bsonBytes, &purchase)
-		purchasesList = append(purchasesList, purchase)
+		operation := wallet.TreasuryDirect{}
+		bson.Unmarshal(bsonBytes, &operation)
+		operationsList = append(operationsList, operation)
 	}
-	return purchasesList, nil
+	return operationsList, nil
 }
 
 func (m *mongoSession) getTreasuryDirectByID(c, id string) (*wallet.TreasuryDirect, error) {
