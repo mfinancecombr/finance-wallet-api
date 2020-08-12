@@ -94,23 +94,7 @@ func (m *mongoSession) getPortfolioItem(itemType string, year int) (map[string]w
 		if len(operations) > 0 {
 			operation := operations[0]
 			if operation != nil {
-				// FIXME: duplicated
-				switch itemType {
-				case "stocks":
-					broker = operation.(*wallet.Stock).BrokerID
-				case "fiis":
-					broker = operation.(*wallet.FII).BrokerID
-				case "certificates-of-deposit":
-					broker = operation.(*wallet.CertificateOfDeposit).BrokerID
-				case "treasuries-direct":
-					broker = operation.(*wallet.TreasuryDirect).BrokerID
-				case "stocks-funds":
-					broker = operation.(*wallet.StockFund).BrokerID
-				case "ficfi":
-					broker = operation.(*wallet.FICFI).BrokerID
-				default:
-					log.Errorf("Item type '%s' not found", itemType)
-				}
+				broker = operation.(wallet.TradableAsset).BrokerID
 			}
 		}
 

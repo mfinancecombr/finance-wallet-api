@@ -5,8 +5,6 @@ package wallet
 
 import (
 	"math"
-
-	log "github.com/sirupsen/logrus"
 )
 
 type PortfolioItem struct {
@@ -65,47 +63,11 @@ func (pi *PortfolioItem) Recalculate() {
 	totalPrice := 0.0
 	totalShares := 0.0
 
-	// FIXME: duplicated
 	for _, s := range pi.Operations {
-		var operationPrice float64
-		var operationShares float64
-		var operationCommission float64
-		var operationType string
-		switch itemType := s.(type) {
-		case *Stock:
-			operationPrice = s.(*Stock).Price
-			operationShares = s.(*Stock).Shares
-			operationCommission = s.(*Stock).Commission
-			operationType = s.(*Stock).Type
-		case *FII:
-			operationPrice = s.(*FII).Price
-			operationShares = s.(*FII).Shares
-			operationCommission = s.(*FII).Commission
-			operationType = s.(*FII).Type
-		case *CertificateOfDeposit:
-			operationPrice = s.(*CertificateOfDeposit).Price
-			operationShares = s.(*CertificateOfDeposit).Shares
-			operationCommission = s.(*CertificateOfDeposit).Commission
-			operationType = s.(*CertificateOfDeposit).Type
-		case *TreasuryDirect:
-			operationPrice = s.(*TreasuryDirect).Price
-			operationShares = s.(*TreasuryDirect).Shares
-			operationCommission = s.(*TreasuryDirect).Commission
-			operationType = s.(*TreasuryDirect).Type
-		case *StockFund:
-			operationPrice = s.(*StockFund).Price
-			operationShares = s.(*StockFund).Shares
-			operationCommission = s.(*StockFund).Commission
-			operationType = s.(*StockFund).Type
-		case *FICFI:
-			operationPrice = s.(*FICFI).Price
-			operationShares = s.(*FICFI).Shares
-			operationCommission = s.(*FICFI).Commission
-			operationType = s.(*FICFI).Type
-		default:
-			log.Errorf("Item type '%s' not found", itemType)
-		}
-
+		var operationPrice = s.(TradableAsset).Price
+		var operationShares = s.(TradableAsset).Shares
+		var operationCommission = s.(TradableAsset).Commission
+		var operationType = s.(TradableAsset).Type
 		if operationType == "purchase" {
 			totalPrice += (operationPrice * operationShares) + operationCommission
 			totalShares += operationShares
