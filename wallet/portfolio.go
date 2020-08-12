@@ -10,25 +10,24 @@ import (
 )
 
 type PortfolioItem struct {
-	AveragePrice  float64       `json:"averagePrice" bson:"averagePrice"`
-	BrokerID      string        `json:"brokerId" bson:"brokerId"`
-	Change        float64       `json:"change" bson:"change"`
-	ClosingPrice  float64       `json:"closingPrice" bson:"closingPrice"`
-	Commission    float64       `json:"commission" bson:"commission"`
-	CostBasics    float64       `json:"costBasics" bson:"costBasics"`
-	Gain          float64       `json:"gain" bson:"gain"`
-	OverallReturn float64       `json:"overallReturn" bson:"overallReturn"`
-	ItemType      string        `json:"itemType" bson:"itemType"`
-	LastPrice     float64       `json:"lastPrice" bson:"lastPrice"`
-	LastYearHigh  float64       `json:"lastYearHigh" bson:"lastYearHigh"`
-	LastYearLow   float64       `json:"lastYearLow" bson:"lastYearLow"`
-	Name          string        `json:"name" bson:"name"`
-	Purchases     PurchasesList `json:"purchases" bson:"purchases"`
-	Sales         SalesList     `json:"sales" bson:"sales"`
-	Sector        string        `json:"sector" bson:"sector"`
-	Segment       string        `json:"segment" bson:"segment"`
-	Shares        float64       `json:"shares" bson:"shares"`
-	SubSector     string        `json:"subSector" bson:"subSector"`
+	AveragePrice  float64        `json:"averagePrice" bson:"averagePrice"`
+	BrokerID      string         `json:"brokerId" bson:"brokerId"`
+	Change        float64        `json:"change" bson:"change"`
+	ClosingPrice  float64        `json:"closingPrice" bson:"closingPrice"`
+	Commission    float64        `json:"commission" bson:"commission"`
+	CostBasics    float64        `json:"costBasics" bson:"costBasics"`
+	Gain          float64        `json:"gain" bson:"gain"`
+	OverallReturn float64        `json:"overallReturn" bson:"overallReturn"`
+	ItemType      string         `json:"itemType" bson:"itemType"`
+	LastPrice     float64        `json:"lastPrice" bson:"lastPrice"`
+	LastYearHigh  float64        `json:"lastYearHigh" bson:"lastYearHigh"`
+	LastYearLow   float64        `json:"lastYearLow" bson:"lastYearLow"`
+	Name          string         `json:"name" bson:"name"`
+	Operations    OperationsList `json:"operations" bson:"operations"`
+	Sector        string         `json:"sector" bson:"sector"`
+	Segment       string         `json:"segment" bson:"segment"`
+	Shares        float64        `json:"shares" bson:"shares"`
+	SubSector     string         `json:"subSector" bson:"subSector"`
 }
 
 type Portfolio struct {
@@ -63,94 +62,68 @@ func (p *Portfolio) Recalculate() {
 
 func (pi *PortfolioItem) Recalculate() {
 	commission := 0.0
-	salesPrice := 0.0
-	salesShares := 0.0
+	totalPrice := 0.0
+	totalShares := 0.0
 
 	// FIXME: duplicated
-	for _, s := range pi.Sales {
-		var salePrice float64
-		var saleShares float64
-		var saleCommission float64
+	for _, s := range pi.Operations {
+		var operationPrice float64
+		var operationShares float64
+		var operationCommission float64
+		var operationType string
 		switch itemType := s.(type) {
 		case *Stock:
-			salePrice = s.(*Stock).Price
-			saleShares = s.(*Stock).Shares
-			saleCommission = s.(*Stock).Commission
+			operationPrice = s.(*Stock).Price
+			operationShares = s.(*Stock).Shares
+			operationCommission = s.(*Stock).Commission
+			operationType = s.(*Stock).Type
 		case *FII:
-			salePrice = s.(*FII).Price
-			saleShares = s.(*FII).Shares
-			saleCommission = s.(*FII).Commission
+			operationPrice = s.(*FII).Price
+			operationShares = s.(*FII).Shares
+			operationCommission = s.(*FII).Commission
+			operationType = s.(*FII).Type
 		case *CertificateOfDeposit:
-			salePrice = s.(*CertificateOfDeposit).Price
-			saleShares = s.(*CertificateOfDeposit).Shares
-			saleCommission = s.(*CertificateOfDeposit).Commission
+			operationPrice = s.(*CertificateOfDeposit).Price
+			operationShares = s.(*CertificateOfDeposit).Shares
+			operationCommission = s.(*CertificateOfDeposit).Commission
+			operationType = s.(*CertificateOfDeposit).Type
 		case *TreasuryDirect:
-			salePrice = s.(*TreasuryDirect).Price
-			saleShares = s.(*TreasuryDirect).Shares
-			saleCommission = s.(*TreasuryDirect).Commission
+			operationPrice = s.(*TreasuryDirect).Price
+			operationShares = s.(*TreasuryDirect).Shares
+			operationCommission = s.(*TreasuryDirect).Commission
+			operationType = s.(*TreasuryDirect).Type
 		case *StockFund:
-			salePrice = s.(*StockFund).Price
-			saleShares = s.(*StockFund).Shares
-			saleCommission = s.(*StockFund).Commission
+			operationPrice = s.(*StockFund).Price
+			operationShares = s.(*StockFund).Shares
+			operationCommission = s.(*StockFund).Commission
+			operationType = s.(*StockFund).Type
 		case *FICFI:
-			salePrice = s.(*FICFI).Price
-			saleShares = s.(*FICFI).Shares
-			saleCommission = s.(*FICFI).Commission
+			operationPrice = s.(*FICFI).Price
+			operationShares = s.(*FICFI).Shares
+			operationCommission = s.(*FICFI).Commission
+			operationType = s.(*FICFI).Type
 		default:
 			log.Errorf("Item type '%s' not found", itemType)
 		}
 
-		salesPrice += (salePrice * saleShares) + saleCommission
-		salesShares += saleShares
-		commission += saleCommission
-	}
-
-	purchasesPrice := 0.0
-	purchasesShares := 0.0
-
-	// FIXME: duplicated
-	for _, p := range pi.Purchases {
-		var purchasePrice float64
-		var purchaseShares float64
-		var purchaseCommission float64
-		switch itemType := p.(type) {
-		case *Stock:
-			purchasePrice = p.(*Stock).Price
-			purchaseShares = p.(*Stock).Shares
-			purchaseCommission = p.(*Stock).Commission
-		case *FII:
-			purchasePrice = p.(*FII).Price
-			purchaseShares = p.(*FII).Shares
-			purchaseCommission = p.(*FII).Commission
-		case *CertificateOfDeposit:
-			purchasePrice = p.(*CertificateOfDeposit).Price
-			purchaseShares = p.(*CertificateOfDeposit).Shares
-			purchaseCommission = p.(*CertificateOfDeposit).Commission
-		case *TreasuryDirect:
-			purchasePrice = p.(*TreasuryDirect).Price
-			purchaseShares = p.(*TreasuryDirect).Shares
-			purchaseCommission = p.(*TreasuryDirect).Commission
-		case *StockFund:
-			purchasePrice = p.(*StockFund).Price
-			purchaseShares = p.(*StockFund).Shares
-			purchaseCommission = p.(*StockFund).Commission
-		case *FICFI:
-			purchasePrice = p.(*FICFI).Price
-			purchaseShares = p.(*FICFI).Shares
-			purchaseCommission = p.(*FICFI).Commission
-		default:
-			log.Errorf("Item type '%s' not found", itemType)
+		if operationType == "purchase" {
+			totalPrice += (operationPrice * operationShares) + operationCommission
+			totalShares += operationShares
+			commission += operationCommission
+		} else {
+			// To properly calculate the average price we need to remove from the cost basis
+			// based on the average price at the time of the sale.
+			totalPrice -= (totalPrice / totalShares) * operationShares
+			totalPrice += operationCommission
+			totalShares -= operationShares
+			commission += operationCommission
 		}
-
-		purchasesPrice += (purchasePrice * purchaseShares) + purchaseCommission
-		purchasesShares += purchaseShares
-		commission += commission
 	}
 
-	pi.Shares = purchasesShares - salesShares
+	pi.Shares = totalShares
 	if pi.Shares > 0 {
 		pi.Commission = roundFloatTwoDecimalPlaces(commission)
-		pi.CostBasics = roundFloatTwoDecimalPlaces(purchasesPrice - salesPrice + commission)
+		pi.CostBasics = roundFloatTwoDecimalPlaces(totalPrice)
 		pi.AveragePrice = roundFloatTwoDecimalPlaces(pi.CostBasics / pi.Shares)
 
 		// FIXME

@@ -24,19 +24,19 @@ func (m *mongoSession) updateFIIByID(c, id string, d *wallet.FII) (*mongo.Update
 }
 
 func (m *mongoSession) getAllFIIs(c string) (wallet.FIIList, error) {
-	log.Debug("[DB] GetAllFIIsSales")
+	log.Debug("[DB] GetAllFIIsOperations")
 	results, err := m.collection.FindAll(c, bson.M{})
 	if err != nil {
 		return nil, err
 	}
-	purchasesList := wallet.FIIList{}
+	operationsList := wallet.FIIList{}
 	for _, result := range results {
 		bsonBytes, _ := bson.Marshal(result)
 		buy := wallet.FII{}
 		bson.Unmarshal(bsonBytes, &buy)
-		purchasesList = append(purchasesList, buy)
+		operationsList = append(operationsList, buy)
 	}
-	return purchasesList, nil
+	return operationsList, nil
 }
 
 func (m *mongoSession) getFIIByPortfolioID(c, id string) (wallet.FIIList, error) {
@@ -46,14 +46,14 @@ func (m *mongoSession) getFIIByPortfolioID(c, id string) (wallet.FIIList, error)
 	if err != nil {
 		return nil, err
 	}
-	purchasesList := wallet.FIIList{}
+	operationsList := wallet.FIIList{}
 	for _, result := range results {
 		bsonBytes, _ := bson.Marshal(result)
-		purchase := wallet.FII{}
-		bson.Unmarshal(bsonBytes, &purchase)
-		purchasesList = append(purchasesList, purchase)
+		operation := wallet.FII{}
+		bson.Unmarshal(bsonBytes, &operation)
+		operationsList = append(operationsList, operation)
 	}
-	return purchasesList, nil
+	return operationsList, nil
 }
 
 func (m *mongoSession) getFIIByID(c, id string) (*wallet.FII, error) {
