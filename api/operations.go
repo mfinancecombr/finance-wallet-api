@@ -25,6 +25,36 @@ func (s *server) getAllOperations(c echo.Context) error {
 	return c.JSON(http.StatusOK, result)
 }
 
+// getAllPurchases godoc
+// @Summary List all purchases operations
+// @Description get all purchases operations data
+// @Accept json
+// @Produce json
+// @Router /purchases [get]
+func (s *server) getAllPurchases(c echo.Context) error {
+	log.Debug("[API] Retrieving all purchases operations")
+	result, err := s.db.GetAllPurchases()
+	if err != nil {
+		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
+	}
+	return c.JSON(http.StatusOK, result)
+}
+
+// getAllSales godoc
+// @Summary List all sales operations
+// @Description get all sales operations data
+// @Accept json
+// @Produce json
+// @Router /sales [get]
+func (s *server) getAllSales(c echo.Context) error {
+	log.Debug("[API] Retrieving all sales operations")
+	result, err := s.db.GetAllSales()
+	if err != nil {
+		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
+	}
+	return c.JSON(http.StatusOK, result)
+}
+
 // deleteOperationByID godoc
 // @Summary Delete operation by ID
 // @Description delete some operation by id

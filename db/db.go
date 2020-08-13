@@ -70,6 +70,8 @@ type DB interface {
 
 	GetAllOperations() (interface{}, error)
 	DeleteOperationByID(id string) (*mongo.DeleteResult, error)
+	GetAllPurchases() (interface{}, error)
+	GetAllSales() (interface{}, error)
 
 	Ping() error
 }

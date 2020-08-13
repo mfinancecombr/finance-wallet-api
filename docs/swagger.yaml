@@ -575,6 +575,22 @@ paths:
       produces:
       - application/json
       summary: Update portfolio data by ID
+  /purchases:
+    get:
+      consumes:
+      - application/json
+      description: get all operations data
+      produces:
+      - application/json
+      summary: List all operations
+  /sales:
+    get:
+      consumes:
+      - application/json
+      description: get all operations data
+      produces:
+      - application/json
+      summary: List all operations
   /stocks-funds/operations:
     post:
       consumes:

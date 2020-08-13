@@ -458,6 +458,30 @@ var doc = `{
                 ]
             }
         },
+        "/purchases": {
+            "get": {
+                "description": "get all operations data",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "List all operations"
+            }
+        },
+        "/sales": {
+            "get": {
+                "description": "get all operations data",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "List all operations"
+            }
+        },
         "/stocks-funds/operations": {
             "post": {
                 "description": "insert new stocks fund operation",

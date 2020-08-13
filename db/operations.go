@@ -74,3 +74,13 @@ func (m *mongoSession) GetAllOperations() (interface{}, error) {
 	log.Debug("[DB] GetAllOperations")
 	return m.collection.FindAll(operationsCollection, bson.M{})
 }
+
+func (m *mongoSession) GetAllPurchases() (interface{}, error) {
+	log.Debug("[DB] GetAllOperations")
+	return m.collection.FindAll(operationsCollection, bson.M{"type": "purchase"})
+}
+
+func (m *mongoSession) GetAllSales() (interface{}, error) {
+	log.Debug("[DB] GetAllOperations")
+	return m.collection.FindAll(operationsCollection, bson.M{"type": "sale"})
+}
