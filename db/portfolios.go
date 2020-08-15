@@ -94,7 +94,7 @@ func (m *mongoSession) getPortfolioItem(itemType string, year int) (map[string]w
 		if len(operations) > 0 {
 			operation := operations[0]
 			if operation != nil {
-				broker = operation.(wallet.Tradable).GetBrokerID()
+				broker = operation.GetBrokerID()
 			}
 		}
 

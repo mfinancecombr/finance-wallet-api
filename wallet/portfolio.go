@@ -64,9 +64,9 @@ func (pi *PortfolioItem) Recalculate() {
 	totalShares := 0.0
 
 	for _, s := range pi.Operations {
-		var operationPrice = s.(Tradable).GetPrice()
-		var operationShares = s.(Tradable).GetShares()
-		var operationCommission = s.(Tradable).GetComission()
+		var operationPrice = s.GetPrice()
+		var operationShares = s.GetShares()
+		var operationCommission = s.GetComission()
 		var operationType = s.(Tradable).GetType()
 		if operationType == "purchase" {
 			totalPrice += (operationPrice * operationShares) + operationCommission
