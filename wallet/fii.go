@@ -25,3 +25,23 @@ type FIIList []FII
 func NewFII() *FII {
 	return &FII{ItemType: "fiis"}
 }
+
+func (s FII) GetPrice() float64 {
+	return s.Price
+}
+
+func (s FII) GetShares() float64 {
+	return s.Shares
+}
+
+func (s FII) GetComission() float64 {
+	return s.Commission
+}
+
+func (s FII) GetType() string {
+	return s.Type
+}
+
+func (s FII) GetBrokerID() string {
+	return s.BrokerID
+}

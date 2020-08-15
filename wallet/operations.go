@@ -3,4 +3,4 @@
 
 package wallet
 
-type OperationsList []interface{}
+type OperationsList []Tradable

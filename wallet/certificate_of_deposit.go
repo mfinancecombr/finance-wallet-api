@@ -27,3 +27,23 @@ type CertificateOfDepositList []CertificateOfDeposit
 func NewCertificateOfDeposit() *CertificateOfDeposit {
 	return &CertificateOfDeposit{ItemType: "certificate-of-deposit"}
 }
+
+func (s CertificateOfDeposit) GetPrice() float64 {
+	return s.Price
+}
+
+func (s CertificateOfDeposit) GetShares() float64 {
+	return s.Shares
+}
+
+func (s CertificateOfDeposit) GetComission() float64 {
+	return s.Commission
+}
+
+func (s CertificateOfDeposit) GetType() string {
+	return s.Type
+}
+
+func (s CertificateOfDeposit) GetBrokerID() string {
+	return s.BrokerID
+}

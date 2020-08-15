@@ -46,7 +46,7 @@ func (m *mongoSession) getAllOperationsBySymbol(symbol, itemType string, year in
 	// FIXME
 	operationsList := wallet.OperationsList{}
 	for _, result := range results {
-		var operation interface{}
+		var operation wallet.Tradable
 		switch itemType {
 		case "stocks":
 			operation = &wallet.Stock{}
