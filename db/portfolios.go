@@ -68,35 +68,15 @@ func contains(s []interface{}, e interface{}) bool {
 	return false
 }
 
-// FIXME: maybe unnecessary
-func mergeSlices(a, b []interface{}) []interface{} {
-	for _, valB := range b {
-		if !contains(a, valB) {
-			a = append(a, valB)
-		}
-	}
-
-	return a
-}
-
 func (m *mongoSession) getPortfolioItem(itemType string, year int) (map[string]wallet.PortfolioItem, error) {
 	log.Debugf("[DB] Getting portfolio item %s", itemType)
-	purchasesSymbols, err := m.getPurchasesSymbols(bson.M{"itemType": itemType})
+	operationsSymbols, err := m.getOperationsSymbols(bson.M{"itemType": itemType})
 	if err != nil {
 		return nil, err
 	}
-
-	// FIXME: maybe unnecessary
-	salesSymbols, err := m.getSalesSymbols(bson.M{"itemType": itemType})
-	if err != nil {
-		return nil, err
-	}
-
-	// FIXME: maybe unnecessary
-	uniqueSymbols := mergeSlices(purchasesSymbols, salesSymbols)
 
 	items := map[string]wallet.PortfolioItem{}
-	for _, s := range uniqueSymbols {
+	for _, s := range operationsSymbols {
 		symbol := s.(string)
 		portfolioItem := &wallet.PortfolioItem{}
 		// FIXME: one request
@@ -104,35 +84,30 @@ func (m *mongoSession) getPortfolioItem(itemType string, year int) (map[string]w
 			log.Errorf("Error on get stock item: %s", err)
 		}
 
-		purchases, err := m.getAllPurchasesBySymbol(symbol, itemType, year)
-		if err != nil {
-			return nil, err
-		}
-
-		sales, err := m.getAllSalesBySymbol(symbol, itemType, year)
+		operations, err := m.getAllOperationsBySymbol(symbol, itemType, year)
 		if err != nil {
 			return nil, err
 		}
 
 		// FIXME
 		broker := ""
-		if len(purchases) > 0 {
-			purchase := purchases[0]
-			if purchase != nil {
+		if len(operations) > 0 {
+			operation := operations[0]
+			if operation != nil {
 				// FIXME: duplicated
 				switch itemType {
 				case "stocks":
-					broker = purchase.(*wallet.Stock).BrokerID
+					broker = operation.(*wallet.Stock).BrokerID
 				case "fiis":
-					broker = purchase.(*wallet.FII).BrokerID
+					broker = operation.(*wallet.FII).BrokerID
 				case "certificates-of-deposit":
-					broker = purchase.(*wallet.CertificateOfDeposit).BrokerID
+					broker = operation.(*wallet.CertificateOfDeposit).BrokerID
 				case "treasuries-direct":
-					broker = purchase.(*wallet.TreasuryDirect).BrokerID
+					broker = operation.(*wallet.TreasuryDirect).BrokerID
 				case "stocks-funds":
-					broker = purchase.(*wallet.StockFund).BrokerID
+					broker = operation.(*wallet.StockFund).BrokerID
 				case "ficfi":
-					broker = purchase.(*wallet.FICFI).BrokerID
+					broker = operation.(*wallet.FICFI).BrokerID
 				default:
 					log.Errorf("Item type '%s' not found", itemType)
 				}
@@ -141,8 +116,7 @@ func (m *mongoSession) getPortfolioItem(itemType string, year int) (map[string]w
 
 		portfolioItem.BrokerID = broker
 		portfolioItem.ItemType = itemType
-		portfolioItem.Purchases = purchases
-		portfolioItem.Sales = sales
+		portfolioItem.Operations = operations
 		portfolioItem.Recalculate()
 		items[symbol] = *portfolioItem
 	}

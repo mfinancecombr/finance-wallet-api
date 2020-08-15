@@ -29,14 +29,14 @@ func (m *mongoSession) getAllStocksFunds(c string) (wallet.StockFundList, error)
 	if err != nil {
 		return nil, err
 	}
-	salesList := wallet.StockFundList{}
+	operationsList := wallet.StockFundList{}
 	for _, result := range results {
 		bsonBytes, _ := bson.Marshal(result)
 		buy := wallet.StockFund{}
 		bson.Unmarshal(bsonBytes, &buy)
-		salesList = append(salesList, buy)
+		operationsList = append(operationsList, buy)
 	}
-	return salesList, nil
+	return operationsList, nil
 }
 
 func (m *mongoSession) getStockFundByPortfolioID(c, id string) (wallet.StockFundList, error) {
@@ -46,14 +46,14 @@ func (m *mongoSession) getStockFundByPortfolioID(c, id string) (wallet.StockFund
 	if err != nil {
 		return nil, err
 	}
-	salesList := wallet.StockFundList{}
+	operationsList := wallet.StockFundList{}
 	for _, result := range results {
 		bsonBytes, _ := bson.Marshal(result)
-		sale := wallet.StockFund{}
-		bson.Unmarshal(bsonBytes, &sale)
-		salesList = append(salesList, sale)
+		operation := wallet.StockFund{}
+		bson.Unmarshal(bsonBytes, &operation)
+		operationsList = append(operationsList, operation)
 	}
-	return salesList, nil
+	return operationsList, nil
 }
 
 func (m *mongoSession) getStockFundByID(c, id string) (*wallet.StockFund, error) {

@@ -11,9 +11,9 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
-func (s *server) getAllCertificatesOfDepositSales(c echo.Context) error {
-	log.Debug("[API] Retrieving all certificates of deposit sales")
-	result, err := s.db.GetAllCertificatesOfDepositsSales()
+func (s *server) getAllFICFIOperations(c echo.Context) error {
+	log.Debug("[API] Retrieving all FICFI operations")
+	result, err := s.db.GetAllFICFIOperations()
 	if err != nil {
 		log.Errorf("[API] Error on retrieve data: %v", err)
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
@@ -21,38 +21,38 @@ func (s *server) getAllCertificatesOfDepositSales(c echo.Context) error {
 	return c.JSON(http.StatusOK, result)
 }
 
-// getCertificateOfDepositSaleByID godoc
-// @Summary Get get certificate of deposit sale by ID
-// @Description get certificate of deposit sale data
+// getFICFIOperationByID godoc
+// @Summary Get FICFI operation by ID
+// @Description get FICFI operation data
 // @Accept json
 // @Produce json
-// @Success 200 {object} wallet.CertificateOfDeposit
-// @Router /certificates-of-deposit/sales/{id} [get]
-// @Param id path string true "Sale id"
-func (s *server) getCertificateOfDepositSaleByID(c echo.Context) error {
+// @Success 200 {object} wallet.FICFI
+// @Router /ficfi/operations/{id} [get]
+// @Param id path string true "Operation id"
+func (s *server) getFICFIOperationByID(c echo.Context) error {
 	id := c.Param("id")
-	log.Debugf("[API] Retrieving certificate of deposit sale with id: %s", id)
-	result, err := s.db.GetCertificateOfDepositSaleByID(id)
+	log.Debugf("[API] Retrieving FICFI operation with id: %s", id)
+	result, err := s.db.GetFICFIOperationByID(id)
 	if err != nil {
 		log.Errorf("[API] Error on retrieve data: %v", err)
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}
 	if result == nil {
-		return c.JSON(http.StatusNotFound, "Certificate of deposit sale data not found")
+		return c.JSON(http.StatusNotFound, "FICFI operation data not found")
 	}
 	return c.JSON(http.StatusOK, result)
 }
 
-// insertCertificateOfDepositSale godoc
-// @Summary Insert some certificate of deposit sale
-// @Description insert new certificate of deposit sale
+// insertFICFIOperation godoc
+// @Summary Insert some FICFI operation
+// @Description insert new FICFI operation
 // @Accept json
 // @Produce json
-// @Router /certificates-of-deposit/sales [post]
-func (s *server) insertCertificateOfDepositSale(c echo.Context) error {
-	log.Debugf("[API] Inserting certificate of deposit sale")
+// @Router /ficfi/operations [post]
+func (s *server) insertFICFIOperation(c echo.Context) error {
+	log.Debugf("[API] Inserting FICFI operation")
 
-	data := wallet.NewCertificateOfDeposit()
+	data := wallet.NewFICFI()
 
 	if err := c.Bind(data); err != nil {
 		log.Errorf("[API] Error on bind: %v", err)
@@ -64,7 +64,7 @@ func (s *server) insertCertificateOfDepositSale(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusUnprocessableEntity, err.Error())
 	}
 
-	result, err := s.db.InsertCertificateOfDepositSale(data)
+	result, err := s.db.InsertFICFIOperation(data)
 	if err != nil {
 		log.Errorf("[API] Error on insert: %v", err)
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
@@ -73,18 +73,18 @@ func (s *server) insertCertificateOfDepositSale(c echo.Context) error {
 	return c.JSON(http.StatusOK, result)
 }
 
-// updateCertificateOfDepositSaleByID godoc
-// @Summary Update some certificate of deposit sale
-// @Description update new certificate of deposit sale
+// updateFICFIOperationByID godoc
+// @Summary Update some FICFI operation
+// @Description update new FICFI operation
 // @Accept json
 // @Produce json
-// @Router /certificates-of-deposit/sales/{id} [put]
-// @Param id path string true "Sale id"
-func (s *server) updateCertificateOfDepositSaleByID(c echo.Context) error {
+// @Router /ficfi/operations/{id} [put]
+// @Param id path string true "Operation id"
+func (s *server) updateFICFIOperationByID(c echo.Context) error {
 	id := c.Param("id")
-	log.Debugf("[API] Updating certificate of deposit sale with id %s", id)
+	log.Debugf("[API] Updating FICFI operation with id %s", id)
 
-	data := wallet.NewCertificateOfDeposit()
+	data := wallet.NewFICFI()
 
 	if err := c.Bind(data); err != nil {
 		log.Errorf("[API] Error on bind: %v", err)
@@ -96,7 +96,7 @@ func (s *server) updateCertificateOfDepositSaleByID(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusUnprocessableEntity, err.Error())
 	}
 
-	result, err := s.db.UpdateCertificateOfDepositSaleByID(id, data)
+	result, err := s.db.UpdateFICFIOperationByID(id, data)
 	if err != nil {
 		log.Errorf("[API] Error on update: %v", err)
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
@@ -106,5 +106,5 @@ func (s *server) updateCertificateOfDepositSaleByID(c echo.Context) error {
 		return c.JSON(http.StatusOK, result)
 	}
 
-	return c.JSON(http.StatusNotFound, "Certificate of deposit sale not found")
+	return c.JSON(http.StatusNotFound, "FICFI operation not found")
 }

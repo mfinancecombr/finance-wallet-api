@@ -41,25 +41,24 @@ curl \
   -d '{"id": "clear", "name": "CLEAR"}'
 ```
 
-* Adding stocks purchases:
+* Adding stocks operations:
 ```curlrc
 curl \
-  http://localhost:8889/api/v1/stocks/purchases \
+  http://localhost:8889/api/v1/stocks/operations \
   -X POST \
   -H 'Content-Type: application/json' \
   -d '{
-    "portfolioId": "default", "symbol": "PETR4", "brokerId": "clear",
+    "portfolioId": "default", "symbol": "PETR4", "type": "purchase", "brokerId": "clear",
     "shares": 500, "price": 10, "date": "2020-04-24T00:00:00Z"}'
 ```
 
-* Adding stocks sales:
 ```curlrc
 curl \
-  http://localhost:8889/api/v1/stocks/sales \
+  http://localhost:8889/api/v1/stocks/operations \
   -X POST \
   -H 'Content-Type: application/json' \
   -d '{
-    "portfolioId": "default", "symbol": "PETR4", "brokerId": "clear",
+    "portfolioId": "default", "symbol": "PETR4", "type": "sale", "brokerId": "clear",
     "shares": 100, "price": 15, "date": "2020-06-30T00:00:00Z"}'
 ```
 
