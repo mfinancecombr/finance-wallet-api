@@ -4,6 +4,7 @@
 package api
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/labstack/echo/v4"
@@ -15,8 +16,8 @@ func (s *server) getAllCertificatesOfDepositOperations(c echo.Context) error {
 	log.Debug("[API] Retrieving all certificates of deposit operations")
 	result, err := s.db.GetAllCertificatesOfDepositsOperations()
 	if err != nil {
-		log.Errorf("[API] Error on retrieve data: %v", err)
-		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
+		errMsg := fmt.Sprintf("Error on retrieve certificates of deposit operations: %v", err)
+		return logAndReturnError(c, errMsg)
 	}
 	return c.JSON(http.StatusOK, result)
 }
@@ -27,6 +28,8 @@ func (s *server) getAllCertificatesOfDepositOperations(c echo.Context) error {
 // @Accept json
 // @Produce json
 // @Success 200 {object} wallet.CertificateOfDeposit
+// @Failure 404 {object} api.ErrorMessage
+// @Failure 500 {object} api.ErrorMessage
 // @Router /certificates-of-deposit/operations/{id} [get]
 // @Param id path string true "Operation id"
 func (s *server) getCertificateOfDepositOperationByID(c echo.Context) error {
@@ -34,11 +37,12 @@ func (s *server) getCertificateOfDepositOperationByID(c echo.Context) error {
 	log.Debugf("[API] Retrieving certificate of deposit operation with id: %s", id)
 	result, err := s.db.GetCertificateOfDepositOperationByID(id)
 	if err != nil {
-		log.Errorf("[API] Error on retrieve data: %v", err)
-		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
+		errMsg := fmt.Sprintf("Error on retrieve '%s' operations: %v", id, err)
+		return logAndReturnError(c, errMsg)
 	}
 	if result == nil {
-		return c.JSON(http.StatusNotFound, "Certificate of deposit operation data not found")
+		errMsg := fmt.Sprintf("Certificate of deposit operation '%s' not found", id)
+		return c.JSON(http.StatusNotFound, errorMessage(errMsg))
 	}
 	return c.JSON(http.StatusOK, result)
 }
@@ -48,6 +52,9 @@ func (s *server) getCertificateOfDepositOperationByID(c echo.Context) error {
 // @Description insert new certificate of deposit operation
 // @Accept json
 // @Produce json
+// @Success 200 {object} interface{}
+// @Failure 422 {object} api.ErrorMessage
+// @Failure 500 {object} api.ErrorMessage
 // @Router /certificates-of-deposit/operations [post]
 func (s *server) insertCertificateOfDepositOperation(c echo.Context) error {
 	log.Debugf("[API] Inserting certificate of deposit operation")
@@ -55,19 +62,19 @@ func (s *server) insertCertificateOfDepositOperation(c echo.Context) error {
 	data := wallet.NewCertificateOfDeposit()
 
 	if err := c.Bind(data); err != nil {
-		log.Errorf("[API] Error on bind: %v", err)
-		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
+		errMsg := fmt.Sprintf("Error on bind certificate of deposit: %v", err)
+		return logAndReturnError(c, errMsg)
 	}
 
 	if err := c.Validate(data); err != nil {
-		log.Errorf("[API] Error on validate: %v", err)
-		return echo.NewHTTPError(http.StatusUnprocessableEntity, err.Error())
+		errMsg := fmt.Sprintf("Error on validate certificate of deposit: %v", err)
+		return c.JSON(http.StatusUnprocessableEntity, errorMessage(errMsg))
 	}
 
 	result, err := s.db.InsertCertificateOfDepositOperation(data)
 	if err != nil {
-		log.Errorf("[API] Error on insert: %v", err)
-		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
+		errMsg := fmt.Sprintf("Error on insert certificate of deposit: %v", err)
+		return logAndReturnError(c, errMsg)
 	}
 
 	return c.JSON(http.StatusOK, result)
@@ -78,6 +85,10 @@ func (s *server) insertCertificateOfDepositOperation(c echo.Context) error {
 // @Description update new certificate of deposit operation
 // @Accept json
 // @Produce json
+// @Success 200 {object} interface{}
+// @Failure 404 {object} api.ErrorMessage
+// @Failure 422 {object} api.ErrorMessage
+// @Failure 500 {object} api.ErrorMessage
 // @Router /certificates-of-deposit/operations/{id} [put]
 // @Param id path string true "Operation id"
 func (s *server) updateCertificateOfDepositOperationByID(c echo.Context) error {
@@ -87,24 +98,25 @@ func (s *server) updateCertificateOfDepositOperationByID(c echo.Context) error {
 	data := wallet.NewCertificateOfDeposit()
 
 	if err := c.Bind(data); err != nil {
-		log.Errorf("[API] Error on bind: %v", err)
-		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
+		errMsg := fmt.Sprintf("Error on bind certificate of deposit: %v", err)
+		return logAndReturnError(c, errMsg)
 	}
 
 	if err := c.Validate(data); err != nil {
-		log.Errorf("[API] Error on validate: %v", err)
-		return echo.NewHTTPError(http.StatusUnprocessableEntity, err.Error())
+		errMsg := fmt.Sprintf("Error on validate certificate of deposit: %v", err)
+		return c.JSON(http.StatusUnprocessableEntity, errorMessage(errMsg))
 	}
 
 	result, err := s.db.UpdateCertificateOfDepositOperationByID(id, data)
 	if err != nil {
-		log.Errorf("[API] Error on update: %v", err)
-		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
+		errMsg := fmt.Sprintf("Error on update certificate of deposit: %v", err)
+		return logAndReturnError(c, errMsg)
 	}
 
 	if result.MatchedCount != 0 {
 		return c.JSON(http.StatusOK, result)
 	}
 
-	return c.JSON(http.StatusNotFound, "Certificate of deposit operation not found")
+	errMsg := fmt.Sprintf("Certificate of deposit operation '%s' not found", id)
+	return c.JSON(http.StatusNotFound, errorMessage(errMsg))
 }

@@ -4,6 +4,7 @@
 package api
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/labstack/echo/v4"
@@ -15,12 +16,15 @@ import (
 // @Description get all operations data
 // @Accept json
 // @Produce json
+// @Success 200 {object} interface{}
+// @Failure 500 {object} api.ErrorMessage
 // @Router /operations [get]
 func (s *server) getAllOperations(c echo.Context) error {
 	log.Debug("[API] Retrieving all operations")
 	result, err := s.db.GetAllOperations()
 	if err != nil {
-		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
+		errMsg := fmt.Sprintf("Error on retrieve all operations: %v", err)
+		return logAndReturnError(c, errMsg)
 	}
 	return c.JSON(http.StatusOK, result)
 }
@@ -30,12 +34,15 @@ func (s *server) getAllOperations(c echo.Context) error {
 // @Description get all purchases operations data
 // @Accept json
 // @Produce json
+// @Success 200 {object} interface{}
+// @Failure 500 {object} api.ErrorMessage
 // @Router /purchases [get]
 func (s *server) getAllPurchases(c echo.Context) error {
 	log.Debug("[API] Retrieving all purchases operations")
 	result, err := s.db.GetAllPurchases()
 	if err != nil {
-		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
+		errMsg := fmt.Sprintf("Error on retrieve purchases operations: %v", err)
+		return logAndReturnError(c, errMsg)
 	}
 	return c.JSON(http.StatusOK, result)
 }
@@ -45,12 +52,15 @@ func (s *server) getAllPurchases(c echo.Context) error {
 // @Description get all sales operations data
 // @Accept json
 // @Produce json
+// @Success 200 {object} interface{}
+// @Failure 500 {object} api.ErrorMessage
 // @Router /sales [get]
 func (s *server) getAllSales(c echo.Context) error {
 	log.Debug("[API] Retrieving all sales operations")
 	result, err := s.db.GetAllSales()
 	if err != nil {
-		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
+		errMsg := fmt.Sprintf("Error on retrieve sales operations: %v", err)
+		return logAndReturnError(c, errMsg)
 	}
 	return c.JSON(http.StatusOK, result)
 }
@@ -60,6 +70,9 @@ func (s *server) getAllSales(c echo.Context) error {
 // @Description delete some operation by id
 // @Accept json
 // @Produce json
+// @Success 200 {object} interface{}
+// @Failure 404 {object} api.ErrorMessage
+// @Failure 500 {object} api.ErrorMessage
 // @Router /operations/{id} [delete]
 // @Param id path string true "Operation id"
 func (s *server) deleteOperationByID(c echo.Context) error {
@@ -67,7 +80,8 @@ func (s *server) deleteOperationByID(c echo.Context) error {
 	log.Debugf("Deleting %s data", id)
 	result, err := s.db.DeleteOperationByID(id)
 	if err != nil {
-		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
+		errMsg := fmt.Sprintf("Error on delete operation '%s': %v", id, err)
+		return logAndReturnError(c, errMsg)
 	}
 	return c.JSON(http.StatusOK, result)
 }

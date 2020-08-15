@@ -1,5 +1,10 @@
 basePath: /api/v1
 definitions:
+  api.ErrorMessage:
+    properties:
+      message:
+        type: string
+    type: object
   wallet.Broker:
     properties:
       CNPJ:
@@ -304,6 +309,10 @@ paths:
             items:
               $ref: '#/definitions/wallet.Broker'
             type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/api.ErrorMessage'
       summary: List all brokers
     post:
       consumes:
@@ -311,6 +320,21 @@ paths:
       description: insert new broker
       produces:
       - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              type: object
+            type: array
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/api.ErrorMessage'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/api.ErrorMessage'
       summary: Insert some broker
   /brokers/{id}:
     delete:
@@ -325,6 +349,21 @@ paths:
         type: string
       produces:
       - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              type: object
+            type: array
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/api.ErrorMessage'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/api.ErrorMessage'
       summary: Delete broker by ID
     get:
       consumes:
@@ -343,6 +382,14 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/wallet.Broker'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/api.ErrorMessage'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/api.ErrorMessage'
       summary: Get a broker
     put:
       consumes:
@@ -356,6 +403,25 @@ paths:
         type: string
       produces:
       - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              type: object
+            type: array
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/api.ErrorMessage'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/api.ErrorMessage'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/api.ErrorMessage'
       summary: Update broker data by ID
   /certificates-of-deposit/operations:
     post:
@@ -364,6 +430,19 @@ paths:
       description: insert new certificate of deposit operation
       produces:
       - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: object
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/api.ErrorMessage'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/api.ErrorMessage'
       summary: Insert some certificate of deposit operation
   /certificates-of-deposit/operations/{id}:
     get:
@@ -383,6 +462,14 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/wallet.CertificateOfDeposit'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/api.ErrorMessage'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/api.ErrorMessage'
       summary: Get get certificate of deposit operation by ID
     put:
       consumes:
@@ -396,6 +483,23 @@ paths:
         type: string
       produces:
       - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/api.ErrorMessage'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/api.ErrorMessage'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/api.ErrorMessage'
       summary: Update some certificate of deposit operation
   /ficfi/operations:
     post:
@@ -404,6 +508,19 @@ paths:
       description: insert new FICFI operation
       produces:
       - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: object
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/api.ErrorMessage'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/api.ErrorMessage'
       summary: Insert some FICFI operation
   /ficfi/operations/{id}:
     get:
@@ -423,6 +540,14 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/wallet.FICFI'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/api.ErrorMessage'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/api.ErrorMessage'
       summary: Get FICFI operation by ID
     put:
       consumes:
@@ -436,6 +561,23 @@ paths:
         type: string
       produces:
       - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/api.ErrorMessage'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/api.ErrorMessage'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/api.ErrorMessage'
       summary: Update some FICFI operation
   /fiis/operations:
     post:
@@ -444,6 +586,19 @@ paths:
       description: insert new FII operation
       produces:
       - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: object
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/api.ErrorMessage'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/api.ErrorMessage'
       summary: Insert some FII operation
   /fiis/operations/{id}:
     get:
@@ -463,6 +618,14 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/wallet.FII'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/api.ErrorMessage'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/api.ErrorMessage'
       summary: Get FII operation by ID
     put:
       consumes:
@@ -476,6 +639,23 @@ paths:
         type: string
       produces:
       - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/api.ErrorMessage'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/api.ErrorMessage'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/api.ErrorMessage'
       summary: Update some FII operation
   /operations:
     get:
@@ -484,6 +664,15 @@ paths:
       description: get all operations data
       produces:
       - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/api.ErrorMessage'
       summary: List all operations
   /operations/{id}:
     delete:
@@ -498,6 +687,19 @@ paths:
         type: string
       produces:
       - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/api.ErrorMessage'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/api.ErrorMessage'
       summary: Delete operation by ID
   /portfolios:
     get:
@@ -518,6 +720,10 @@ paths:
             items:
               $ref: '#/definitions/wallet.Portfolio'
             type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/api.ErrorMessage'
       summary: List all portfolios
     post:
       consumes:
@@ -525,6 +731,19 @@ paths:
       description: insert new portfolio
       produces:
       - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: object
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/api.ErrorMessage'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/api.ErrorMessage'
       summary: Insert some portfolio
   /portfolios/{id}:
     delete:
@@ -539,6 +758,19 @@ paths:
         type: string
       produces:
       - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/api.ErrorMessage'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/api.ErrorMessage'
       summary: Delete portfolio by ID
     get:
       consumes:
@@ -561,6 +793,14 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/wallet.Portfolio'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/api.ErrorMessage'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/api.ErrorMessage'
       summary: Get a portfolio
     put:
       consumes:
@@ -574,23 +814,58 @@ paths:
         type: string
       produces:
       - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/wallet.Portfolio'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/api.ErrorMessage'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/api.ErrorMessage'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/api.ErrorMessage'
       summary: Update portfolio data by ID
   /purchases:
     get:
       consumes:
       - application/json
-      description: get all operations data
+      description: get all purchases operations data
       produces:
       - application/json
-      summary: List all operations
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/api.ErrorMessage'
+      summary: List all purchases operations
   /sales:
     get:
       consumes:
       - application/json
-      description: get all operations data
+      description: get all sales operations data
       produces:
       - application/json
-      summary: List all operations
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/api.ErrorMessage'
+      summary: List all sales operations
   /stocks-funds/operations:
     post:
       consumes:
@@ -598,6 +873,19 @@ paths:
       description: insert new stocks fund operation
       produces:
       - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: object
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/api.ErrorMessage'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/api.ErrorMessage'
       summary: Insert some stocks fund operation
   /stocks-funds/operations/{id}:
     get:
@@ -617,6 +905,14 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/wallet.StockFund'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/api.ErrorMessage'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/api.ErrorMessage'
       summary: Get stocks fund operation by ID
     put:
       consumes:
@@ -630,6 +926,23 @@ paths:
         type: string
       produces:
       - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/api.ErrorMessage'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/api.ErrorMessage'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/api.ErrorMessage'
       summary: Update some stocks fund operation
   /stocks/operations:
     post:
@@ -638,6 +951,19 @@ paths:
       description: insert new stocks operation
       produces:
       - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: object
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/api.ErrorMessage'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/api.ErrorMessage'
       summary: Insert some stocks operation
   /stocks/operations/{id}:
     get:
@@ -657,6 +983,14 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/wallet.Stock'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/api.ErrorMessage'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/api.ErrorMessage'
       summary: Get stocks operation by ID
     put:
       consumes:
@@ -670,6 +1004,19 @@ paths:
         type: string
       produces:
       - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: object
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/api.ErrorMessage'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/api.ErrorMessage'
       summary: Update some stocks operation
   /treasuries-direct/operations:
     post:
@@ -678,6 +1025,19 @@ paths:
       description: insert new treasury direct operation
       produces:
       - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: object
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/api.ErrorMessage'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/api.ErrorMessage'
       summary: Insert some treasury direct operation
   /treasuries-direct/operations/{id}:
     get:
@@ -697,6 +1057,14 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/wallet.TreasuryDirect'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/api.ErrorMessage'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/api.ErrorMessage'
       summary: Get treasury direct operation by ID
     put:
       consumes:
@@ -710,5 +1078,22 @@ paths:
         type: string
       produces:
       - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/api.ErrorMessage'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/api.ErrorMessage'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/api.ErrorMessage'
       summary: Update some treasury direct operation
 swagger: "2.0"

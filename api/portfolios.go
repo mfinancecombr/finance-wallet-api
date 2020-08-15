@@ -4,6 +4,7 @@
 package api
 
 import (
+	"fmt"
 	"net/http"
 	"strconv"
 
@@ -19,37 +20,40 @@ import (
 // @Accept json
 // @Produce json
 // @Success 200 {object} wallet.Portfolio
+// @Failure 404 {object} api.ErrorMessage
+// @Failure 500 {object} api.ErrorMessage
 // @Router /portfolios/{id} [get]
 // @Param id path string true "Broker id"
 // @Param year query string false "filter by year"
 func (s *server) portfolio(c echo.Context) error {
 	id := c.Param("id")
-	log.Debugf("Retrieving %s data...", id)
+	log.Debugf("[API] Retrieving %s data...", id)
 
 	// FIXME
 	yearString := c.QueryParam("year")
 	year, err := strconv.Atoi(yearString)
 	if err != nil {
-		log.Errorf("Error on convert year: %v", err)
+		log.Debugf("[API] Error on convert year: %v", err)
 		// FIXME
 		year = 2020
 	}
 
 	result, err := s.db.GetPortfolioByID(id)
 	if err != nil {
-		log.Errorf("Error on get portfolio: %v", err)
-		return err
+		errMsg := fmt.Sprintf("Error on get portfolio '%s': %v", id, err)
+		return logAndReturnError(c, errMsg)
 	}
 
 	if result == nil {
-		return c.JSON(http.StatusNotFound, "Portfolio data not found")
+		errMsg := fmt.Sprintf("Portfolio '%s' not found", id)
+		return c.JSON(http.StatusNotFound, errorMessage(errMsg))
 	}
 
 	// FIXME
 	err = s.db.GetPortfolioItems(result, year)
 	if err != nil {
-		log.Errorf("Error on get portfolio items: %v", err)
-		return err
+		errMsg := fmt.Sprintf("Error on get portfolio '%s' items: %v", id, err)
+		return logAndReturnError(c, errMsg)
 	}
 
 	return c.JSON(http.StatusOK, result)
@@ -61,6 +65,7 @@ func (s *server) portfolio(c echo.Context) error {
 // @Accept json
 // @Produce json
 // @Success 200 {array} wallet.Portfolio
+// @Failure 500 {object} api.ErrorMessage
 // @Router /portfolios [get]
 // @Param year query string false "filter by year"
 func (s *server) portfolios(c echo.Context) error {
@@ -69,14 +74,15 @@ func (s *server) portfolios(c echo.Context) error {
 	// FIXME
 	year, err := strconv.Atoi(c.QueryParam("year"))
 	if err != nil {
-		log.Errorf("Error on convert year: %v", err)
+		log.Debugf("Error on convert year: %v", err)
 		// FIXME
 		year = 2020
 	}
 
 	allPortfolios, err := s.db.GetAllPortfolios()
 	if err != nil {
-		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
+		errMsg := fmt.Sprintf("Error on get all portfolios: %v", err)
+		return logAndReturnError(c, errMsg)
 	}
 
 	portfolios := make([]wallet.Portfolio, len(allPortfolios))
@@ -84,8 +90,8 @@ func (s *server) portfolios(c echo.Context) error {
 		// FIXME
 		err := s.db.GetPortfolioItems(&portfolio, year)
 		if err != nil {
-			log.Errorf("Error on get portfolio items: %v", err)
-			return err
+			errMsg := fmt.Sprintf("Error on get portfolio items: %v", err)
+			return logAndReturnError(c, errMsg)
 		}
 
 		portfolios[idx] = portfolio
@@ -98,24 +104,30 @@ func (s *server) portfolios(c echo.Context) error {
 // @Description insert new portfolio
 // @Accept json
 // @Produce json
+// @Success 200 {object} interface{}
+// @Failure 422 {object} api.ErrorMessage
+// @Failure 500 {object} api.ErrorMessage
 // @Router /portfolios [post]
 func (s *server) portfoliosAdd(c echo.Context) error {
 	log.Debug("Insert portfolio data")
 
 	portfolio := &wallet.Portfolio{}
 	if err := c.Bind(portfolio); err != nil {
-		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
+		errMsg := fmt.Sprintf("Error on bind portfolio: %v", err)
+		return logAndReturnError(c, errMsg)
 	}
 
 	portfolio.ID = slug.Make(portfolio.Name)
 
 	if err := c.Validate(portfolio); err != nil {
-		return echo.NewHTTPError(http.StatusUnprocessableEntity, err.Error())
+		errMsg := fmt.Sprintf("Error on validate portfolio: %v", err)
+		return c.JSON(http.StatusUnprocessableEntity, errorMessage(errMsg))
 	}
 
 	result, err := s.db.InsertPortfolio(portfolio)
 	if err != nil {
-		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
+		errMsg := fmt.Sprintf("Error on insert portfolio: %v", err)
+		return logAndReturnError(c, errMsg)
 	}
 
 	return c.JSON(http.StatusOK, result)
@@ -126,6 +138,9 @@ func (s *server) portfoliosAdd(c echo.Context) error {
 // @Description delete some portfolio by id
 // @Accept json
 // @Produce json
+// @Success 200 {object} interface{}
+// @Failure 404 {object} api.ErrorMessage
+// @Failure 500 {object} api.ErrorMessage
 // @Router /portfolios/{id} [delete]
 // @Param id path string true "Portfolio id"
 func (s *server) portfoliosDelete(c echo.Context) error {
@@ -133,7 +148,8 @@ func (s *server) portfoliosDelete(c echo.Context) error {
 	log.Debugf("Deleting %s data", id)
 	result, err := s.db.DeletePortfolioByID(id)
 	if err != nil {
-		return err
+		errMsg := fmt.Sprintf("Error on delete portolio '%s': %v", id, err)
+		return logAndReturnError(c, errMsg)
 	}
 	return c.JSON(http.StatusOK, result)
 }
@@ -143,6 +159,10 @@ func (s *server) portfoliosDelete(c echo.Context) error {
 // @Description Update some portfolio by id
 // @Accept json
 // @Produce json
+// @Success 200 {object} wallet.Portfolio
+// @Failure 404 {object} api.ErrorMessage
+// @Failure 422 {object} api.ErrorMessage
+// @Failure 500 {object} api.ErrorMessage
 // @Router /portfolios/{id} [put]
 // @Param id path string true "Portfolio id"
 func (s *server) portfoliosUpdate(c echo.Context) error {
@@ -151,24 +171,25 @@ func (s *server) portfoliosUpdate(c echo.Context) error {
 
 	portfolio := &wallet.Portfolio{}
 	if err := c.Bind(portfolio); err != nil {
-		log.Errorf("Error on bind: %v", err)
-		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
+		errMsg := fmt.Sprintf("Error on bind portfolio: %v", err)
+		return logAndReturnError(c, errMsg)
 	}
 
 	if err := c.Validate(portfolio); err != nil {
-		log.Errorf("Error on validate: %v", err)
-		return echo.NewHTTPError(http.StatusUnprocessableEntity, err.Error())
+		errMsg := fmt.Sprintf("Error on validate portfolio: %v", err)
+		return c.JSON(http.StatusUnprocessableEntity, errorMessage(errMsg))
 	}
 
 	result, err := s.db.UpdatePortfolio(id, portfolio)
 	if err != nil {
-		log.Errorf("Error on update portfolio: %v", err)
-		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
+		errMsg := fmt.Sprintf("Error on update portfolio: %v", err)
+		return logAndReturnError(c, errMsg)
 	}
 
 	if result.MatchedCount != 0 {
 		return c.JSON(http.StatusOK, result)
 	}
 
-	return c.JSON(http.StatusNotFound, "Portfolio not found")
+	errMsg := fmt.Sprintf("Portfolio '%s' not found", id)
+	return c.JSON(http.StatusNotFound, errorMessage(errMsg))
 }

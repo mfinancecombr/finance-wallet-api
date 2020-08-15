@@ -50,6 +50,12 @@ var doc = `{
                                 "$ref": "#/definitions/wallet.Broker"
                             }
                         }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/api.ErrorMessage"
+                        }
                     }
                 }
             },
@@ -61,7 +67,30 @@ var doc = `{
                 "produces": [
                     "application/json"
                 ],
-                "summary": "Insert some broker"
+                "summary": "Insert some broker",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "object"
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "schema": {
+                            "$ref": "#/definitions/api.ErrorMessage"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/api.ErrorMessage"
+                        }
+                    }
+                }
             }
         },
         "/brokers/{id}": {
@@ -89,6 +118,18 @@ var doc = `{
                         "schema": {
                             "$ref": "#/definitions/wallet.Broker"
                         }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/api.ErrorMessage"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/api.ErrorMessage"
+                        }
                     }
                 }
             },
@@ -109,7 +150,36 @@ var doc = `{
                         "in": "path",
                         "required": true
                     }
-                ]
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "object"
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/api.ErrorMessage"
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "schema": {
+                            "$ref": "#/definitions/api.ErrorMessage"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/api.ErrorMessage"
+                        }
+                    }
+                }
             },
             "delete": {
                 "description": "delete some broker by id",
@@ -128,7 +198,30 @@ var doc = `{
                         "in": "path",
                         "required": true
                     }
-                ]
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "object"
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/api.ErrorMessage"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/api.ErrorMessage"
+                        }
+                    }
+                }
             }
         },
         "/certificates-of-deposit/operations": {
@@ -140,7 +233,27 @@ var doc = `{
                 "produces": [
                     "application/json"
                 ],
-                "summary": "Insert some certificate of deposit operation"
+                "summary": "Insert some certificate of deposit operation",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object"
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "schema": {
+                            "$ref": "#/definitions/api.ErrorMessage"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/api.ErrorMessage"
+                        }
+                    }
+                }
             }
         },
         "/certificates-of-deposit/operations/{id}": {
@@ -168,6 +281,18 @@ var doc = `{
                         "schema": {
                             "$ref": "#/definitions/wallet.CertificateOfDeposit"
                         }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/api.ErrorMessage"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/api.ErrorMessage"
+                        }
                     }
                 }
             },
@@ -188,7 +313,33 @@ var doc = `{
                         "in": "path",
                         "required": true
                     }
-                ]
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/api.ErrorMessage"
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "schema": {
+                            "$ref": "#/definitions/api.ErrorMessage"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/api.ErrorMessage"
+                        }
+                    }
+                }
             }
         },
         "/ficfi/operations": {
@@ -200,7 +351,27 @@ var doc = `{
                 "produces": [
                     "application/json"
                 ],
-                "summary": "Insert some FICFI operation"
+                "summary": "Insert some FICFI operation",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object"
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "schema": {
+                            "$ref": "#/definitions/api.ErrorMessage"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/api.ErrorMessage"
+                        }
+                    }
+                }
             }
         },
         "/ficfi/operations/{id}": {
@@ -228,6 +399,18 @@ var doc = `{
                         "schema": {
                             "$ref": "#/definitions/wallet.FICFI"
                         }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/api.ErrorMessage"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/api.ErrorMessage"
+                        }
                     }
                 }
             },
@@ -248,7 +431,33 @@ var doc = `{
                         "in": "path",
                         "required": true
                     }
-                ]
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/api.ErrorMessage"
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "schema": {
+                            "$ref": "#/definitions/api.ErrorMessage"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/api.ErrorMessage"
+                        }
+                    }
+                }
             }
         },
         "/fiis/operations": {
@@ -260,7 +469,27 @@ var doc = `{
                 "produces": [
                     "application/json"
                 ],
-                "summary": "Insert some FII operation"
+                "summary": "Insert some FII operation",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object"
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "schema": {
+                            "$ref": "#/definitions/api.ErrorMessage"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/api.ErrorMessage"
+                        }
+                    }
+                }
             }
         },
         "/fiis/operations/{id}": {
@@ -288,6 +517,18 @@ var doc = `{
                         "schema": {
                             "$ref": "#/definitions/wallet.FII"
                         }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/api.ErrorMessage"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/api.ErrorMessage"
+                        }
                     }
                 }
             },
@@ -308,7 +549,33 @@ var doc = `{
                         "in": "path",
                         "required": true
                     }
-                ]
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/api.ErrorMessage"
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "schema": {
+                            "$ref": "#/definitions/api.ErrorMessage"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/api.ErrorMessage"
+                        }
+                    }
+                }
             }
         },
         "/operations": {
@@ -320,7 +587,21 @@ var doc = `{
                 "produces": [
                     "application/json"
                 ],
-                "summary": "List all operations"
+                "summary": "List all operations",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/api.ErrorMessage"
+                        }
+                    }
+                }
             }
         },
         "/operations/{id}": {
@@ -341,7 +622,27 @@ var doc = `{
                         "in": "path",
                         "required": true
                     }
-                ]
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/api.ErrorMessage"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/api.ErrorMessage"
+                        }
+                    }
+                }
             }
         },
         "/portfolios": {
@@ -371,6 +672,12 @@ var doc = `{
                                 "$ref": "#/definitions/wallet.Portfolio"
                             }
                         }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/api.ErrorMessage"
+                        }
                     }
                 }
             },
@@ -382,7 +689,27 @@ var doc = `{
                 "produces": [
                     "application/json"
                 ],
-                "summary": "Insert some portfolio"
+                "summary": "Insert some portfolio",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object"
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "schema": {
+                            "$ref": "#/definitions/api.ErrorMessage"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/api.ErrorMessage"
+                        }
+                    }
+                }
             }
         },
         "/portfolios/{id}": {
@@ -416,6 +743,18 @@ var doc = `{
                         "schema": {
                             "$ref": "#/definitions/wallet.Portfolio"
                         }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/api.ErrorMessage"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/api.ErrorMessage"
+                        }
                     }
                 }
             },
@@ -436,7 +775,33 @@ var doc = `{
                         "in": "path",
                         "required": true
                     }
-                ]
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/wallet.Portfolio"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/api.ErrorMessage"
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "schema": {
+                            "$ref": "#/definitions/api.ErrorMessage"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/api.ErrorMessage"
+                        }
+                    }
+                }
             },
             "delete": {
                 "description": "delete some portfolio by id",
@@ -455,31 +820,79 @@ var doc = `{
                         "in": "path",
                         "required": true
                     }
-                ]
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/api.ErrorMessage"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/api.ErrorMessage"
+                        }
+                    }
+                }
             }
         },
         "/purchases": {
             "get": {
-                "description": "get all operations data",
+                "description": "get all purchases operations data",
                 "consumes": [
                     "application/json"
                 ],
                 "produces": [
                     "application/json"
                 ],
-                "summary": "List all operations"
+                "summary": "List all purchases operations",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/api.ErrorMessage"
+                        }
+                    }
+                }
             }
         },
         "/sales": {
             "get": {
-                "description": "get all operations data",
+                "description": "get all sales operations data",
                 "consumes": [
                     "application/json"
                 ],
                 "produces": [
                     "application/json"
                 ],
-                "summary": "List all operations"
+                "summary": "List all sales operations",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/api.ErrorMessage"
+                        }
+                    }
+                }
             }
         },
         "/stocks-funds/operations": {
@@ -491,7 +904,27 @@ var doc = `{
                 "produces": [
                     "application/json"
                 ],
-                "summary": "Insert some stocks fund operation"
+                "summary": "Insert some stocks fund operation",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object"
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "schema": {
+                            "$ref": "#/definitions/api.ErrorMessage"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/api.ErrorMessage"
+                        }
+                    }
+                }
             }
         },
         "/stocks-funds/operations/{id}": {
@@ -519,6 +952,18 @@ var doc = `{
                         "schema": {
                             "$ref": "#/definitions/wallet.StockFund"
                         }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/api.ErrorMessage"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/api.ErrorMessage"
+                        }
                     }
                 }
             },
@@ -539,7 +984,33 @@ var doc = `{
                         "in": "path",
                         "required": true
                     }
-                ]
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/api.ErrorMessage"
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "schema": {
+                            "$ref": "#/definitions/api.ErrorMessage"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/api.ErrorMessage"
+                        }
+                    }
+                }
             }
         },
         "/stocks/operations": {
@@ -551,7 +1022,27 @@ var doc = `{
                 "produces": [
                     "application/json"
                 ],
-                "summary": "Insert some stocks operation"
+                "summary": "Insert some stocks operation",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object"
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "schema": {
+                            "$ref": "#/definitions/api.ErrorMessage"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/api.ErrorMessage"
+                        }
+                    }
+                }
             }
         },
         "/stocks/operations/{id}": {
@@ -579,6 +1070,18 @@ var doc = `{
                         "schema": {
                             "$ref": "#/definitions/wallet.Stock"
                         }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/api.ErrorMessage"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/api.ErrorMessage"
+                        }
                     }
                 }
             },
@@ -599,7 +1102,27 @@ var doc = `{
                         "in": "path",
                         "required": true
                     }
-                ]
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object"
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "schema": {
+                            "$ref": "#/definitions/api.ErrorMessage"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/api.ErrorMessage"
+                        }
+                    }
+                }
             }
         },
         "/treasuries-direct/operations": {
@@ -611,7 +1134,27 @@ var doc = `{
                 "produces": [
                     "application/json"
                 ],
-                "summary": "Insert some treasury direct operation"
+                "summary": "Insert some treasury direct operation",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object"
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "schema": {
+                            "$ref": "#/definitions/api.ErrorMessage"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/api.ErrorMessage"
+                        }
+                    }
+                }
             }
         },
         "/treasuries-direct/operations/{id}": {
@@ -639,6 +1182,18 @@ var doc = `{
                         "schema": {
                             "$ref": "#/definitions/wallet.TreasuryDirect"
                         }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/api.ErrorMessage"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/api.ErrorMessage"
+                        }
                     }
                 }
             },
@@ -659,11 +1214,45 @@ var doc = `{
                         "in": "path",
                         "required": true
                     }
-                ]
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/api.ErrorMessage"
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "schema": {
+                            "$ref": "#/definitions/api.ErrorMessage"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/api.ErrorMessage"
+                        }
+                    }
+                }
             }
         }
     },
     "definitions": {
+        "api.ErrorMessage": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string"
+                }
+            }
+        },
         "wallet.Broker": {
             "type": "object",
             "required": [

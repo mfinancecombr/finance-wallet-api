@@ -4,6 +4,7 @@
 package api
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/labstack/echo/v4"
@@ -15,8 +16,8 @@ func (s *server) getAllFIIOperations(c echo.Context) error {
 	log.Debug("[API] Retrieving all stocks operations")
 	result, err := s.db.GetAllFIIsOperations()
 	if err != nil {
-		log.Errorf("[API] Error on retrieve data: %v", err)
-		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
+		errMsg := fmt.Sprintf("Error on retrieve operations: %v", err)
+		return logAndReturnError(c, errMsg)
 	}
 	return c.JSON(http.StatusOK, result)
 }
@@ -27,6 +28,8 @@ func (s *server) getAllFIIOperations(c echo.Context) error {
 // @Accept json
 // @Produce json
 // @Success 200 {object} wallet.FII
+// @Failure 404 {object} api.ErrorMessage
+// @Failure 500 {object} api.ErrorMessage
 // @Router /fiis/operations/{id} [get]
 // @Param id path string true "Operation id"
 func (s *server) getFIIOperationByID(c echo.Context) error {
@@ -34,11 +37,12 @@ func (s *server) getFIIOperationByID(c echo.Context) error {
 	log.Debugf("[API] Retrieving stock operation with id: %s", id)
 	result, err := s.db.GetFIIOperationByID(id)
 	if err != nil {
-		log.Errorf("[API] Error on retrieve data: %v", err)
-		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
+		errMsg := fmt.Sprintf("Error on retrieve '%s' operations: %v", id, err)
+		return logAndReturnError(c, errMsg)
 	}
 	if result == nil {
-		return c.JSON(http.StatusNotFound, "FII operation data not found")
+		errMsg := fmt.Sprintf("FII operation '%s' not found", id)
+		return c.JSON(http.StatusNotFound, errorMessage(errMsg))
 	}
 	return c.JSON(http.StatusOK, result)
 }
@@ -48,6 +52,9 @@ func (s *server) getFIIOperationByID(c echo.Context) error {
 // @Description insert new FII operation
 // @Accept json
 // @Produce json
+// @Success 200 {object} interface{}
+// @Failure 422 {object} api.ErrorMessage
+// @Failure 500 {object} api.ErrorMessage
 // @Router /fiis/operations [post]
 func (s *server) insertFIIOperation(c echo.Context) error {
 	log.Debugf("[API] Inserting stock operation")
@@ -55,19 +62,19 @@ func (s *server) insertFIIOperation(c echo.Context) error {
 	data := wallet.NewFII()
 
 	if err := c.Bind(data); err != nil {
-		log.Errorf("[API] Error on bind: %v", err)
-		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
+		errMsg := fmt.Sprintf("Error on bind FII: %v", err)
+		return logAndReturnError(c, errMsg)
 	}
 
 	if err := c.Validate(data); err != nil {
-		log.Errorf("[API] Error on validate: %v", err)
-		return echo.NewHTTPError(http.StatusUnprocessableEntity, err.Error())
+		errMsg := fmt.Sprintf("Error on validate FII: %v", err)
+		return c.JSON(http.StatusUnprocessableEntity, errorMessage(errMsg))
 	}
 
 	result, err := s.db.InsertFIIOperation(data)
 	if err != nil {
-		log.Errorf("[API] Error on insert: %v", err)
-		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
+		errMsg := fmt.Sprintf("Error on insert FII: %v", err)
+		return logAndReturnError(c, errMsg)
 	}
 
 	return c.JSON(http.StatusOK, result)
@@ -78,6 +85,10 @@ func (s *server) insertFIIOperation(c echo.Context) error {
 // @Description update new FII operation
 // @Accept json
 // @Produce json
+// @Success 200 {object} interface{}
+// @Failure 404 {object} api.ErrorMessage
+// @Failure 422 {object} api.ErrorMessage
+// @Failure 500 {object} api.ErrorMessage
 // @Router /fiis/operations/{id} [put]
 // @Param id path string true "Operation id"
 func (s *server) updateFIIOperationByID(c echo.Context) error {
@@ -87,24 +98,25 @@ func (s *server) updateFIIOperationByID(c echo.Context) error {
 	data := wallet.NewFII()
 
 	if err := c.Bind(data); err != nil {
-		log.Errorf("[API] Error on bind: %v", err)
-		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
+		errMsg := fmt.Sprintf("Error on bind FII: %v", err)
+		return logAndReturnError(c, errMsg)
 	}
 
 	if err := c.Validate(data); err != nil {
-		log.Errorf("[API] Error on validate: %v", err)
-		return echo.NewHTTPError(http.StatusUnprocessableEntity, err.Error())
+		errMsg := fmt.Sprintf("Error on validate FII: %v", err)
+		return c.JSON(http.StatusUnprocessableEntity, errorMessage(errMsg))
 	}
 
 	result, err := s.db.UpdateFIIOperationByID(id, data)
 	if err != nil {
-		log.Errorf("[API] Error on update: %v", err)
-		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
+		errMsg := fmt.Sprintf("Error on update FII: %v", err)
+		return logAndReturnError(c, errMsg)
 	}
 
 	if result.MatchedCount != 0 {
 		return c.JSON(http.StatusOK, result)
 	}
 
-	return c.JSON(http.StatusNotFound, "FII operation not found")
+	errMsg := fmt.Sprintf("Stock operation '%s' not found", id)
+	return c.JSON(http.StatusNotFound, errorMessage(errMsg))
 }

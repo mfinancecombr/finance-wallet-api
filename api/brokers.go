@@ -4,6 +4,7 @@
 package api
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/gosimple/slug"
@@ -18,6 +19,8 @@ import (
 // @Accept json
 // @Produce json
 // @Success 200 {object} wallet.Broker
+// @Failure 404 {object} api.ErrorMessage
+// @Failure 500 {object} api.ErrorMessage
 // @Router /brokers/{id} [get]
 // @Param id path string true "Broker id"
 func (s *server) broker(c echo.Context) error {
@@ -25,10 +28,12 @@ func (s *server) broker(c echo.Context) error {
 	log.Debugf("[API] Retrieving broker id: %s", id)
 	result, err := s.db.GetBrokerByID(id)
 	if err != nil {
-		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
+		errMsg := fmt.Sprintf("Error on retrieve broker id '%s': %v", id, err)
+		return logAndReturnError(c, errMsg)
 	}
 	if result == nil {
-		return c.JSON(http.StatusNotFound, "Broker data not found")
+		errMsg := fmt.Sprintf("Broker '%s' not found", id)
+		return c.JSON(http.StatusNotFound, errorMessage(errMsg))
 	}
 	return c.JSON(http.StatusOK, result)
 }
@@ -39,15 +44,15 @@ func (s *server) broker(c echo.Context) error {
 // @Accept json
 // @Produce json
 // @Success 200 {array} wallet.Broker
+// @Failure 500 {object} api.ErrorMessage
 // @Router /brokers [get]
 func (s *server) brokers(c echo.Context) error {
 	log.Debug("Retrieving all brokers")
-
 	result, err := s.db.GetAllBrokers()
 	if err != nil {
-		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
+		errMsg := fmt.Sprintf("Error on retrieve brokers: %v", err)
+		return logAndReturnError(c, errMsg)
 	}
-
 	return c.JSON(http.StatusOK, result)
 }
 
@@ -56,24 +61,30 @@ func (s *server) brokers(c echo.Context) error {
 // @Description insert new broker
 // @Accept json
 // @Produce json
+// @Success 200 {array} interface{}
+// @Failure 422 {object} api.ErrorMessage
+// @Failure 500 {object} api.ErrorMessage
 // @Router /brokers [post]
 func (s *server) brokersAdd(c echo.Context) error {
 	log.Debug("Insert brokers data")
 
 	broker := &wallet.Broker{}
 	if err := c.Bind(broker); err != nil {
-		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
+		errMsg := fmt.Sprintf("Error on bind broker: %v", err)
+		return logAndReturnError(c, errMsg)
 	}
 
 	broker.ID = slug.Make(broker.Name)
 
 	if err := c.Validate(broker); err != nil {
-		return echo.NewHTTPError(http.StatusUnprocessableEntity, err.Error())
+		errMsg := fmt.Sprintf("Error on validate broker: %v", err)
+		return c.JSON(http.StatusUnprocessableEntity, errorMessage(errMsg))
 	}
 
 	result, err := s.db.InsertBroker(broker)
 	if err != nil {
-		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
+		errMsg := fmt.Sprintf("Error on insert broker: %v", err)
+		return logAndReturnError(c, errMsg)
 	}
 
 	return c.JSON(http.StatusOK, result)
@@ -84,6 +95,9 @@ func (s *server) brokersAdd(c echo.Context) error {
 // @Description delete some broker by id
 // @Accept json
 // @Produce json
+// @Success 200 {array} interface{}
+// @Failure 404 {object} api.ErrorMessage
+// @Failure 500 {object} api.ErrorMessage
 // @Router /brokers/{id} [delete]
 // @Param id path string true "Broker id"
 func (s *server) brokersDelete(c echo.Context) error {
@@ -91,7 +105,8 @@ func (s *server) brokersDelete(c echo.Context) error {
 	log.Debugf("Deleting %s data", id)
 	result, err := s.db.DeleteBrokerByID(id)
 	if err != nil {
-		return err
+		errMsg := fmt.Sprintf("Error on delete broker '%s': %v", id, err)
+		return logAndReturnError(c, errMsg)
 	}
 	return c.JSON(http.StatusOK, result)
 }
@@ -101,6 +116,10 @@ func (s *server) brokersDelete(c echo.Context) error {
 // @Description Update some broker by id
 // @Accept json
 // @Produce json
+// @Success 200 {array} interface{}
+// @Failure 404 {object} api.ErrorMessage
+// @Failure 422 {object} api.ErrorMessage
+// @Failure 500 {object} api.ErrorMessage
 // @Router /brokers/{id} [put]
 // @Param id path string true "Broker id"
 func (s *server) brokersUpdate(c echo.Context) error {
@@ -109,24 +128,25 @@ func (s *server) brokersUpdate(c echo.Context) error {
 
 	broker := &wallet.Broker{}
 	if err := c.Bind(broker); err != nil {
-		log.Errorf("Error on bind: %v", err)
-		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
+		errMsg := fmt.Sprintf("Error on bind broker: %v", err)
+		return logAndReturnError(c, errMsg)
 	}
 
 	if err := c.Validate(broker); err != nil {
-		log.Errorf("Error on validate: %v", err)
-		return echo.NewHTTPError(http.StatusUnprocessableEntity, err.Error())
+		errMsg := fmt.Sprintf("Error on validate broker: %v", err)
+		return c.JSON(http.StatusUnprocessableEntity, errorMessage(errMsg))
 	}
 
 	result, err := s.db.UpdateBroker(id, broker)
 	if err != nil {
-		log.Errorf("Error on update broker: %v", err)
-		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
+		errMsg := fmt.Sprintf("Error on update broker: %v", err)
+		return logAndReturnError(c, errMsg)
 	}
 
 	if result.MatchedCount != 0 {
 		return c.JSON(http.StatusOK, result)
 	}
 
-	return c.JSON(http.StatusNotFound, "Broker not found")
+	errMsg := fmt.Sprintf("Broker '%s' not found", id)
+	return c.JSON(http.StatusNotFound, errorMessage(errMsg))
 }
