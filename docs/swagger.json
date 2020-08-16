@@ -1402,7 +1402,7 @@
         "wallet.OperationsList": {
             "type": "array",
             "items": {
-                "type": "object"
+                "$ref": "#/definitions/wallet.Tradable"
             }
         },
         "wallet.Portfolio": {
@@ -1412,7 +1412,7 @@
                 "name"
             ],
             "properties": {
-                "costBasics": {
+                "costBasis": {
                     "type": "number"
                 },
                 "gain": {
@@ -1453,7 +1453,7 @@
                 "commission": {
                     "type": "number"
                 },
-                "costBasics": {
+                "costBasis": {
                     "type": "number"
                 },
                 "gain": {
@@ -1584,6 +1584,9 @@
                     "type": "string"
                 }
             }
+        },
+        "wallet.Tradable": {
+            "type": "object"
         },
         "wallet.TreasuryDirect": {
             "type": "object",

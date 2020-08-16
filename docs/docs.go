@@ -1417,7 +1417,7 @@ var doc = `{
         "wallet.OperationsList": {
             "type": "array",
             "items": {
-                "type": "object"
+                "$ref": "#/definitions/wallet.Tradable"
             }
         },
         "wallet.Portfolio": {
@@ -1427,7 +1427,7 @@ var doc = `{
                 "name"
             ],
             "properties": {
-                "costBasics": {
+                "costBasis": {
                     "type": "number"
                 },
                 "gain": {
@@ -1468,7 +1468,7 @@ var doc = `{
                 "commission": {
                     "type": "number"
                 },
-                "costBasics": {
+                "costBasis": {
                     "type": "number"
                 },
                 "gain": {
@@ -1599,6 +1599,9 @@ var doc = `{
                     "type": "string"
                 }
             }
+        },
+        "wallet.Tradable": {
+            "type": "object"
         },
         "wallet.TreasuryDirect": {
             "type": "object",

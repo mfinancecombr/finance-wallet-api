@@ -13,7 +13,7 @@ type PortfolioItem struct {
 	Change        float64        `json:"change" bson:"change"`
 	ClosingPrice  float64        `json:"closingPrice" bson:"closingPrice"`
 	Commission    float64        `json:"commission" bson:"commission"`
-	CostBasics    float64        `json:"costBasics" bson:"costBasics"`
+	CostBasis     float64        `json:"costBasis" bson:"costBasis"`
 	Gain          float64        `json:"gain" bson:"gain"`
 	OverallReturn float64        `json:"overallReturn" bson:"overallReturn"`
 	ItemType      string         `json:"itemType" bson:"itemType"`
@@ -29,7 +29,7 @@ type PortfolioItem struct {
 }
 
 type Portfolio struct {
-	CostBasics    float64                  `json:"costBasics" bson:"costBasics"`
+	CostBasis     float64                  `json:"costBasis" bson:"costBasis"`
 	Gain          float64                  `json:"gain" bson:"gain"`
 	ID            string                   `json:"id" bson:"_id" validate:"required"`
 	Items         map[string]PortfolioItem `json:"items" bson:"items"`
@@ -46,16 +46,16 @@ func (p *Portfolio) Recalculate() {
 		return
 	}
 
-	costBasics := 0.0
+	costBasis := 0.0
 	gain := 0.0
 	for _, item := range p.Items {
-		costBasics += item.CostBasics
+		costBasis += item.CostBasis
 		gain += item.Gain
 	}
 
-	p.CostBasics = roundFloatTwoDecimalPlaces(costBasics)
+	p.CostBasis = roundFloatTwoDecimalPlaces(costBasis)
 	p.Gain = roundFloatTwoDecimalPlaces(gain)
-	p.OverallReturn = roundFloatTwoDecimalPlaces(p.Gain * 100 / p.CostBasics)
+	p.OverallReturn = roundFloatTwoDecimalPlaces(p.Gain * 100 / p.CostBasis)
 }
 
 func (pi *PortfolioItem) Recalculate() {
@@ -85,14 +85,14 @@ func (pi *PortfolioItem) Recalculate() {
 	pi.Shares = totalShares
 	if pi.Shares > 0 {
 		pi.Commission = roundFloatTwoDecimalPlaces(commission)
-		pi.CostBasics = roundFloatTwoDecimalPlaces(totalPrice)
-		pi.AveragePrice = roundFloatTwoDecimalPlaces(pi.CostBasics / pi.Shares)
+		pi.CostBasis = roundFloatTwoDecimalPlaces(totalPrice)
+		pi.AveragePrice = roundFloatTwoDecimalPlaces(pi.CostBasis / pi.Shares)
 
 		// FIXME
 		if pi.ItemType == "stocks" || pi.ItemType == "fiis" {
-			gain := (pi.Shares * pi.LastPrice) - pi.CostBasics
+			gain := (pi.Shares * pi.LastPrice) - pi.CostBasis
 			pi.Gain = roundFloatTwoDecimalPlaces(gain)
-			pi.OverallReturn = roundFloatTwoDecimalPlaces((gain * 100) / pi.CostBasics)
+			pi.OverallReturn = roundFloatTwoDecimalPlaces((gain * 100) / pi.CostBasis)
 		} else {
 			pi.Gain = 0
 			pi.OverallReturn = 0

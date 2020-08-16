@@ -121,11 +121,11 @@ definitions:
     type: object
   wallet.OperationsList:
     items:
-      type: object
+      $ref: '#/definitions/wallet.Tradable'
     type: array
   wallet.Portfolio:
     properties:
-      costBasics:
+      costBasis:
         type: number
       gain:
         type: number
@@ -155,7 +155,7 @@ definitions:
         type: number
       commission:
         type: number
-      costBasics:
+      costBasis:
         type: number
       gain:
         type: number
@@ -246,6 +246,8 @@ definitions:
     - shares
     - symbol
     - type
+    type: object
+  wallet.Tradable:
     type: object
   wallet.TreasuryDirect:
     properties:
