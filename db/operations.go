@@ -77,10 +77,14 @@ func (m *mongoSession) GetAllOperations() (interface{}, error) {
 
 func (m *mongoSession) GetAllPurchases() (interface{}, error) {
 	log.Debug("[DB] GetAllOperations")
-	return m.collection.FindAll(operationsCollection, bson.M{"type": "purchase"})
+	query := bson.M{"type": "purchase"}
+	opts := options.Find().SetSort(bson.D{{"date", -1}})
+	return m.collection.FindAll(operationsCollection, query, opts)
 }
 
 func (m *mongoSession) GetAllSales() (interface{}, error) {
 	log.Debug("[DB] GetAllOperations")
-	return m.collection.FindAll(operationsCollection, bson.M{"type": "sale"})
+	query := bson.M{"type": "sale"}
+	opts := options.Find().SetSort(bson.D{{"date", -1}})
+	return m.collection.FindAll(operationsCollection, query, opts)
 }
