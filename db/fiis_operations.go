@@ -16,7 +16,8 @@ func (m *mongoSession) InsertFIIOperation(d *wallet.FII) (*mongo.InsertOneResult
 
 func (m *mongoSession) UpdateFIIOperationByID(id string, d *wallet.FII) (*mongo.UpdateResult, error) {
 	log.Debug("[DB] UpdateFIIOperationByID")
-	return m.updateFIIByID(operationsCollection, id, d)
+	d.ID = ""
+	return m.updateOperation(operationsCollection, id, d)
 }
 
 func (m *mongoSession) GetAllFIIsOperations() (wallet.FIIList, error) {

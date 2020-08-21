@@ -14,9 +14,20 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-func (m *mongoSession) insertOperation(d interface{}) (*mongo.InsertOneResult, error) {
+func (m *mongoSession) insertOperation(d wallet.Tradable) (*mongo.InsertOneResult, error) {
 	log.Debug("[DB] insertOperation")
 	return m.collection.InsertOne(operationsCollection, d)
+}
+
+func (m *mongoSession) updateOperation(c, id string, d wallet.Tradable) (*mongo.UpdateResult, error) {
+	log.Debug("[DB] updateOperation")
+	objectId, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		return nil, err
+	}
+	f := bson.D{{"_id", objectId}}
+	u := bson.D{{"$set", d}}
+	return m.collection.UpdateOne(c, f, u)
 }
 
 func (m *mongoSession) DeleteOperationByID(id string) (*mongo.DeleteResult, error) {

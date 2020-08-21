@@ -16,7 +16,8 @@ func (m *mongoSession) InsertStockFundOperation(d *wallet.StockFund) (*mongo.Ins
 
 func (m *mongoSession) UpdateStockFundOperationByID(id string, d *wallet.StockFund) (*mongo.UpdateResult, error) {
 	log.Debug("[DB] UpdateStockFundOperationByID")
-	return m.updateStockFundByID(operationsCollection, id, d)
+	d.ID = ""
+	return m.updateOperation(operationsCollection, id, d)
 }
 
 func (m *mongoSession) GetAllStocksFundsOperations() (wallet.StockFundList, error) {

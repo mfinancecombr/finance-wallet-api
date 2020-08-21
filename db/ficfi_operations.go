@@ -16,7 +16,8 @@ func (m *mongoSession) InsertFICFIOperation(d *wallet.FICFI) (*mongo.InsertOneRe
 
 func (m *mongoSession) UpdateFICFIOperationByID(id string, d *wallet.FICFI) (*mongo.UpdateResult, error) {
 	log.Debug("[DB] UpdateFICFIOperationByID")
-	return m.updateFICFIByID(operationsCollection, id, d)
+	d.ID = ""
+	return m.updateOperation(operationsCollection, id, d)
 }
 
 func (m *mongoSession) GetAllFICFIOperations() (wallet.FICFIList, error) {

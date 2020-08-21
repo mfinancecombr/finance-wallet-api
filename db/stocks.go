@@ -8,20 +8,7 @@ import (
 	log "github.com/sirupsen/logrus"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
-	"go.mongodb.org/mongo-driver/mongo"
 )
-
-func (m *mongoSession) updateStockByID(c, id string, d *wallet.Stock) (*mongo.UpdateResult, error) {
-	log.Debug("[DB] updateStockByID")
-	objectId, err := primitive.ObjectIDFromHex(id)
-	if err != nil {
-		return nil, err
-	}
-	d.ID = ""
-	f := bson.D{{"_id", objectId}}
-	u := bson.D{{"$set", d}}
-	return m.collection.UpdateOne(c, f, u)
-}
 
 func (m *mongoSession) getAllStocks(c string) (wallet.StockList, error) {
 	log.Debug("[DB] getAllStocks")

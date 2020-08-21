@@ -8,20 +8,7 @@ import (
 	log "github.com/sirupsen/logrus"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
-	"go.mongodb.org/mongo-driver/mongo"
 )
-
-func (m *mongoSession) updateTreasuryDirectByID(c, id string, d *wallet.TreasuryDirect) (*mongo.UpdateResult, error) {
-	log.Debug("[DB] updateTreasuryDirectByID")
-	objectId, err := primitive.ObjectIDFromHex(id)
-	if err != nil {
-		return nil, err
-	}
-	d.ID = ""
-	f := bson.D{{"_id", objectId}}
-	u := bson.D{{"$set", d}}
-	return m.collection.UpdateOne(c, f, u)
-}
 
 func (m *mongoSession) getAllTreasuriesDirects(c string) (wallet.TreasuryDirectList, error) {
 	log.Debug("[DB] getAllTreasuriesDirects")

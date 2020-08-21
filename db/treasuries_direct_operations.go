@@ -16,7 +16,8 @@ func (m *mongoSession) InsertTreasuryDirectOperation(d *wallet.TreasuryDirect) (
 
 func (m *mongoSession) UpdateTreasuryDirectOperationByID(id string, d *wallet.TreasuryDirect) (*mongo.UpdateResult, error) {
 	log.Debug("[DB] UpdateTreasuryDirectOperationByID")
-	return m.updateTreasuryDirectByID(operationsCollection, id, d)
+	d.ID = ""
+	return m.updateOperation(operationsCollection, id, d)
 }
 
 func (m *mongoSession) GetAllTreasuriesDirectsOperations() (wallet.TreasuryDirectList, error) {

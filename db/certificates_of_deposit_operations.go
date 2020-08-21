@@ -16,7 +16,8 @@ func (m *mongoSession) InsertCertificateOfDepositOperation(d *wallet.Certificate
 
 func (m *mongoSession) UpdateCertificateOfDepositOperationByID(id string, d *wallet.CertificateOfDeposit) (*mongo.UpdateResult, error) {
 	log.Debug("[DB] UpdateCertificateOfDepositOperationByID")
-	return m.updateCertificateOfDepositByID(operationsCollection, id, d)
+	d.ID = ""
+	return m.updateOperation(operationsCollection, id, d)
 }
 
 func (m *mongoSession) GetAllCertificatesOfDepositsOperations() (wallet.CertificateOfDepositList, error) {
