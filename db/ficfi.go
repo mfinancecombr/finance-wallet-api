@@ -23,7 +23,8 @@ func (m *mongoSession) UpdateFICFIOperationByID(id string, d *wallet.FICFI) (*mo
 
 func (m *mongoSession) GetAllFICFIOperations() (wallet.FICFIList, error) {
 	log.Debug("[DB] GetAllFICFIOperations")
-	results, err := m.collection.FindAll(operationsCollection, bson.M{})
+	query := bson.M{"itemType": "ficfi"}
+	results, err := m.collection.FindAll(operationsCollection, query)
 	if err != nil {
 		return nil, err
 	}

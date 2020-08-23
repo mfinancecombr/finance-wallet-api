@@ -23,7 +23,8 @@ func (m *mongoSession) UpdateStockFundOperationByID(id string, d *wallet.StockFu
 
 func (m *mongoSession) GetAllStocksFundsOperations() (wallet.StockFundList, error) {
 	log.Debug("[DB] GetAllStocksFundsOperations")
-	results, err := m.collection.FindAll(operationsCollection, bson.M{})
+	query := bson.M{"itemType": "stocks-funds"}
+	results, err := m.collection.FindAll(operationsCollection, query)
 	if err != nil {
 		return nil, err
 	}

@@ -23,7 +23,8 @@ func (m *mongoSession) UpdateTreasuryDirectOperationByID(id string, d *wallet.Tr
 
 func (m *mongoSession) GetAllTreasuriesDirectsOperations() (wallet.TreasuryDirectList, error) {
 	log.Debug("[DB] GetAllTreasuriesDirectsOperations")
-	results, err := m.collection.FindAll(operationsCollection, bson.M{})
+	query := bson.M{"itemType": "treasury-direct"}
+	results, err := m.collection.FindAll(operationsCollection, query)
 	if err != nil {
 		return nil, err
 	}

@@ -23,7 +23,8 @@ func (m *mongoSession) UpdateFIIOperationByID(id string, d *wallet.FII) (*mongo.
 
 func (m *mongoSession) GetAllFIIsOperations() (wallet.FIIList, error) {
 	log.Debug("[DB] GetAllFIIsOperations")
-	results, err := m.collection.FindAll(operationsCollection, bson.M{})
+	query := bson.M{"itemType": "fiis"}
+	results, err := m.collection.FindAll(operationsCollection, query)
 	if err != nil {
 		return nil, err
 	}

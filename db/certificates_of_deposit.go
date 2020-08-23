@@ -23,7 +23,8 @@ func (m *mongoSession) UpdateCertificateOfDepositOperationByID(id string, d *wal
 
 func (m *mongoSession) GetAllCertificatesOfDepositsOperations() (wallet.CertificateOfDepositList, error) {
 	log.Debug("[DB] GetAllCertificatesOfDepositsOperations")
-	results, err := m.collection.FindAll(operationsCollection, bson.M{})
+	query := bson.M{"itemType": "certificate-of-deposit"}
+	results, err := m.collection.FindAll(operationsCollection, query)
 	if err != nil {
 		return nil, err
 	}
