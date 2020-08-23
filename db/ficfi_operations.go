@@ -32,5 +32,12 @@ func (m *mongoSession) GetFICFIOperationsByPortfolioID(id string) (wallet.FICFIL
 
 func (m *mongoSession) GetFICFIOperationByID(id string) (*wallet.FICFI, error) {
 	log.Debug("[DB] GetFICFIOperationByID")
-	return m.getFICFIByID(operationsCollection, id)
+	ficfi := &wallet.FICFI{}
+	if err := m.getOperationByID(operationsCollection, id, ficfi); err != nil {
+		return nil, err
+	}
+	if ficfi.Symbol == "" {
+		return nil, nil
+	}
+	return ficfi, nil
 }

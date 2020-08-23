@@ -32,5 +32,12 @@ func (m *mongoSession) GetTreasuryDirectOperationsByPortfolioID(id string) (wall
 
 func (m *mongoSession) GetTreasuryDirectOperationByID(id string) (*wallet.TreasuryDirect, error) {
 	log.Debug("[DB] GetTreasuryDirectOperationByID")
-	return m.getTreasuryDirectByID(operationsCollection, id)
+	treasuryDirect := &wallet.TreasuryDirect{}
+	if err := m.getOperationByID(operationsCollection, id, treasuryDirect); err != nil {
+		return nil, err
+	}
+	if treasuryDirect.Symbol == "" {
+		return nil, nil
+	}
+	return treasuryDirect, nil
 }

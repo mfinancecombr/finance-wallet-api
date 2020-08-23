@@ -32,5 +32,12 @@ func (m *mongoSession) GetCertificateOfDepositOperationsByPortfolioID(id string)
 
 func (m *mongoSession) GetCertificateOfDepositOperationByID(id string) (*wallet.CertificateOfDeposit, error) {
 	log.Debug("[DB] GetCertificateOfDepositOperationByID")
-	return m.getCertificateOfDepositByID(operationsCollection, id)
+	certificateOfDeposit := &wallet.CertificateOfDeposit{}
+	if err := m.getOperationByID(operationsCollection, id, certificateOfDeposit); err != nil {
+		return nil, err
+	}
+	if certificateOfDeposit.Symbol == "" {
+		return nil, nil
+	}
+	return certificateOfDeposit, nil
 }

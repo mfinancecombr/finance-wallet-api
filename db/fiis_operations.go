@@ -32,5 +32,12 @@ func (m *mongoSession) GetFIIOperationsByPortfolioID(id string) (wallet.FIIList,
 
 func (m *mongoSession) GetFIIOperationByID(id string) (*wallet.FII, error) {
 	log.Debug("[DB] GetFIIOperationByID")
-	return m.getFIIByID(operationsCollection, id)
+	fii := &wallet.FII{}
+	if err := m.getOperationByID(operationsCollection, id, fii); err != nil {
+		return nil, err
+	}
+	if fii.Symbol == "" {
+		return nil, nil
+	}
+	return fii, nil
 }

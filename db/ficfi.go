@@ -7,7 +7,6 @@ import (
 	"github.com/mfinancecombr/finance-wallet-api/wallet"
 	log "github.com/sirupsen/logrus"
 	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 func (m *mongoSession) getAllFICFI(c string) (wallet.FICFIList, error) {
@@ -41,22 +40,4 @@ func (m *mongoSession) getFICFIByPortfolioID(c, id string) (wallet.FICFIList, er
 		operationsList = append(operationsList, operation)
 	}
 	return operationsList, nil
-}
-
-func (m *mongoSession) getFICFIByID(c, id string) (*wallet.FICFI, error) {
-	log.Debug("[DB] getFICFIByID")
-	objectId, err := primitive.ObjectIDFromHex(id)
-	if err != nil {
-		return nil, err
-	}
-	query := bson.M{"_id": objectId}
-	h := &wallet.FICFI{}
-	err = m.collection.FindOne(c, query, h)
-	if err != nil {
-		return nil, err
-	}
-	if h.Symbol == "" {
-		return nil, nil
-	}
-	return h, nil
 }

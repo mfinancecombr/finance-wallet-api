@@ -32,5 +32,12 @@ func (m *mongoSession) GetStockOperationsByPortfolioID(id string) (wallet.StockL
 
 func (m *mongoSession) GetStockOperationByID(id string) (*wallet.Stock, error) {
 	log.Debug("[DB] GetStockOperationByID")
-	return m.getStockByID(operationsCollection, id)
+	stock := &wallet.Stock{}
+	if err := m.getOperationByID(operationsCollection, id, stock); err != nil {
+		return nil, err
+	}
+	if stock.Symbol == "" {
+		return nil, nil
+	}
+	return stock, nil
 }

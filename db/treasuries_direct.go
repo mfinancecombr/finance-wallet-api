@@ -7,7 +7,6 @@ import (
 	"github.com/mfinancecombr/finance-wallet-api/wallet"
 	log "github.com/sirupsen/logrus"
 	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 func (m *mongoSession) getAllTreasuriesDirects(c string) (wallet.TreasuryDirectList, error) {
@@ -41,22 +40,4 @@ func (m *mongoSession) getTreasuryDirectByPortfolioID(c, id string) (wallet.Trea
 		operationsList = append(operationsList, operation)
 	}
 	return operationsList, nil
-}
-
-func (m *mongoSession) getTreasuryDirectByID(c, id string) (*wallet.TreasuryDirect, error) {
-	log.Debug("[DB] getTreasuryDirectByID")
-	objectId, err := primitive.ObjectIDFromHex(id)
-	if err != nil {
-		return nil, err
-	}
-	query := bson.M{"_id": objectId}
-	h := &wallet.TreasuryDirect{}
-	err = m.collection.FindOne(c, query, h)
-	if err != nil {
-		return nil, err
-	}
-	if h.Symbol == "" {
-		return nil, nil
-	}
-	return h, nil
 }

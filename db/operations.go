@@ -99,3 +99,17 @@ func (m *mongoSession) GetAllSales() (interface{}, error) {
 	opts := options.Find().SetSort(bson.D{{"date", -1}})
 	return m.collection.FindAll(operationsCollection, query, opts)
 }
+
+func (m *mongoSession) getOperationByID(c, id string, h wallet.Tradable) error {
+	log.Debug("[DB] getOperationByID")
+	objectId, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		return err
+	}
+	query := bson.M{"_id": objectId}
+	err = m.collection.FindOne(c, query, h)
+	if err != nil {
+		return err
+	}
+	return nil
+}

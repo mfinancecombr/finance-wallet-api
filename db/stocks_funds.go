@@ -7,7 +7,6 @@ import (
 	"github.com/mfinancecombr/finance-wallet-api/wallet"
 	log "github.com/sirupsen/logrus"
 	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 func (m *mongoSession) getAllStocksFunds(c string) (wallet.StockFundList, error) {
@@ -41,22 +40,4 @@ func (m *mongoSession) getStockFundByPortfolioID(c, id string) (wallet.StockFund
 		operationsList = append(operationsList, operation)
 	}
 	return operationsList, nil
-}
-
-func (m *mongoSession) getStockFundByID(c, id string) (*wallet.StockFund, error) {
-	log.Debug("[DB] getStockFundByID")
-	objectId, err := primitive.ObjectIDFromHex(id)
-	if err != nil {
-		return nil, err
-	}
-	query := bson.M{"_id": objectId}
-	h := &wallet.StockFund{}
-	err = m.collection.FindOne(c, query, h)
-	if err != nil {
-		return nil, err
-	}
-	if h.Symbol == "" {
-		return nil, nil
-	}
-	return h, nil
 }
