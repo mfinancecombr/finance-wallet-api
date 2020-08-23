@@ -25,11 +25,6 @@ func (m *mongoSession) GetAllFIIsOperations() (wallet.FIIList, error) {
 	return m.getAllFIIs(operationsCollection)
 }
 
-func (m *mongoSession) GetFIIOperationsByPortfolioID(id string) (wallet.FIIList, error) {
-	log.Debug("[DB] GetFIIOperationsByPortfolioID")
-	return m.getFIIByPortfolioID(operationsCollection, id)
-}
-
 func (m *mongoSession) GetFIIOperationByID(id string) (*wallet.FII, error) {
 	log.Debug("[DB] GetFIIOperationByID")
 	fii := &wallet.FII{}

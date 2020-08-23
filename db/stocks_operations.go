@@ -25,11 +25,6 @@ func (m *mongoSession) GetAllStocksOperations() (wallet.StockList, error) {
 	return m.getAllStocks(operationsCollection)
 }
 
-func (m *mongoSession) GetStockOperationsByPortfolioID(id string) (wallet.StockList, error) {
-	log.Debug("[DB] GetStockOperationsByPortfolioID")
-	return m.getStockByPortfolioID(operationsCollection, id)
-}
-
 func (m *mongoSession) GetStockOperationByID(id string) (*wallet.Stock, error) {
 	log.Debug("[DB] GetStockOperationByID")
 	stock := &wallet.Stock{}

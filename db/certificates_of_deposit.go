@@ -24,20 +24,3 @@ func (m *mongoSession) getAllCertificatesOfDeposits(c string) (wallet.Certificat
 	}
 	return operationsList, nil
 }
-
-func (m *mongoSession) getCertificateOfDepositByPortfolioID(c, id string) (wallet.CertificateOfDepositList, error) {
-	log.Debug("[DB] getCertificateOfDepositByPortfolioID")
-	query := bson.M{"portfolioId": id, "itemType": "certificates-of-deposit"}
-	results, err := m.collection.FindAll(c, query)
-	if err != nil {
-		return nil, err
-	}
-	operationsList := wallet.CertificateOfDepositList{}
-	for _, result := range results {
-		bsonBytes, _ := bson.Marshal(result)
-		operation := wallet.CertificateOfDeposit{}
-		bson.Unmarshal(bsonBytes, &operation)
-		operationsList = append(operationsList, operation)
-	}
-	return operationsList, nil
-}

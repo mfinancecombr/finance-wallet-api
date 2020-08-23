@@ -25,11 +25,6 @@ func (m *mongoSession) GetAllFICFIOperations() (wallet.FICFIList, error) {
 	return m.getAllFICFI(operationsCollection)
 }
 
-func (m *mongoSession) GetFICFIOperationsByPortfolioID(id string) (wallet.FICFIList, error) {
-	log.Debug("[DB] GetFICFIOperationsByPortfolioID")
-	return m.getFICFIByPortfolioID(operationsCollection, id)
-}
-
 func (m *mongoSession) GetFICFIOperationByID(id string) (*wallet.FICFI, error) {
 	log.Debug("[DB] GetFICFIOperationByID")
 	ficfi := &wallet.FICFI{}

@@ -25,11 +25,6 @@ func (m *mongoSession) GetAllCertificatesOfDepositsOperations() (wallet.Certific
 	return m.getAllCertificatesOfDeposits(operationsCollection)
 }
 
-func (m *mongoSession) GetCertificateOfDepositOperationsByPortfolioID(id string) (wallet.CertificateOfDepositList, error) {
-	log.Debug("[DB] GetCertificateOfDepositOperationsByPortfolioID")
-	return m.getCertificateOfDepositByPortfolioID(operationsCollection, id)
-}
-
 func (m *mongoSession) GetCertificateOfDepositOperationByID(id string) (*wallet.CertificateOfDeposit, error) {
 	log.Debug("[DB] GetCertificateOfDepositOperationByID")
 	certificateOfDeposit := &wallet.CertificateOfDeposit{}

@@ -24,20 +24,3 @@ func (m *mongoSession) getAllFICFI(c string) (wallet.FICFIList, error) {
 	}
 	return operationsList, nil
 }
-
-func (m *mongoSession) getFICFIByPortfolioID(c, id string) (wallet.FICFIList, error) {
-	log.Debug("[DB] getFICFIByPortfolioID")
-	query := bson.M{"portfolioId": id, "itemType": "ficfi"}
-	results, err := m.collection.FindAll(c, query)
-	if err != nil {
-		return nil, err
-	}
-	operationsList := wallet.FICFIList{}
-	for _, result := range results {
-		bsonBytes, _ := bson.Marshal(result)
-		operation := wallet.FICFI{}
-		bson.Unmarshal(bsonBytes, &operation)
-		operationsList = append(operationsList, operation)
-	}
-	return operationsList, nil
-}

@@ -24,20 +24,3 @@ func (m *mongoSession) getAllTreasuriesDirects(c string) (wallet.TreasuryDirectL
 	}
 	return treasuryDirectList, nil
 }
-
-func (m *mongoSession) getTreasuryDirectByPortfolioID(c, id string) (wallet.TreasuryDirectList, error) {
-	log.Debug("[DB] getTreasuryDirectByPortfolioID")
-	query := bson.M{"portfolioId": id, "itemType": "treasuries-direct"}
-	results, err := m.collection.FindAll(c, query)
-	if err != nil {
-		return nil, err
-	}
-	operationsList := wallet.TreasuryDirectList{}
-	for _, result := range results {
-		bsonBytes, _ := bson.Marshal(result)
-		operation := wallet.TreasuryDirect{}
-		bson.Unmarshal(bsonBytes, &operation)
-		operationsList = append(operationsList, operation)
-	}
-	return operationsList, nil
-}

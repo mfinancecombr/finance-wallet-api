@@ -24,20 +24,3 @@ func (m *mongoSession) getAllStocks(c string) (wallet.StockList, error) {
 	}
 	return operationsList, nil
 }
-
-func (m *mongoSession) getStockByPortfolioID(c, id string) (wallet.StockList, error) {
-	log.Debug("[DB] getStockByPortfolioID")
-	query := bson.M{"portfolioId": id, "itemType": "stocks"}
-	results, err := m.collection.FindAll(c, query)
-	if err != nil {
-		return nil, err
-	}
-	operationsList := wallet.StockList{}
-	for _, result := range results {
-		bsonBytes, _ := bson.Marshal(result)
-		stock := wallet.Stock{}
-		bson.Unmarshal(bsonBytes, &stock)
-		operationsList = append(operationsList, stock)
-	}
-	return operationsList, nil
-}

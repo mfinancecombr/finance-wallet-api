@@ -25,11 +25,6 @@ func (m *mongoSession) GetAllTreasuriesDirectsOperations() (wallet.TreasuryDirec
 	return m.getAllTreasuriesDirects(operationsCollection)
 }
 
-func (m *mongoSession) GetTreasuryDirectOperationsByPortfolioID(id string) (wallet.TreasuryDirectList, error) {
-	log.Debug("[DB] GetTreasuryDirectOperationsByPortfolioID")
-	return m.getTreasuryDirectByPortfolioID(operationsCollection, id)
-}
-
 func (m *mongoSession) GetTreasuryDirectOperationByID(id string) (*wallet.TreasuryDirect, error) {
 	log.Debug("[DB] GetTreasuryDirectOperationByID")
 	treasuryDirect := &wallet.TreasuryDirect{}
