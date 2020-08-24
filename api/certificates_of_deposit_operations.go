@@ -14,7 +14,7 @@ import (
 
 func (s *server) getAllCertificatesOfDepositOperations(c echo.Context) error {
 	log.Debug("[API] Retrieving all certificates of deposit operations")
-	result, err := s.db.GetAllCertificatesOfDepositsOperations()
+	result, err := s.db.GetAll(wallet.CertificateOfDeposit{})
 	if err != nil {
 		errMsg := fmt.Sprintf("Error on retrieve certificates of deposit operations: %v", err)
 		return logAndReturnError(c, errMsg)
@@ -35,8 +35,8 @@ func (s *server) getAllCertificatesOfDepositOperations(c echo.Context) error {
 func (s *server) getCertificateOfDepositOperationByID(c echo.Context) error {
 	id := c.Param("id")
 	log.Debugf("[API] Retrieving certificate of deposit operation with id: %s", id)
-	result, err := s.db.GetCertificateOfDepositOperationByID(id)
-	if err != nil {
+	result := &wallet.CertificateOfDeposit{}
+	if err := s.db.Get(id, result); err != nil {
 		errMsg := fmt.Sprintf("Error on retrieve '%s' operations: %v", id, err)
 		return logAndReturnError(c, errMsg)
 	}
@@ -71,7 +71,7 @@ func (s *server) insertCertificateOfDepositOperation(c echo.Context) error {
 		return c.JSON(http.StatusUnprocessableEntity, errorMessage(errMsg))
 	}
 
-	result, err := s.db.InsertCertificateOfDepositOperation(data)
+	result, err := s.db.Create(data)
 	if err != nil {
 		errMsg := fmt.Sprintf("Error on insert certificate of deposit: %v", err)
 		return logAndReturnError(c, errMsg)
@@ -107,7 +107,7 @@ func (s *server) updateCertificateOfDepositOperationByID(c echo.Context) error {
 		return c.JSON(http.StatusUnprocessableEntity, errorMessage(errMsg))
 	}
 
-	result, err := s.db.UpdateCertificateOfDepositOperationByID(id, data)
+	result, err := s.db.Update(id, data)
 	if err != nil {
 		errMsg := fmt.Sprintf("Error on update certificate of deposit: %v", err)
 		return logAndReturnError(c, errMsg)

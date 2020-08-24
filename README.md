@@ -29,7 +29,7 @@ curl \
   http://localhost:8889/api/v1/portfolios \
   -X POST \
   -H 'Content-Type: application/json' \
-  -d '{"id": "default", "name": "Default"}'
+  -d '{"name": "Default", "slug": "default"}'
 ```
 
 * Adding brokers:
@@ -38,7 +38,7 @@ curl \
   http://localhost:8889/api/v1/brokers \
   -X POST \
   -H 'Content-Type: application/json' \
-  -d '{"id": "clear", "name": "CLEAR"}'
+  -d '{"name": "CLEAR", "slug": "clear"}'
 ```
 
 * Adding stocks operations:
@@ -48,8 +48,9 @@ curl \
   -X POST \
   -H 'Content-Type: application/json' \
   -d '{
-    "portfolioId": "default", "symbol": "PETR4", "type": "purchase", "brokerId": "clear",
-    "shares": 500, "price": 10, "date": "2020-04-24T00:00:00Z"}'
+    "portfolioSlug": "default", "symbol": "PETR4", "type": "purchase",
+    "brokerSlug": "clear", "shares": 500, "price": 10,
+    "date": "2020-04-24T00:00:00Z"}'
 ```
 
 ```curlrc
@@ -58,8 +59,9 @@ curl \
   -X POST \
   -H 'Content-Type: application/json' \
   -d '{
-    "portfolioId": "default", "symbol": "PETR4", "type": "sale", "brokerId": "clear",
-    "shares": 100, "price": 15, "date": "2020-06-30T00:00:00Z"}'
+    "portfolioSlug": "default", "symbol": "PETR4", "type": "sale",
+    "brokerSlug": "clear", "shares": 100, "price": 15,
+    "date": "2020-06-30T00:00:00Z"}'
 ```
 
 ## Third Party

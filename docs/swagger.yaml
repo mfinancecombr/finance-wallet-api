@@ -13,13 +13,15 @@ definitions:
         type: string
       name:
         type: string
+      slug:
+        type: string
     required:
-    - id
     - name
+    - slug
     type: object
   wallet.CertificateOfDeposit:
     properties:
-      brokerId:
+      brokerSlug:
         type: string
       commission:
         type: number
@@ -33,7 +35,7 @@ definitions:
         type: string
       itemType:
         type: string
-      portfolioId:
+      portfolioSlug:
         type: string
       price:
         type: number
@@ -44,12 +46,12 @@ definitions:
       type:
         type: string
     required:
-    - brokerId
+    - brokerSlug
     - date
     - dueDate
     - fixedInterestRate
     - itemType
-    - portfolioId
+    - portfolioSlug
     - price
     - shares
     - symbol
@@ -57,7 +59,7 @@ definitions:
     type: object
   wallet.FICFI:
     properties:
-      brokerId:
+      brokerSlug:
         type: string
       commission:
         type: number
@@ -67,7 +69,7 @@ definitions:
         type: string
       itemType:
         type: string
-      portfolioId:
+      portfolioSlug:
         type: string
       price:
         type: number
@@ -78,10 +80,10 @@ definitions:
       type:
         type: string
     required:
-    - brokerId
+    - brokerSlug
     - date
     - itemType
-    - portfolioId
+    - portfolioSlug
     - price
     - shares
     - symbol
@@ -89,7 +91,7 @@ definitions:
     type: object
   wallet.FII:
     properties:
-      brokerId:
+      brokerSlug:
         type: string
       commission:
         type: number
@@ -99,7 +101,7 @@ definitions:
         type: string
       itemType:
         type: string
-      portfolioId:
+      portfolioSlug:
         type: string
       price:
         type: number
@@ -110,10 +112,10 @@ definitions:
       type:
         type: string
     required:
-    - brokerId
+    - brokerSlug
     - date
     - itemType
-    - portfolioId
+    - portfolioSlug
     - price
     - shares
     - symbol
@@ -139,15 +141,17 @@ definitions:
         type: string
       overallReturn:
         type: number
+      slug:
+        type: string
     required:
-    - id
     - name
+    - slug
     type: object
   wallet.PortfolioItem:
     properties:
       averagePrice:
         type: number
-      brokerId:
+      brokerSlug:
         type: string
       change:
         type: number
@@ -185,7 +189,7 @@ definitions:
     type: object
   wallet.Stock:
     properties:
-      brokerId:
+      brokerSlug:
         type: string
       commission:
         type: number
@@ -195,7 +199,7 @@ definitions:
         type: string
       itemType:
         type: string
-      portfolioId:
+      portfolioSlug:
         type: string
       price:
         type: number
@@ -206,10 +210,10 @@ definitions:
       type:
         type: string
     required:
-    - brokerId
+    - brokerSlug
     - date
     - itemType
-    - portfolioId
+    - portfolioSlug
     - price
     - shares
     - symbol
@@ -217,7 +221,7 @@ definitions:
     type: object
   wallet.StockFund:
     properties:
-      brokerId:
+      brokerSlug:
         type: string
       commission:
         type: number
@@ -227,7 +231,7 @@ definitions:
         type: string
       itemType:
         type: string
-      portfolioId:
+      portfolioSlug:
         type: string
       price:
         type: number
@@ -238,10 +242,10 @@ definitions:
       type:
         type: string
     required:
-    - brokerId
+    - brokerSlug
     - date
     - itemType
-    - portfolioId
+    - portfolioSlug
     - price
     - shares
     - symbol
@@ -251,7 +255,7 @@ definitions:
     type: object
   wallet.TreasuryDirect:
     properties:
-      brokerId:
+      brokerSlug:
         type: string
       commission:
         type: number
@@ -264,7 +268,7 @@ definitions:
         type: string
       itemType:
         type: string
-      portfolioId:
+      portfolioSlug:
         type: string
       price:
         type: number
@@ -275,11 +279,11 @@ definitions:
       type:
         type: string
     required:
-    - brokerId
+    - brokerSlug
     - date
     - fixedInterestRate
     - itemType
-    - portfolioId
+    - portfolioSlug
     - price
     - shares
     - symbol
@@ -774,36 +778,6 @@ paths:
           schema:
             $ref: '#/definitions/api.ErrorMessage'
       summary: Delete portfolio by ID
-    get:
-      consumes:
-      - application/json
-      description: get all portfolio data
-      parameters:
-      - description: Broker id
-        in: path
-        name: id
-        required: true
-        type: string
-      - description: filter by year
-        in: query
-        name: year
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/wallet.Portfolio'
-        "404":
-          description: Not Found
-          schema:
-            $ref: '#/definitions/api.ErrorMessage'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/api.ErrorMessage'
-      summary: Get a portfolio
     put:
       consumes:
       - application/json
@@ -834,6 +808,37 @@ paths:
           schema:
             $ref: '#/definitions/api.ErrorMessage'
       summary: Update portfolio data by ID
+  /portfolios/{slug}:
+    get:
+      consumes:
+      - application/json
+      description: get all portfolio data
+      parameters:
+      - description: Broker slug
+        in: path
+        name: slug
+        required: true
+        type: string
+      - description: filter by year
+        in: query
+        name: year
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/wallet.Portfolio'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/api.ErrorMessage'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/api.ErrorMessage'
+      summary: Get a portfolio
   /purchases:
     get:
       consumes:

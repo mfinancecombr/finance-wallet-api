@@ -22,12 +22,12 @@ import (
 // @Success 200 {object} wallet.Portfolio
 // @Failure 404 {object} api.ErrorMessage
 // @Failure 500 {object} api.ErrorMessage
-// @Router /portfolios/{id} [get]
-// @Param id path string true "Broker id"
+// @Router /portfolios/{slug} [get]
+// @Param slug path string true "Broker slug"
 // @Param year query string false "filter by year"
 func (s *server) portfolio(c echo.Context) error {
-	id := c.Param("id")
-	log.Debugf("[API] Retrieving %s data...", id)
+	slug := c.Param("id")
+	log.Debugf("[API] Retrieving %s data...", slug)
 
 	// FIXME
 	yearString := c.QueryParam("year")
@@ -38,21 +38,21 @@ func (s *server) portfolio(c echo.Context) error {
 		year = 2020
 	}
 
-	result, err := s.db.GetPortfolioByID(id)
-	if err != nil {
-		errMsg := fmt.Sprintf("Error on get portfolio '%s': %v", id, err)
+	result := &wallet.Portfolio{}
+	if err := s.db.GetBySlug(slug, result); err != nil {
+		errMsg := fmt.Sprintf("Error on get portfolio '%s': %v", slug, err)
 		return logAndReturnError(c, errMsg)
 	}
 
-	if result == nil {
-		errMsg := fmt.Sprintf("Portfolio '%s' not found", id)
+	if result.Name == "" {
+		errMsg := fmt.Sprintf("Portfolio '%s' not found", slug)
 		return c.JSON(http.StatusNotFound, errorMessage(errMsg))
 	}
 
 	// FIXME
 	err = s.db.GetPortfolioItems(result, year)
 	if err != nil {
-		errMsg := fmt.Sprintf("Error on get portfolio '%s' items: %v", id, err)
+		errMsg := fmt.Sprintf("Error on get portfolio '%s' items: %v", slug, err)
 		return logAndReturnError(c, errMsg)
 	}
 
@@ -79,22 +79,21 @@ func (s *server) portfolios(c echo.Context) error {
 		year = 2020
 	}
 
-	allPortfolios, err := s.db.GetAllPortfolios()
+	allPortfolios, err := s.db.GetAll(&wallet.Portfolio{})
 	if err != nil {
 		errMsg := fmt.Sprintf("Error on get all portfolios: %v", err)
 		return logAndReturnError(c, errMsg)
 	}
 
 	portfolios := make([]wallet.Portfolio, len(allPortfolios))
-	for idx, portfolio := range allPortfolios {
-		// FIXME
-		err := s.db.GetPortfolioItems(&portfolio, year)
+	for idx, p := range allPortfolios {
+		portfolio := p.(*wallet.Portfolio)
+		err := s.db.GetPortfolioItems(portfolio, year)
 		if err != nil {
 			errMsg := fmt.Sprintf("Error on get portfolio items: %v", err)
 			return logAndReturnError(c, errMsg)
 		}
-
-		portfolios[idx] = portfolio
+		portfolios[idx] = *portfolio
 	}
 	return c.JSON(http.StatusOK, portfolios)
 }
@@ -117,14 +116,14 @@ func (s *server) portfoliosAdd(c echo.Context) error {
 		return logAndReturnError(c, errMsg)
 	}
 
-	portfolio.ID = slug.Make(portfolio.Name)
+	portfolio.Slug = slug.Make(portfolio.Name)
 
 	if err := c.Validate(portfolio); err != nil {
 		errMsg := fmt.Sprintf("Error on validate portfolio: %v", err)
 		return c.JSON(http.StatusUnprocessableEntity, errorMessage(errMsg))
 	}
 
-	result, err := s.db.InsertPortfolio(portfolio)
+	result, err := s.db.Create(portfolio)
 	if err != nil {
 		errMsg := fmt.Sprintf("Error on insert portfolio: %v", err)
 		return logAndReturnError(c, errMsg)
@@ -146,7 +145,7 @@ func (s *server) portfoliosAdd(c echo.Context) error {
 func (s *server) portfoliosDelete(c echo.Context) error {
 	id := c.Param("id")
 	log.Debugf("Deleting %s data", id)
-	result, err := s.db.DeletePortfolioByID(id)
+	result, err := s.db.Delete("portfolios", id)
 	if err != nil {
 		errMsg := fmt.Sprintf("Error on delete portolio '%s': %v", id, err)
 		return logAndReturnError(c, errMsg)
@@ -180,7 +179,7 @@ func (s *server) portfoliosUpdate(c echo.Context) error {
 		return c.JSON(http.StatusUnprocessableEntity, errorMessage(errMsg))
 	}
 
-	result, err := s.db.UpdatePortfolio(id, portfolio)
+	result, err := s.db.Update(id, portfolio)
 	if err != nil {
 		errMsg := fmt.Sprintf("Error on update portfolio: %v", err)
 		return logAndReturnError(c, errMsg)

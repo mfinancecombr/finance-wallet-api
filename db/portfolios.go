@@ -8,65 +8,7 @@ import (
 	"github.com/mfinancecombr/finance-wallet-api/wallet"
 	log "github.com/sirupsen/logrus"
 	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/mongo"
 )
-
-func (m *mongoSession) InsertPortfolio(d interface{}) (*mongo.InsertOneResult, error) {
-	log.Debug("[DB] InsertPortfolio")
-	return m.collection.InsertOne(portfoliosCollection, d)
-}
-
-func (m *mongoSession) DeletePortfolioByID(id string) (*mongo.DeleteResult, error) {
-	log.Debug("[DB] DeletePortfolioByID")
-	q := bson.M{"_id": id}
-	return m.collection.DeleteOne(portfoliosCollection, q)
-}
-
-func (m *mongoSession) UpdatePortfolio(id string, d interface{}) (*mongo.UpdateResult, error) {
-	log.Debug("[DB] UpdatePortfolio")
-	f := bson.D{{"_id", id}}
-	u := bson.D{{"$set", d}}
-	return m.collection.UpdateOne(portfoliosCollection, f, u)
-}
-
-func (m *mongoSession) GetAllPortfolios() ([]wallet.Portfolio, error) {
-	log.Debug("[DB] GetAllPortfolios")
-	results, err := m.collection.FindAll(portfoliosCollection, bson.M{})
-	if err != nil {
-		return nil, err
-	}
-	portfolioTemp := []wallet.Portfolio{}
-	for _, result := range results {
-		bsonBytes, _ := bson.Marshal(result)
-		portfolio := wallet.Portfolio{}
-		bson.Unmarshal(bsonBytes, &portfolio)
-		portfolioTemp = append(portfolioTemp, portfolio)
-	}
-	return portfolioTemp, nil
-}
-
-func (m *mongoSession) GetPortfolioByID(id string) (*wallet.Portfolio, error) {
-	log.Debug("[DB] GetPortfolioByID")
-	h := &wallet.Portfolio{}
-	query := bson.M{"_id": id}
-	if err := m.collection.FindOne(portfoliosCollection, query, h); err != nil {
-		return nil, err
-	}
-	if h.ID == "" {
-		return nil, nil
-	}
-	return h, nil
-}
-
-// FIXME: maybe unnecessary
-func contains(s []interface{}, e interface{}) bool {
-	for _, a := range s {
-		if a == e {
-			return true
-		}
-	}
-	return false
-}
 
 func (m *mongoSession) getPortfolioItem(itemType string, year int) (map[string]wallet.PortfolioItem, error) {
 	log.Debugf("[DB] Getting portfolio item %s", itemType)
@@ -94,11 +36,11 @@ func (m *mongoSession) getPortfolioItem(itemType string, year int) (map[string]w
 		if len(operations) > 0 {
 			operation := operations[0]
 			if operation != nil {
-				broker = operation.GetBrokerID()
+				broker = operation.GetBrokerSlug()
 			}
 		}
 
-		portfolioItem.BrokerID = broker
+		portfolioItem.BrokerSlug = broker
 		portfolioItem.ItemType = itemType
 		portfolioItem.Operations = operations
 		portfolioItem.Recalculate()

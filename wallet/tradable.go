@@ -8,5 +8,5 @@ type Tradable interface {
 	GetShares() float64
 	GetComission() float64
 	GetType() string
-	GetBrokerID() string
+	GetBrokerSlug() string
 }

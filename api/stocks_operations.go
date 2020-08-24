@@ -14,7 +14,7 @@ import (
 
 func (s *server) getAllStockOperations(c echo.Context) error {
 	log.Debug("[API] Retrieving all stocks operations")
-	result, err := s.db.GetAllStocksOperations()
+	result, err := s.db.GetAll(wallet.Stock{})
 	if err != nil {
 		errMsg := fmt.Sprintf("Error on retrieve all stocks operations: %v", err)
 		return logAndReturnError(c, errMsg)
@@ -35,8 +35,8 @@ func (s *server) getAllStockOperations(c echo.Context) error {
 func (s *server) getStockOperationByID(c echo.Context) error {
 	id := c.Param("id")
 	log.Debugf("[API] Retrieving stock operation with id: %s", id)
-	result, err := s.db.GetStockOperationByID(id)
-	if err != nil {
+	result := &wallet.Stock{}
+	if err := s.db.Get(id, result); err != nil {
 		errMsg := fmt.Sprintf("Error on retrieve '%s' operations: %v", id, err)
 		return logAndReturnError(c, errMsg)
 	}
@@ -71,7 +71,7 @@ func (s *server) insertStockOperation(c echo.Context) error {
 		return c.JSON(http.StatusUnprocessableEntity, errorMessage(errMsg))
 	}
 
-	result, err := s.db.InsertStockOperation(data)
+	result, err := s.db.Create(data)
 	if err != nil {
 		errMsg := fmt.Sprintf("Error on insert stock: %v", err)
 		return logAndReturnError(c, errMsg)
@@ -106,7 +106,7 @@ func (s *server) updateStockOperationByID(c echo.Context) error {
 		return c.JSON(http.StatusUnprocessableEntity, errorMessage(errMsg))
 	}
 
-	result, err := s.db.UpdateStockOperationByID(id, data)
+	result, err := s.db.Update(id, data)
 	if err != nil {
 		errMsg := fmt.Sprintf("Error on update stock: %v", err)
 		return logAndReturnError(c, errMsg)

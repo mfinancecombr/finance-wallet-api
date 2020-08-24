@@ -78,7 +78,7 @@ func (s *server) getAllSales(c echo.Context) error {
 func (s *server) deleteOperationByID(c echo.Context) error {
 	id := c.Param("id")
 	log.Debugf("Deleting %s data", id)
-	result, err := s.db.DeleteOperationByID(id)
+	result, err := s.db.Delete("operations", id)
 	if err != nil {
 		errMsg := fmt.Sprintf("Error on delete operation '%s': %v", id, err)
 		return logAndReturnError(c, errMsg)

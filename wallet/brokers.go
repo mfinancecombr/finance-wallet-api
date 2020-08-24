@@ -4,11 +4,20 @@
 package wallet
 
 type Broker struct {
-	ID   string `json:"id" bson:"_id" validate:"required"`
-	Name string `json:"name" bson:"name" validate:"required"`
 	CNPJ string `json:"CNPJ" bson:"CNPJ"`
+	ID   string `json:"id,omitempty" bson:"_id,omitempty"`
+	Name string `json:"name" bson:"name" validate:"required"`
+	Slug string `json:"slug" bson:"slug" validate:"required"`
 }
 
 type BrokersList struct {
 	Brokers []Broker `json:"brokers" bson:"brokers"`
+}
+
+func (s Broker) GetCollectionName() string {
+	return "brokers"
+}
+
+func (s Broker) GetItemType() string {
+	return ""
 }

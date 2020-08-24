@@ -14,7 +14,7 @@ import (
 
 func (s *server) getAllFICFIOperations(c echo.Context) error {
 	log.Debug("[API] Retrieving all FICFI operations")
-	result, err := s.db.GetAllFICFIOperations()
+	result, err := s.db.GetAll(wallet.FICFI{})
 	if err != nil {
 		errMsg := fmt.Sprintf("Error on retrieve FICFI operations: %v", err)
 		return logAndReturnError(c, errMsg)
@@ -35,8 +35,8 @@ func (s *server) getAllFICFIOperations(c echo.Context) error {
 func (s *server) getFICFIOperationByID(c echo.Context) error {
 	id := c.Param("id")
 	log.Debugf("[API] Retrieving FICFI operation with id: %s", id)
-	result, err := s.db.GetFICFIOperationByID(id)
-	if err != nil {
+	result := &wallet.FICFI{}
+	if err := s.db.Get(id, result); err != nil {
 		errMsg := fmt.Sprintf("Error on retrieve '%s' operations: %v", id, err)
 		return logAndReturnError(c, errMsg)
 	}
@@ -71,7 +71,7 @@ func (s *server) insertFICFIOperation(c echo.Context) error {
 		return c.JSON(http.StatusUnprocessableEntity, errorMessage(errMsg))
 	}
 
-	result, err := s.db.InsertFICFIOperation(data)
+	result, err := s.db.Create(data)
 	if err != nil {
 		errMsg := fmt.Sprintf("Error on insert FICFI: %v", err)
 		return logAndReturnError(c, errMsg)
@@ -107,7 +107,7 @@ func (s *server) updateFICFIOperationByID(c echo.Context) error {
 		return c.JSON(http.StatusUnprocessableEntity, errorMessage(errMsg))
 	}
 
-	result, err := s.db.UpdateFICFIOperationByID(id, data)
+	result, err := s.db.Update(id, data)
 	if err != nil {
 		errMsg := fmt.Sprintf("Error on update FICFI: %v", err)
 		return logAndReturnError(c, errMsg)

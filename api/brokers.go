@@ -24,15 +24,15 @@ import (
 // @Router /brokers/{id} [get]
 // @Param id path string true "Broker id"
 func (s *server) broker(c echo.Context) error {
-	id := c.Param("id")
-	log.Debugf("[API] Retrieving broker id: %s", id)
-	result, err := s.db.GetBrokerByID(id)
-	if err != nil {
-		errMsg := fmt.Sprintf("Error on retrieve broker id '%s': %v", id, err)
+	slug := c.Param("id")
+	log.Debugf("[API] Retrieving broker slug: %s", slug)
+	result := &wallet.Broker{}
+	if err := s.db.GetBySlug(slug, result); err != nil {
+		errMsg := fmt.Sprintf("Error on retrieve broker id '%s': %v", slug, err)
 		return logAndReturnError(c, errMsg)
 	}
-	if result == nil {
-		errMsg := fmt.Sprintf("Broker '%s' not found", id)
+	if result.Name == "" {
+		errMsg := fmt.Sprintf("Broker '%s' not found", slug)
 		return c.JSON(http.StatusNotFound, errorMessage(errMsg))
 	}
 	return c.JSON(http.StatusOK, result)
@@ -48,7 +48,7 @@ func (s *server) broker(c echo.Context) error {
 // @Router /brokers [get]
 func (s *server) brokers(c echo.Context) error {
 	log.Debug("Retrieving all brokers")
-	result, err := s.db.GetAllBrokers()
+	result, err := s.db.GetAll(&wallet.Broker{})
 	if err != nil {
 		errMsg := fmt.Sprintf("Error on retrieve brokers: %v", err)
 		return logAndReturnError(c, errMsg)
@@ -74,14 +74,14 @@ func (s *server) brokersAdd(c echo.Context) error {
 		return logAndReturnError(c, errMsg)
 	}
 
-	broker.ID = slug.Make(broker.Name)
+	broker.Slug = slug.Make(broker.Name)
 
 	if err := c.Validate(broker); err != nil {
 		errMsg := fmt.Sprintf("Error on validate broker: %v", err)
 		return c.JSON(http.StatusUnprocessableEntity, errorMessage(errMsg))
 	}
 
-	result, err := s.db.InsertBroker(broker)
+	result, err := s.db.Create(broker)
 	if err != nil {
 		errMsg := fmt.Sprintf("Error on insert broker: %v", err)
 		return logAndReturnError(c, errMsg)
@@ -103,7 +103,7 @@ func (s *server) brokersAdd(c echo.Context) error {
 func (s *server) brokersDelete(c echo.Context) error {
 	id := c.Param("id")
 	log.Debugf("Deleting %s data", id)
-	result, err := s.db.DeleteBrokerByID(id)
+	result, err := s.db.Delete("brokers", id)
 	if err != nil {
 		errMsg := fmt.Sprintf("Error on delete broker '%s': %v", id, err)
 		return logAndReturnError(c, errMsg)
@@ -137,7 +137,7 @@ func (s *server) brokersUpdate(c echo.Context) error {
 		return c.JSON(http.StatusUnprocessableEntity, errorMessage(errMsg))
 	}
 
-	result, err := s.db.UpdateBroker(id, broker)
+	result, err := s.db.Update(id, broker)
 	if err != nil {
 		errMsg := fmt.Sprintf("Error on update broker: %v", err)
 		return logAndReturnError(c, errMsg)

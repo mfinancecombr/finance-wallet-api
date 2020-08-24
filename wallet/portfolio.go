@@ -9,19 +9,19 @@ import (
 
 type PortfolioItem struct {
 	AveragePrice  float64        `json:"averagePrice" bson:"averagePrice"`
-	BrokerID      string         `json:"brokerId" bson:"brokerId"`
+	BrokerSlug    string         `json:"brokerSlug" bson:"brokerSlug"`
 	Change        float64        `json:"change" bson:"change"`
 	ClosingPrice  float64        `json:"closingPrice" bson:"closingPrice"`
 	Commission    float64        `json:"commission" bson:"commission"`
 	CostBasis     float64        `json:"costBasis" bson:"costBasis"`
 	Gain          float64        `json:"gain" bson:"gain"`
-	OverallReturn float64        `json:"overallReturn" bson:"overallReturn"`
 	ItemType      string         `json:"itemType" bson:"itemType"`
 	LastPrice     float64        `json:"lastPrice" bson:"lastPrice"`
 	LastYearHigh  float64        `json:"lastYearHigh" bson:"lastYearHigh"`
 	LastYearLow   float64        `json:"lastYearLow" bson:"lastYearLow"`
 	Name          string         `json:"name" bson:"name"`
 	Operations    OperationsList `json:"operations" bson:"operations"`
+	OverallReturn float64        `json:"overallReturn" bson:"overallReturn"`
 	Sector        string         `json:"sector" bson:"sector"`
 	Segment       string         `json:"segment" bson:"segment"`
 	Shares        float64        `json:"shares" bson:"shares"`
@@ -29,12 +29,21 @@ type PortfolioItem struct {
 }
 
 type Portfolio struct {
-	CostBasis     float64                  `json:"costBasis" bson:"costBasis"`
-	Gain          float64                  `json:"gain" bson:"gain"`
-	ID            string                   `json:"id" bson:"_id" validate:"required"`
-	Items         map[string]PortfolioItem `json:"items" bson:"items"`
+	CostBasis     float64                  `json:"costBasis" bson:"costBasis,omitempty"`
+	Gain          float64                  `json:"gain" bson:"gain,omitempty"`
+	ID            string                   `json:"id,omitempty" bson:"_id,omitempty"`
+	Items         map[string]PortfolioItem `json:"items" bson:"items,omitempty"`
 	Name          string                   `json:"name" bson:"name" validate:"required"`
-	OverallReturn float64                  `json:"overallReturn" bson:"overallReturn"`
+	OverallReturn float64                  `json:"overallReturn" bson:"overallReturn,omitempty"`
+	Slug          string                   `json:"slug" bson:"slug" validate:"required"`
+}
+
+func (s Portfolio) GetCollectionName() string {
+	return "portfolios"
+}
+
+func (s Portfolio) GetItemType() string {
+	return ""
 }
 
 func roundFloatTwoDecimalPlaces(n float64) float64 {

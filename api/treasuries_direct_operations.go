@@ -14,7 +14,7 @@ import (
 
 func (s *server) getAllTreasuriesDirectOperations(c echo.Context) error {
 	log.Debug("[API] Retrieving all treasuries direct operations")
-	result, err := s.db.GetAllTreasuriesDirectsOperations()
+	result, err := s.db.GetAll(wallet.TreasuryDirect{})
 	if err != nil {
 		errMsg := fmt.Sprintf("Error on retrieve treasuries direct operations: %v", err)
 		return logAndReturnError(c, errMsg)
@@ -35,8 +35,8 @@ func (s *server) getAllTreasuriesDirectOperations(c echo.Context) error {
 func (s *server) getTreasuryDirectOperationByID(c echo.Context) error {
 	id := c.Param("id")
 	log.Debugf("[API] Retrieving treasury direct operation with id: %s", id)
-	result, err := s.db.GetTreasuryDirectOperationByID(id)
-	if err != nil {
+	result := &wallet.TreasuryDirect{}
+	if err := s.db.Get(id, result); err != nil {
 		errMsg := fmt.Sprintf("Error on retrieve '%s' operations: %v", id, err)
 		return logAndReturnError(c, errMsg)
 	}
@@ -71,7 +71,7 @@ func (s *server) insertTreasuryDirectOperation(c echo.Context) error {
 		return c.JSON(http.StatusUnprocessableEntity, errorMessage(errMsg))
 	}
 
-	result, err := s.db.InsertTreasuryDirectOperation(data)
+	result, err := s.db.Create(data)
 	if err != nil {
 		errMsg := fmt.Sprintf("Error on insert treasury direct: %v", err)
 		return logAndReturnError(c, errMsg)
@@ -107,7 +107,7 @@ func (s *server) updateTreasuryDirectOperationByID(c echo.Context) error {
 		return c.JSON(http.StatusUnprocessableEntity, errorMessage(errMsg))
 	}
 
-	result, err := s.db.UpdateTreasuryDirectOperationByID(id, data)
+	result, err := s.db.Update(id, data)
 	if err != nil {
 		errMsg := fmt.Sprintf("Error on update treasury direct: %v", err)
 		return logAndReturnError(c, errMsg)

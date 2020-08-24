@@ -8,14 +8,14 @@ import (
 )
 
 type TreasuryDirect struct {
-	BrokerID   string     `json:"brokerId" bson:"brokerId" validate:"required"`
+	BrokerSlug string     `json:"brokerSlug" bson:"brokerSlug" validate:"required"`
 	Commission float64    `json:"commission" bson:"commission"`
 	Date       *time.Time `json:"date" bson:"date" validate:"required"`
 	//DueDate           *time.Time `json:"dueDate" bson:"dueDate" validate:"required"`
 	FixedInterestRate float64 `json:"fixedInterestRate" bson:"fixedInterestRate" validate:"required"`
 	ID                string  `json:"id,omitempty" bson:"_id,omitempty"`
 	ItemType          string  `json:"itemType" bson:"itemType" validate:"required"`
-	PortfolioID       string  `json:"portfolioId" bson:"portfolioId" validate:"required"`
+	PortfolioSlug     string  `json:"portfolioSlug" bson:"portfolioSlug" validate:"required"`
 	Price             float64 `json:"price" bson:"price" validate:"required"`
 	Shares            float64 `json:"shares" bson:"shares" validate:"required"`
 	Symbol            string  `json:"symbol" bson:"symbol" validate:"required"`
@@ -24,8 +24,10 @@ type TreasuryDirect struct {
 
 type TreasuryDirectList []TreasuryDirect
 
+const TreasuryDirectItemType = "treasury-direct"
+
 func NewTreasuryDirect() *TreasuryDirect {
-	return &TreasuryDirect{ItemType: "treasury-direct"}
+	return &TreasuryDirect{ItemType: TreasuryDirectItemType}
 }
 
 func (s TreasuryDirect) GetPrice() float64 {
@@ -44,6 +46,14 @@ func (s TreasuryDirect) GetType() string {
 	return s.Type
 }
 
-func (s TreasuryDirect) GetBrokerID() string {
-	return s.BrokerID
+func (s TreasuryDirect) GetBrokerSlug() string {
+	return s.BrokerSlug
+}
+
+func (s TreasuryDirect) GetCollectionName() string {
+	return "operations"
+}
+
+func (s TreasuryDirect) GetItemType() string {
+	return TreasuryDirectItemType
 }

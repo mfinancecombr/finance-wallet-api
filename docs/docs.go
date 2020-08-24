@@ -713,51 +713,6 @@ var doc = `{
             }
         },
         "/portfolios/{id}": {
-            "get": {
-                "description": "get all portfolio data",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "summary": "Get a portfolio",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Broker id",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "filter by year",
-                        "name": "year",
-                        "in": "query"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/wallet.Portfolio"
-                        }
-                    },
-                    "404": {
-                        "description": "Not Found",
-                        "schema": {
-                            "$ref": "#/definitions/api.ErrorMessage"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/api.ErrorMessage"
-                        }
-                    }
-                }
-            },
             "put": {
                 "description": "Update some portfolio by id",
                 "consumes": [
@@ -826,6 +781,53 @@ var doc = `{
                         "description": "OK",
                         "schema": {
                             "type": "object"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/api.ErrorMessage"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/api.ErrorMessage"
+                        }
+                    }
+                }
+            }
+        },
+        "/portfolios/{slug}": {
+            "get": {
+                "description": "get all portfolio data",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Get a portfolio",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Broker slug",
+                        "name": "slug",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "filter by year",
+                        "name": "year",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/wallet.Portfolio"
                         }
                     },
                     "404": {
@@ -1256,8 +1258,8 @@ var doc = `{
         "wallet.Broker": {
             "type": "object",
             "required": [
-                "id",
-                "name"
+                "name",
+                "slug"
             ],
             "properties": {
                 "CNPJ": {
@@ -1268,25 +1270,28 @@ var doc = `{
                 },
                 "name": {
                     "type": "string"
+                },
+                "slug": {
+                    "type": "string"
                 }
             }
         },
         "wallet.CertificateOfDeposit": {
             "type": "object",
             "required": [
-                "brokerId",
+                "brokerSlug",
                 "date",
                 "dueDate",
                 "fixedInterestRate",
                 "itemType",
-                "portfolioId",
+                "portfolioSlug",
                 "price",
                 "shares",
                 "symbol",
                 "type"
             ],
             "properties": {
-                "brokerId": {
+                "brokerSlug": {
                     "type": "string"
                 },
                 "commission": {
@@ -1307,7 +1312,7 @@ var doc = `{
                 "itemType": {
                     "type": "string"
                 },
-                "portfolioId": {
+                "portfolioSlug": {
                     "type": "string"
                 },
                 "price": {
@@ -1327,17 +1332,17 @@ var doc = `{
         "wallet.FICFI": {
             "type": "object",
             "required": [
-                "brokerId",
+                "brokerSlug",
                 "date",
                 "itemType",
-                "portfolioId",
+                "portfolioSlug",
                 "price",
                 "shares",
                 "symbol",
                 "type"
             ],
             "properties": {
-                "brokerId": {
+                "brokerSlug": {
                     "type": "string"
                 },
                 "commission": {
@@ -1352,7 +1357,7 @@ var doc = `{
                 "itemType": {
                     "type": "string"
                 },
-                "portfolioId": {
+                "portfolioSlug": {
                     "type": "string"
                 },
                 "price": {
@@ -1372,17 +1377,17 @@ var doc = `{
         "wallet.FII": {
             "type": "object",
             "required": [
-                "brokerId",
+                "brokerSlug",
                 "date",
                 "itemType",
-                "portfolioId",
+                "portfolioSlug",
                 "price",
                 "shares",
                 "symbol",
                 "type"
             ],
             "properties": {
-                "brokerId": {
+                "brokerSlug": {
                     "type": "string"
                 },
                 "commission": {
@@ -1397,7 +1402,7 @@ var doc = `{
                 "itemType": {
                     "type": "string"
                 },
-                "portfolioId": {
+                "portfolioSlug": {
                     "type": "string"
                 },
                 "price": {
@@ -1423,8 +1428,8 @@ var doc = `{
         "wallet.Portfolio": {
             "type": "object",
             "required": [
-                "id",
-                "name"
+                "name",
+                "slug"
             ],
             "properties": {
                 "costBasis": {
@@ -1447,6 +1452,9 @@ var doc = `{
                 },
                 "overallReturn": {
                     "type": "number"
+                },
+                "slug": {
+                    "type": "string"
                 }
             }
         },
@@ -1456,7 +1464,7 @@ var doc = `{
                 "averagePrice": {
                     "type": "number"
                 },
-                "brokerId": {
+                "brokerSlug": {
                     "type": "string"
                 },
                 "change": {
@@ -1513,17 +1521,17 @@ var doc = `{
         "wallet.Stock": {
             "type": "object",
             "required": [
-                "brokerId",
+                "brokerSlug",
                 "date",
                 "itemType",
-                "portfolioId",
+                "portfolioSlug",
                 "price",
                 "shares",
                 "symbol",
                 "type"
             ],
             "properties": {
-                "brokerId": {
+                "brokerSlug": {
                     "type": "string"
                 },
                 "commission": {
@@ -1538,7 +1546,7 @@ var doc = `{
                 "itemType": {
                     "type": "string"
                 },
-                "portfolioId": {
+                "portfolioSlug": {
                     "type": "string"
                 },
                 "price": {
@@ -1558,17 +1566,17 @@ var doc = `{
         "wallet.StockFund": {
             "type": "object",
             "required": [
-                "brokerId",
+                "brokerSlug",
                 "date",
                 "itemType",
-                "portfolioId",
+                "portfolioSlug",
                 "price",
                 "shares",
                 "symbol",
                 "type"
             ],
             "properties": {
-                "brokerId": {
+                "brokerSlug": {
                     "type": "string"
                 },
                 "commission": {
@@ -1583,7 +1591,7 @@ var doc = `{
                 "itemType": {
                     "type": "string"
                 },
-                "portfolioId": {
+                "portfolioSlug": {
                     "type": "string"
                 },
                 "price": {
@@ -1606,18 +1614,18 @@ var doc = `{
         "wallet.TreasuryDirect": {
             "type": "object",
             "required": [
-                "brokerId",
+                "brokerSlug",
                 "date",
                 "fixedInterestRate",
                 "itemType",
-                "portfolioId",
+                "portfolioSlug",
                 "price",
                 "shares",
                 "symbol",
                 "type"
             ],
             "properties": {
-                "brokerId": {
+                "brokerSlug": {
                     "type": "string"
                 },
                 "commission": {
@@ -1636,7 +1644,7 @@ var doc = `{
                 "itemType": {
                     "type": "string"
                 },
-                "portfolioId": {
+                "portfolioSlug": {
                     "type": "string"
                 },
                 "price": {

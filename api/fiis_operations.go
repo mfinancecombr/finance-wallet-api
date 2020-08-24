@@ -14,7 +14,7 @@ import (
 
 func (s *server) getAllFIIOperations(c echo.Context) error {
 	log.Debug("[API] Retrieving all stocks operations")
-	result, err := s.db.GetAllFIIsOperations()
+	result, err := s.db.GetAll(wallet.FII{})
 	if err != nil {
 		errMsg := fmt.Sprintf("Error on retrieve operations: %v", err)
 		return logAndReturnError(c, errMsg)
@@ -35,8 +35,8 @@ func (s *server) getAllFIIOperations(c echo.Context) error {
 func (s *server) getFIIOperationByID(c echo.Context) error {
 	id := c.Param("id")
 	log.Debugf("[API] Retrieving stock operation with id: %s", id)
-	result, err := s.db.GetFIIOperationByID(id)
-	if err != nil {
+	result := &wallet.FII{}
+	if err := s.db.Get(id, result); err != nil {
 		errMsg := fmt.Sprintf("Error on retrieve '%s' operations: %v", id, err)
 		return logAndReturnError(c, errMsg)
 	}
@@ -71,7 +71,7 @@ func (s *server) insertFIIOperation(c echo.Context) error {
 		return c.JSON(http.StatusUnprocessableEntity, errorMessage(errMsg))
 	}
 
-	result, err := s.db.InsertFIIOperation(data)
+	result, err := s.db.Create(data)
 	if err != nil {
 		errMsg := fmt.Sprintf("Error on insert FII: %v", err)
 		return logAndReturnError(c, errMsg)
@@ -107,7 +107,7 @@ func (s *server) updateFIIOperationByID(c echo.Context) error {
 		return c.JSON(http.StatusUnprocessableEntity, errorMessage(errMsg))
 	}
 
-	result, err := s.db.UpdateFIIOperationByID(id, data)
+	result, err := s.db.Update(id, data)
 	if err != nil {
 		errMsg := fmt.Sprintf("Error on update FII: %v", err)
 		return logAndReturnError(c, errMsg)
