@@ -17,6 +17,11 @@ func (m *mongoSession) getOperationsSymbols(filter bson.M) ([]interface{}, error
 	return m.collection.Distinct(operationsCollection, "symbol", filter)
 }
 
+func (m *mongoSession) getItemTypes() ([]interface{}, error) {
+	log.Debug("[DB] getItemTypes")
+	return m.collection.Distinct(operationsCollection, "itemType", bson.M{})
+}
+
 func (m *mongoSession) getAllOperationsBySymbol(symbol, itemType string, year int) (wallet.OperationsList, error) {
 	log.Debug("[DB] getAllOperationsBySymbol")
 	date := time.Date(year, 12, 31, 23, 59, 59, 0, time.UTC)

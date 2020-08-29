@@ -1444,7 +1444,10 @@ var doc = `{
                 "items": {
                     "type": "object",
                     "additionalProperties": {
-                        "$ref": "#/definitions/wallet.PortfolioItem"
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/definitions/wallet.Position"
+                        }
                     }
                 },
                 "name": {
@@ -1458,14 +1461,14 @@ var doc = `{
                 }
             }
         },
-        "wallet.PortfolioItem": {
+        "wallet.Position": {
             "type": "object",
+            "required": [
+                "symbol"
+            ],
             "properties": {
                 "averagePrice": {
                     "type": "number"
-                },
-                "brokerSlug": {
-                    "type": "string"
                 },
                 "change": {
                     "type": "number"
@@ -1514,6 +1517,9 @@ var doc = `{
                     "type": "number"
                 },
                 "subSector": {
+                    "type": "string"
+                },
+                "symbol": {
                     "type": "string"
                 }
             }

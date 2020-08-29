@@ -4,78 +4,81 @@
 package db
 
 import (
+	"fmt"
+
 	"github.com/mfinancecombr/finance-wallet-api/financeapi"
 	"github.com/mfinancecombr/finance-wallet-api/wallet"
 	log "github.com/sirupsen/logrus"
 	"go.mongodb.org/mongo-driver/bson"
 )
 
-func (m *mongoSession) getPortfolioItem(itemType string, year int) (map[string]wallet.PortfolioItem, error) {
+func (m *mongoSession) getPositionsByItemType(itemType string, year int) ([]wallet.Position, error) {
 	log.Debugf("[DB] Getting portfolio item %s", itemType)
 	operationsSymbols, err := m.getOperationsSymbols(bson.M{"itemType": itemType})
 	if err != nil {
 		return nil, err
 	}
 
-	items := map[string]wallet.PortfolioItem{}
+	// Get all data by itemType
+	query := ""
+	for _, s := range operationsSymbols {
+		query += fmt.Sprintf("symbols=%s&", s)
+	}
+	tempPosition := &map[string][]wallet.Position{}
+	url := fmt.Sprintf("/%s/?%s", itemType, query)
+	if err := financeapi.GetJSON(url, tempPosition); err != nil {
+		log.Warnf("Error on get %s symbols: %v", itemType, err)
+	}
+
+	// Convert to map of symbols
+	symbolsMap := map[string]wallet.Position{}
+	for _, a := range *tempPosition {
+		for _, item := range a {
+			symbolsMap[item.Symbol] = item
+		}
+	}
+
+	items := []wallet.Position{}
 	for _, s := range operationsSymbols {
 		symbol := s.(string)
-		portfolioItem := &wallet.PortfolioItem{}
-		// FIXME: one request
-		if err := financeapi.GetJSON("/"+itemType+"/"+symbol, portfolioItem); err != nil {
-			log.Errorf("Error on get stock item: %s", err)
-		}
-
 		operations, err := m.getAllOperationsBySymbol(symbol, itemType, year)
 		if err != nil {
 			return nil, err
 		}
 
-		// FIXME
-		broker := ""
-		if len(operations) > 0 {
-			operation := operations[0]
-			if operation != nil {
-				broker = operation.GetBrokerSlug()
-			}
+		var position wallet.Position
+		if val, ok := symbolsMap[symbol]; ok {
+			position = val
+		} else {
+			position = wallet.Position{}
 		}
 
-		portfolioItem.BrokerSlug = broker
-		portfolioItem.ItemType = itemType
-		portfolioItem.Operations = operations
-		portfolioItem.Recalculate()
-		items[symbol] = *portfolioItem
+		position.Symbol = symbol
+		position.ItemType = itemType
+		position.Operations = operations
+		position.Recalculate()
+		items = append(items, position)
 	}
 
 	return items, nil
 }
 
-// FIXME
-func (m *mongoSession) GetPortfolioItems(portfolio *wallet.Portfolio, year int) error {
-	log.Debug("[DB] GetPortfolioItems")
-
-	slugs := []string{
-		"certificates-of-deposit",
-		"ficfi",
-		"fiis",
-		"stocks",
-		"stocks-funds",
-		"treasuries-direct",
+func (m *mongoSession) GetPortfolioData(portfolio *wallet.Portfolio, year int) error {
+	log.Debug("[DB] GetPositions")
+	itemTypes, err := m.getItemTypes()
+	if err != nil {
+		return err
 	}
-
-	portfolio.Items = map[string]wallet.PortfolioItem{}
-	for _, slug := range slugs {
-		stocks, err := m.getPortfolioItem(slug, year)
+	portfolio.Items = map[string][]wallet.Position{}
+	for _, itemType := range itemTypes {
+		kind := itemType.(string)
+		positions, err := m.getPositionsByItemType(kind, year)
 		if err != nil {
 			log.Errorf("[DB] Error on get portfolio items: %v", err)
 			continue
 		}
-		for symbol, portfolioItem := range stocks {
-			portfolio.Items[symbol] = portfolioItem
-		}
+		portfolio.Items[kind] = positions
 	}
-
 	portfolio.Recalculate()
-
 	return nil
 }

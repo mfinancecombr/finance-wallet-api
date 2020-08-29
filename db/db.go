@@ -36,7 +36,7 @@ type DB interface {
 	GetBySlug(slug string, d wallet.Queryable) error
 	Update(id string, d wallet.Queryable) (*mongo.UpdateResult, error)
 
-	GetPortfolioItems(p *wallet.Portfolio, year int) error
+	GetPortfolioData(p *wallet.Portfolio, year int) error
 	GetAllOperations() (interface{}, error)
 	GetAllPurchases() (interface{}, error)
 	GetAllSales() (interface{}, error)

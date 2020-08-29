@@ -135,7 +135,9 @@ definitions:
         type: string
       items:
         additionalProperties:
-          $ref: '#/definitions/wallet.PortfolioItem'
+          items:
+            $ref: '#/definitions/wallet.Position'
+          type: array
         type: object
       name:
         type: string
@@ -147,12 +149,10 @@ definitions:
     - name
     - slug
     type: object
-  wallet.PortfolioItem:
+  wallet.Position:
     properties:
       averagePrice:
         type: number
-      brokerSlug:
-        type: string
       change:
         type: number
       closingPrice:
@@ -186,6 +186,10 @@ definitions:
         type: number
       subSector:
         type: string
+      symbol:
+        type: string
+    required:
+    - symbol
     type: object
   wallet.Stock:
     properties:

@@ -50,7 +50,7 @@ func (s *server) portfolio(c echo.Context) error {
 	}
 
 	// FIXME
-	err = s.db.GetPortfolioItems(result, year)
+	err = s.db.GetPortfolioData(result, year)
 	if err != nil {
 		errMsg := fmt.Sprintf("Error on get portfolio '%s' items: %v", slug, err)
 		return logAndReturnError(c, errMsg)
@@ -88,7 +88,7 @@ func (s *server) portfolios(c echo.Context) error {
 	portfolios := make([]wallet.Portfolio, len(allPortfolios))
 	for idx, p := range allPortfolios {
 		portfolio := p.(*wallet.Portfolio)
-		err := s.db.GetPortfolioItems(portfolio, year)
+		err := s.db.GetPortfolioData(portfolio, year)
 		if err != nil {
 			errMsg := fmt.Sprintf("Error on get portfolio items: %v", err)
 			return logAndReturnError(c, errMsg)

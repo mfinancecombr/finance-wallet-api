@@ -1429,7 +1429,10 @@
                 "items": {
                     "type": "object",
                     "additionalProperties": {
-                        "$ref": "#/definitions/wallet.PortfolioItem"
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/definitions/wallet.Position"
+                        }
                     }
                 },
                 "name": {
@@ -1443,14 +1446,14 @@
                 }
             }
         },
-        "wallet.PortfolioItem": {
+        "wallet.Position": {
             "type": "object",
+            "required": [
+                "symbol"
+            ],
             "properties": {
                 "averagePrice": {
                     "type": "number"
-                },
-                "brokerSlug": {
-                    "type": "string"
                 },
                 "change": {
                     "type": "number"
@@ -1499,6 +1502,9 @@
                     "type": "number"
                 },
                 "subSector": {
+                    "type": "string"
+                },
+                "symbol": {
                     "type": "string"
                 }
             }

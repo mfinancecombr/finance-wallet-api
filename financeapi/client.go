@@ -24,6 +24,5 @@ func GetJSON(path string, target interface{}) error {
 		return err
 	}
 	defer r.Body.Close()
-
 	return json.NewDecoder(r.Body).Decode(target)
 }
