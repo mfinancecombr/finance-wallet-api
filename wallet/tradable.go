@@ -10,3 +10,12 @@ type Tradable interface {
 	GetType() string
 	GetBrokerSlug() string
 }
+
+const (
+	ItemTypeStocks                 = "stocks"
+	ItemTypeFIIS                   = "fiis"
+	ItemTypeCertificateOfDeposit   = "certificate-of-deposit"
+	ItemTypeStocksTreasuriesDirect = "treasury-direct"
+	ItemTypeStocksStocksFunds      = "stocks-funds"
+	ItemTypeStocksFICFI            = "ficfi"
+)

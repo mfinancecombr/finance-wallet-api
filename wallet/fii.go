@@ -22,7 +22,7 @@ type FII struct {
 
 type FIIList []FII
 
-const FIIItemType = "fiis"
+const FIIItemType = ItemTypeFIIS
 
 func NewFII() *FII {
 	return &FII{ItemType: FIIItemType}

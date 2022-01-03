@@ -35,7 +35,7 @@ func (s *server) getAllFICFIOperations(c echo.Context) error {
 func (s *server) getFICFIOperationByID(c echo.Context) error {
 	id := c.Param("id")
 	log.Debugf("[API] Retrieving FICFI operation with id: %s", id)
-	result := &wallet.FICFI{}
+	result := wallet.NewFICFI()
 	if err := s.db.Get(id, result); err != nil {
 		errMsg := fmt.Sprintf("Error on retrieve '%s' operations: %v", id, err)
 		return logAndReturnError(c, errMsg)

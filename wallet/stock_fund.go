@@ -22,7 +22,7 @@ type StockFund struct {
 
 type StockFundList []StockFund
 
-const StockFundItemType = "stocks-funds"
+const StockFundItemType = ItemTypeStocksStocksFunds
 
 func NewStockFund() *StockFund {
 	return &StockFund{ItemType: StockFundItemType}

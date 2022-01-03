@@ -35,7 +35,7 @@ func (s *server) getAllFIIOperations(c echo.Context) error {
 func (s *server) getFIIOperationByID(c echo.Context) error {
 	id := c.Param("id")
 	log.Debugf("[API] Retrieving stock operation with id: %s", id)
-	result := &wallet.FII{}
+	result := wallet.NewFII()
 	if err := s.db.Get(id, result); err != nil {
 		errMsg := fmt.Sprintf("Error on retrieve '%s' operations: %v", id, err)
 		return logAndReturnError(c, errMsg)

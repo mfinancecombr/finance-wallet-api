@@ -19,6 +19,10 @@ func init() {
 	viper.SetDefault("mongodb.name", "finance-wallet")
 	viper.SetDefault("port", 8889)
 	viper.SetDefault("debug", false)
+	viper.SetDefault("db.operation.timeout", 3)
+	viper.SetDefault("collection.operation.timeout", 3)
+	viper.SetDefault("financeapi.operation.timeout", 3)
+	viper.SetDefault("financeapi.url", "https://mfinance.com.br/api/v1")
 	logLevel := log.InfoLevel
 	if viper.GetBool("debug") {
 		logLevel = log.DebugLevel
@@ -28,8 +32,4 @@ func init() {
 		DisableColors: true,
 		FullTimestamp: true,
 	})
-	viper.SetDefault("db.operation.timeout", 3)
-	viper.SetDefault("collection.operation.timeout", 3)
-	viper.SetDefault("financeapi.operation.timeout", 3)
-	viper.SetDefault("financeapi.url", "https://mfinance.com.br/api/v1")
 }

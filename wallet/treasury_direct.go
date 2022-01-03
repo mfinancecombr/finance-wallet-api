@@ -8,18 +8,17 @@ import (
 )
 
 type TreasuryDirect struct {
-	BrokerSlug string     `json:"brokerSlug" bson:"brokerSlug" validate:"required"`
-	Commission float64    `json:"commission" bson:"commission"`
-	Date       *time.Time `json:"date" bson:"date" validate:"required"`
-	//DueDate           *time.Time `json:"dueDate" bson:"dueDate" validate:"required"`
-	FixedInterestRate float64 `json:"fixedInterestRate" bson:"fixedInterestRate" validate:"required"`
-	ID                string  `json:"id,omitempty" bson:"_id,omitempty"`
-	ItemType          string  `json:"itemType" bson:"itemType" validate:"required"`
-	PortfolioSlug     string  `json:"portfolioSlug" bson:"portfolioSlug" validate:"required"`
-	Price             float64 `json:"price" bson:"price" validate:"required"`
-	Shares            float64 `json:"shares" bson:"shares" validate:"required"`
-	Symbol            string  `json:"symbol" bson:"symbol" validate:"required"`
-	Type              string  `json:"type" bson:"type" validate:"required"`
+	BrokerSlug        string     `json:"brokerSlug" bson:"brokerSlug" validate:"required"`
+	Commission        float64    `json:"commission" bson:"commission"`
+	Date              *time.Time `json:"date" bson:"date" validate:"required"`
+	FixedInterestRate float64    `json:"fixedInterestRate" bson:"fixedInterestRate" validate:"required"`
+	ID                string     `json:"id,omitempty" bson:"_id,omitempty"`
+	ItemType          string     `json:"itemType" bson:"itemType" validate:"required"`
+	PortfolioSlug     string     `json:"portfolioSlug" bson:"portfolioSlug" validate:"required"`
+	Price             float64    `json:"price" bson:"price" validate:"required"`
+	Shares            float64    `json:"shares" bson:"shares" validate:"required"`
+	Symbol            string     `json:"symbol" bson:"symbol" validate:"required"`
+	Type              string     `json:"type" bson:"type" validate:"required"`
 }
 
 type TreasuryDirectList []TreasuryDirect

@@ -16,14 +16,10 @@ import (
 )
 
 func getYear(c echo.Context) (int, error) {
-	var year int
-	yearString := c.QueryParam("year")
-	if yearString != "" {
+	if yearString := c.QueryParam("year"); yearString != "" {
 		return strconv.Atoi(yearString)
-	} else {
-		t := time.Now()
-		year = t.Year()
 	}
+	year := time.Now().Year()
 	return year, nil
 }
 

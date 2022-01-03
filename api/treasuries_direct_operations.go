@@ -35,7 +35,7 @@ func (s *server) getAllTreasuriesDirectOperations(c echo.Context) error {
 func (s *server) getTreasuryDirectOperationByID(c echo.Context) error {
 	id := c.Param("id")
 	log.Debugf("[API] Retrieving treasury direct operation with id: %s", id)
-	result := &wallet.TreasuryDirect{}
+	result := wallet.NewTreasuryDirect()
 	if err := s.db.Get(id, result); err != nil {
 		errMsg := fmt.Sprintf("Error on retrieve '%s' operations: %v", id, err)
 		return logAndReturnError(c, errMsg)

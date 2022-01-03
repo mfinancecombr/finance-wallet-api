@@ -4,6 +4,8 @@
 package db
 
 import (
+	"errors"
+	"fmt"
 	"time"
 
 	"github.com/mfinancecombr/finance-wallet-api/wallet"
@@ -11,6 +13,15 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
+
+var operationTypes = map[string]func() wallet.Tradable{
+	wallet.ItemTypeStocks:                 func() wallet.Tradable { return wallet.NewStock() },
+	wallet.ItemTypeFIIS:                   func() wallet.Tradable { return wallet.NewFII() },
+	wallet.ItemTypeCertificateOfDeposit:   func() wallet.Tradable { return wallet.NewCertificateOfDeposit() },
+	wallet.ItemTypeStocksTreasuriesDirect: func() wallet.Tradable { return wallet.NewTreasuryDirect() },
+	wallet.ItemTypeStocksStocksFunds:      func() wallet.Tradable { return wallet.NewStock() },
+	wallet.ItemTypeStocksFICFI:            func() wallet.Tradable { return wallet.NewFICFI() },
+}
 
 func (m *mongoSession) getOperationsSymbols(filter bson.M) ([]interface{}, error) {
 	log.Debug("[DB] getOperationSymbols")
@@ -23,35 +34,26 @@ func (m *mongoSession) getItemTypes() ([]interface{}, error) {
 }
 
 func (m *mongoSession) getAllOperationsBySymbol(symbol, itemType string, year int) (wallet.OperationsList, error) {
-	log.Debug("[DB] getAllOperationsBySymbol")
-	date := time.Date(year, 12, 31, 23, 59, 59, 0, time.UTC)
-	query := bson.M{"symbol": symbol, "date": bson.M{"$lte": date}}
-	opts := options.Find().SetSort(bson.D{{"date", 1}})
+	log.Debug("[DB] getAllOperationsBySymbol", "year", year)
+	date := time.Date(year+1, 1, 1, 0, 0, 0, 0, time.UTC)
+	query := bson.M{"symbol": symbol, "date": bson.M{"$lt": date}}
+	opts := options.Find().SetSort(bson.D{{Key: "date", Value: 1}})
 	results, err := m.collection.FindAll(operationsCollection, query, opts)
 	if err != nil {
 		return nil, err
 	}
-	// FIXME
 	operationsList := wallet.OperationsList{}
 	for _, result := range results {
-		var operation wallet.Tradable
-		switch itemType {
-		case "stocks":
-			operation = &wallet.Stock{}
-		case "fiis":
-			operation = &wallet.FII{}
-		case "certificates-of-deposit":
-			operation = &wallet.CertificateOfDeposit{}
-		case "treasuries-direct":
-			operation = &wallet.TreasuryDirect{}
-		case "stocks-funds":
-			operation = &wallet.StockFund{}
-		case "ficfi":
-			operation = &wallet.FICFI{}
-		default:
-			log.Errorf("Item type '%s' not found", itemType)
+		newOperationType, ok := operationTypes[itemType]
+		if !ok {
+			errMsg := fmt.Sprintf("operation type)Item type '%s' not found", itemType)
+			return nil, errors.New(errMsg)
 		}
-		bsonBytes, _ := bson.Marshal(result)
+		operation := newOperationType()
+		bsonBytes, err := bson.Marshal(result)
+		if err != nil {
+			return nil, err
+		}
 		bson.Unmarshal(bsonBytes, operation)
 		operationsList = append(operationsList, operation)
 	}

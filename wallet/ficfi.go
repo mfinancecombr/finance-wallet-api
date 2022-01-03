@@ -22,7 +22,7 @@ type FICFI struct {
 
 type FICFIList []FICFI
 
-const FICFIItemType = "ficfi"
+const FICFIItemType = ItemTypeStocksFICFI
 
 func NewFICFI() *FICFI {
 	return &FICFI{ItemType: FICFIItemType}

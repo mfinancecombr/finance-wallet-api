@@ -35,7 +35,7 @@ func (s *server) getAllCertificatesOfDepositOperations(c echo.Context) error {
 func (s *server) getCertificateOfDepositOperationByID(c echo.Context) error {
 	id := c.Param("id")
 	log.Debugf("[API] Retrieving certificate of deposit operation with id: %s", id)
-	result := &wallet.CertificateOfDeposit{}
+	result := wallet.NewCertificateOfDeposit()
 	if err := s.db.Get(id, result); err != nil {
 		errMsg := fmt.Sprintf("Error on retrieve '%s' operations: %v", id, err)
 		return logAndReturnError(c, errMsg)

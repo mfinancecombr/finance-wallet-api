@@ -45,5 +45,7 @@ func (p *Portfolio) Recalculate() {
 
 	p.CostBasis = roundFloatTwoDecimalPlaces(costBasis)
 	p.Gain = roundFloatTwoDecimalPlaces(gain)
-	p.OverallReturn = roundFloatTwoDecimalPlaces(p.Gain * 100 / p.CostBasis)
+	if p.CostBasis > 0 {
+		p.OverallReturn = roundFloatTwoDecimalPlaces(p.Gain * 100 / p.CostBasis)
+	}
 }
