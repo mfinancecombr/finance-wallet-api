@@ -7,12 +7,25 @@ import (
 	"fmt"
 	"net/http"
 	"strconv"
+	"time"
 
 	"github.com/gosimple/slug"
 	"github.com/labstack/echo/v4"
 	"github.com/mfinancecombr/finance-wallet-api/wallet"
 	log "github.com/sirupsen/logrus"
 )
+
+func getYear(c echo.Context) (int, error) {
+	var year int
+	yearString := c.QueryParam("year")
+	if yearString != "" {
+		return strconv.Atoi(yearString)
+	} else {
+		t := time.Now()
+		year = t.Year()
+	}
+	return year, nil
+}
 
 // portfolio godoc
 // @Summary Get a portfolio
@@ -29,13 +42,10 @@ func (s *server) portfolio(c echo.Context) error {
 	slug := c.Param("id")
 	log.Debugf("[API] Retrieving %s data...", slug)
 
-	// FIXME
-	yearString := c.QueryParam("year")
-	year, err := strconv.Atoi(yearString)
+	year, err := getYear(c)
 	if err != nil {
-		log.Debugf("[API] Error on convert year: %v", err)
-		// FIXME
-		year = 2020
+		errMsg := fmt.Sprintf("[API] Error on get year: %v", err)
+		return logAndReturnError(c, errMsg)
 	}
 
 	result := &wallet.Portfolio{}
@@ -49,9 +59,7 @@ func (s *server) portfolio(c echo.Context) error {
 		return c.JSON(http.StatusNotFound, errorMessage(errMsg))
 	}
 
-	// FIXME
-	err = s.db.GetPortfolioData(result, year)
-	if err != nil {
+	if err := s.db.GetPortfolioData(result, year); err != nil {
 		errMsg := fmt.Sprintf("Error on get portfolio '%s' items: %v", slug, err)
 		return logAndReturnError(c, errMsg)
 	}
@@ -71,12 +79,10 @@ func (s *server) portfolio(c echo.Context) error {
 func (s *server) portfolios(c echo.Context) error {
 	log.Debug("Retrieving all portfolios")
 
-	// FIXME
-	year, err := strconv.Atoi(c.QueryParam("year"))
+	year, err := getYear(c)
 	if err != nil {
-		log.Debugf("Error on convert year: %v", err)
-		// FIXME
-		year = 2020
+		errMsg := fmt.Sprintf("[API] Error on get year: %v", err)
+		return logAndReturnError(c, errMsg)
 	}
 
 	allPortfolios, err := s.db.GetAll(&wallet.Portfolio{})
