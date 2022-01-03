@@ -22,7 +22,7 @@ type Stock struct {
 
 type StockList []Stock
 
-const StockItemType = "stocks"
+const StockItemType = ItemTypeStocks
 
 func NewStock() *Stock {
 	return &Stock{ItemType: StockItemType}

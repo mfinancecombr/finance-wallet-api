@@ -56,7 +56,7 @@ func (pi *Position) Recalculate() {
 		pi.AveragePrice = roundFloatTwoDecimalPlaces(pi.CostBasis / pi.Shares)
 
 		// FIXME
-		if pi.ItemType == "stocks" || pi.ItemType == "fiis" {
+		if pi.ItemType == ItemTypeStocks || pi.ItemType == ItemTypeFIIS {
 			gain := (pi.Shares * pi.LastPrice) - pi.CostBasis
 			pi.Gain = roundFloatTwoDecimalPlaces(gain)
 			pi.OverallReturn = roundFloatTwoDecimalPlaces((gain * 100) / pi.CostBasis)

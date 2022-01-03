@@ -24,7 +24,7 @@ type CertificateOfDeposit struct {
 
 type CertificateOfDepositList []CertificateOfDeposit
 
-const CertificateOfDepositItemType = "certificate-of-deposit"
+const CertificateOfDepositItemType = ItemTypeCertificateOfDeposit
 
 func NewCertificateOfDeposit() *CertificateOfDeposit {
 	return &CertificateOfDeposit{ItemType: CertificateOfDepositItemType}

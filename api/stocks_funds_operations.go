@@ -35,7 +35,7 @@ func (s *server) getAllStockFundsOperations(c echo.Context) error {
 func (s *server) getStockFundOperationByID(c echo.Context) error {
 	id := c.Param("id")
 	log.Debugf("[API] Retrieving stock fund operation with id: %s", id)
-	result := &wallet.StockFund{}
+	result := wallet.NewStockFund()
 	if err := s.db.Get(id, result); err != nil {
 		errMsg := fmt.Sprintf("Error on retrieve '%s' operations: %v", id, err)
 		return logAndReturnError(c, errMsg)
