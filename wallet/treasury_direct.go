@@ -57,3 +57,7 @@ func (s TreasuryDirect) GetCollectionName() string {
 func (s TreasuryDirect) GetItemType() string {
 	return TreasuryDirectItemType
 }
+
+func (s TreasuryDirect) GetDate() *time.Time {
+	return s.Date
+}

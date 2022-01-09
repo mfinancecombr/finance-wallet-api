@@ -55,3 +55,7 @@ func (s StockFund) GetCollectionName() string {
 func (s StockFund) GetItemType() string {
 	return StockFundItemType
 }
+
+func (s StockFund) GetDate() *time.Time {
+	return s.Date
+}

@@ -3,10 +3,14 @@
 
 package wallet
 
+import "time"
+
 type Tradable interface {
+	GetBrokerSlug() string
+	GetComission() float64
+	GetDate() *time.Time
+	GetItemType() string
 	GetPrice() float64
 	GetShares() float64
-	GetComission() float64
 	GetType() string
-	GetBrokerSlug() string
 }

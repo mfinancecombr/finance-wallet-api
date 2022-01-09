@@ -57,3 +57,7 @@ func (s CertificateOfDeposit) GetCollectionName() string {
 func (s CertificateOfDeposit) GetItemType() string {
 	return CertificateOfDepositItemType
 }
+
+func (s CertificateOfDeposit) GetDate() *time.Time {
+	return s.Date
+}

@@ -55,3 +55,7 @@ func (s FII) GetCollectionName() string {
 func (s FII) GetItemType() string {
 	return FIIItemType
 }
+
+func (s FII) GetDate() *time.Time {
+	return s.Date
+}

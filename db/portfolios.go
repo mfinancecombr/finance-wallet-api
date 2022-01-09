@@ -56,6 +56,17 @@ func (m *mongoSession) getPositionsByItemType(itemType string, year int) ([]wall
 		position.Symbol = symbol
 		position.ItemType = itemType
 		position.Operations = operations
+
+		// FIXME
+		if itemType == "stocks" || itemType == "fiis" {
+			tempDividends := wallet.DividendOperations{}
+			urlDividend := fmt.Sprintf("/%s/dividends/%s", itemType, symbol)
+			if err := financeapi.GetJSON(urlDividend, &tempDividends); err != nil {
+				log.Warnf("Error on get dividends for %s: %v", symbol, err)
+			}
+			position.DividendOperations = tempDividends
+		}
+
 		position.Recalculate()
 		items = append(items, position)
 	}
