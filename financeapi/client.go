@@ -12,6 +12,12 @@ import (
 	"github.com/spf13/viper"
 )
 
+type HttpResponse struct {
+	Url      string
+	Response *http.Response
+	Err      error
+}
+
 var financeClient = &http.Client{
 	Timeout: viper.GetDuration("financeapi.operation.timeout") * time.Second,
 }
@@ -25,4 +31,31 @@ func GetJSON(path string, target interface{}) error {
 	}
 	defer r.Body.Close()
 	return json.NewDecoder(r.Body).Decode(target)
+}
+
+func GetAsyncJSON(urls []string) map[string]*HttpResponse {
+	ch := make(chan *HttpResponse, len(urls))
+	responses := map[string]*HttpResponse{}
+	for _, path := range urls {
+		go func(path string) {
+			log.Debugf("[FinanceAPI] Fetching %s", path)
+			url := viper.GetString("financeapi.url") + path
+			resp, err := http.Get(url)
+			ch <- &HttpResponse{Url: path, Response: resp, Err: err}
+		}(path)
+	}
+
+	for {
+		select {
+		case r := <-ch:
+			log.Debugf("[FinanceAPI] %s was fetched", r.Url)
+			responses[r.Url] = r
+			if len(responses) == len(urls) {
+				return responses
+			}
+		default:
+			time.Sleep(1 * time.Millisecond)
+		}
+	}
+	return responses
 }

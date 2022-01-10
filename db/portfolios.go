@@ -4,6 +4,7 @@
 package db
 
 import (
+	"encoding/json"
 	"fmt"
 
 	"github.com/mfinancecombr/finance-wallet-api/financeapi"
@@ -38,6 +39,16 @@ func (m *mongoSession) getPositionsByItemType(itemType string, year int) ([]wall
 		}
 	}
 
+	// FIXME
+	urls := []string{}
+	for _, s := range operationsSymbols {
+		if itemType != "stocks" && itemType != "fiis" {
+			continue
+		}
+		urlDividend := fmt.Sprintf("/%s/dividends/%s", itemType, s)
+		urls = append(urls, urlDividend)
+	}
+
 	items := []wallet.Position{}
 	for _, s := range operationsSymbols {
 		symbol := s.(string)
@@ -57,13 +68,14 @@ func (m *mongoSession) getPositionsByItemType(itemType string, year int) ([]wall
 		position.ItemType = itemType
 		position.Operations = operations
 
-		// FIXME
-		if itemType == "stocks" || itemType == "fiis" {
+		if len(urls) > 0 {
+			results := financeapi.GetAsyncJSON(urls)
 			tempDividends := wallet.DividendOperations{}
 			urlDividend := fmt.Sprintf("/%s/dividends/%s", itemType, symbol)
-			if err := financeapi.GetJSON(urlDividend, &tempDividends); err != nil {
-				log.Warnf("Error on get dividends for %s: %v", symbol, err)
-			}
+			result := results[urlDividend]
+			defer result.Response.Body.Close()
+			// FIXME
+			json.NewDecoder(result.Response.Body).Decode(&tempDividends)
 			position.DividendOperations = tempDividends
 		}
 
