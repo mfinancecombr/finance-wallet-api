@@ -6,6 +6,7 @@ package db
 import (
 	"encoding/json"
 	"fmt"
+	"strings"
 
 	"github.com/mfinancecombr/finance-wallet-api/financeapi"
 	"github.com/mfinancecombr/finance-wallet-api/wallet"
@@ -25,6 +26,7 @@ func (m *mongoSession) getPositionsByItemType(itemType string, year int) ([]wall
 	for _, s := range operationsSymbols {
 		query += fmt.Sprintf("symbols=%s&", s)
 	}
+	query = strings.TrimRight(query, "&")
 	tempPosition := &map[string][]wallet.Position{}
 	url := fmt.Sprintf("/%s/?%s", itemType, query)
 	if err := financeapi.GetJSON(url, tempPosition); err != nil {
@@ -69,7 +71,7 @@ func (m *mongoSession) getPositionsByItemType(itemType string, year int) ([]wall
 		position.Operations = operations
 
 		if len(urls) > 0 {
-			results := financeapi.GetAsyncJSON(urls)
+			results := financeapi.GetAsync(urls)
 			tempDividends := wallet.DividendOperations{}
 			urlDividend := fmt.Sprintf("/%s/dividends/%s", itemType, symbol)
 			result := results[urlDividend]

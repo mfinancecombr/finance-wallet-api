@@ -33,7 +33,7 @@ func GetJSON(path string, target interface{}) error {
 	return json.NewDecoder(r.Body).Decode(target)
 }
 
-func GetAsyncJSON(urls []string) map[string]*HttpResponse {
+func GetAsync(urls []string) map[string]*HttpResponse {
 	ch := make(chan *HttpResponse, len(urls))
 	responses := map[string]*HttpResponse{}
 	for _, path := range urls {
@@ -57,5 +57,6 @@ func GetAsyncJSON(urls []string) map[string]*HttpResponse {
 			time.Sleep(1 * time.Millisecond)
 		}
 	}
+
 	return responses
 }
